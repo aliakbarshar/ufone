@@ -1,374 +1,377 @@
 <!DOCTYPE html>
-<html lang="en" data-bs-theme="light">
+<html lang="sd" dir="rtl">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hasnain Communication - Telecom Accounting System</title>
+  <title>Hasnain Communication - مڪمل اڪائونٽنگ ۽ ڪاروبار نظام</title>
   
-  <!-- Bootstrap 5 CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap 5 RTL CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.rtl.min.css">
   <!-- FontAwesome Icons -->
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
-  <!-- Chart.js -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 
   <style>
-    :root {
-      --sidebar-width: 260px;
-      --primary-color: #0d6efd;
-      --telecom-orange: #f26522;
-    }
-    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f6f9; }
-    #sidebar { width: var(--sidebar-width); position: fixed; top: 0; bottom: 0; left: 0; z-index: 100; background: #1e293b; color: #fff; transition: all 0.3s; }
-    #sidebar .nav-link { color: #94a3b8; padding: 12px 20px; font-weight: 500; border-radius: 8px; margin: 2px 10px; cursor: pointer; }
-    #sidebar .nav-link:hover, #sidebar .nav-link.active { color: #fff; background: rgba(255,255,255,0.1); }
-    #content { margin-left: var(--sidebar-width); padding: 20px; transition: all 0.3s; }
-    .kpi-card { border: none; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
-    @media (max-width: 768px) {
-      #sidebar { margin-left: calc(-1 * var(--sidebar-width)); }
-      #sidebar.active { margin-left: 0; }
-      #content { margin-left: 0; }
-    }
+    body { font-family: 'Segoe UI', Tahoma, sans-serif; background-color: #f8f9fa; }
+    .nav-pills .nav-link.active { background-color: #0d6efd; font-weight: bold; }
+    .card-kpi { border: none; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+    .table-custom th { background-color: #eef2f7; }
   </style>
 </head>
-<body>
+<body class="p-3 p-md-4">
 
-  <!-- SIDEBAR NAVIGATION -->
-  <nav id="sidebar">
-    <div class="p-3 border-bottom border-secondary text-center">
-      <h4 class="fw-bold mb-0 text-warning"><i class="fa-solid fa-tower-cell me-2"></i>Hasnain Comm.</h4>
-      <small class="text-muted">Telecom Accounting & ERP</small>
-    </div>
-    <div class="py-3">
-      <ul class="nav flex-column">
-        <li class="nav-item">
-          <a class="nav-link active" onclick="switchTab('dashboard')"><i class="fa-solid fa-chart-line me-2"></i> Dashboard</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" onclick="switchTab('chart-of-accounts')"><i class="fa-solid fa-folder-tree me-2"></i> Chart of Accounts</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" onclick="switchTab('telecom-sales')"><i class="fa-solid fa-mobile-screen-button me-2"></i> Easyload & SIM Sales</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" onclick="switchTab('vouchers')"><i class="fa-solid fa-file-invoice-dollar me-2"></i> Accounting Vouchers</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" onclick="switchTab('retailers')"><i class="fa-solid fa-users me-2"></i> Retailers & Customers</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" onclick="switchTab('expenses')"><i class="fa-solid fa-wallet me-2"></i> Daily Expenses</a>
-        </li>
-      </ul>
-    </div>
-  </nav>
-
-  <!-- MAIN CONTENT AREA -->
-  <div id="content">
-
-    <!-- TOP NAVBAR -->
-    <div class="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom bg-white p-3 rounded shadow-sm">
-      <button class="btn btn-sm btn-outline-dark d-md-none" onclick="document.getElementById('sidebar').classList.toggle('active')">
-        <i class="fa-solid fa-bars"></i>
-      </button>
-      <div class="h5 mb-0 fw-bold text-dark">Hasnain Communication Management Portal</div>
-      <div class="d-flex align-items-center gap-3">
-        <span class="badge bg-success p-2"><i class="fa-solid fa-circle-check me-1"></i> System Active</span>
-        <button class="btn btn-sm btn-outline-secondary" onclick="toggleTheme()"><i class="fa-solid fa-moon"></i></button>
+  <div class="container-fluid max-width-1200">
+    
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center bg-white p-3 rounded-3 shadow-sm mb-4">
+      <div>
+        <h3 class="fw-bold mb-0 text-primary"><i class="fa-solid fa-tower-cell me-2"></i>Hasnain Communication</h3>
+        <small class="text-muted">مڪمل ڪاروباري حساب ڪتاب ۽ اڪائونٽس مئنيجمينٽ</small>
       </div>
+      <span class="badge bg-success p-2 fs-6">سسٽم فعال آهي</span>
     </div>
 
-    <!-- TAB 1: DASHBOARD -->
-    <div id="tab-dashboard" class="tab-content">
-      <div class="row g-3 mb-4">
-        <div class="col-md-3">
-          <div class="card kpi-card bg-primary text-white p-3">
-            <small class="text-white-50">Franchise Cash Box</small>
-            <h3 class="mb-0 fw-bold">PKR 150,000</h3>
-            <small class="mt-2 text-white-50"><i class="fa-solid fa-wallet me-1"></i> Cash Balance</small>
-          </div>
-        </div>
-        <div class="col-md-3">
-          <div class="card kpi-card bg-success text-white p-3">
-            <small class="text-white-50">Meezan Bank Balance</small>
-            <h3 class="mb-0 fw-bold">PKR 850,000</h3>
-            <small class="mt-2 text-white-50"><i class="fa-solid fa-building-columns me-1"></i> Bank Balance</small>
-          </div>
-        </div>
-        <div class="col-md-3">
-          <div class="card kpi-card bg-warning text-dark p-3">
-            <small class="text-dark-50">Retailer Receivables (Udhar)</small>
-            <h3 class="mb-0 fw-bold">PKR 220,000</h3>
-            <small class="mt-2 text-dark-50"><i class="fa-solid fa-hand-holding-dollar me-1"></i> Pending Balance</small>
-          </div>
-        </div>
-        <div class="col-md-3">
-          <div class="card kpi-card bg-danger text-white p-3">
-            <small class="text-white-50">Telecom Vendor Payable</small>
-            <h3 class="mb-0 fw-bold">PKR 300,000</h3>
-            <small class="mt-2 text-white-50"><i class="fa-solid fa-truck me-1"></i> Company Credit</small>
-          </div>
-        </div>
-      </div>
+    <!-- Navigation Tabs -->
+    <ul class="nav nav-pills mb-4 bg-white p-2 rounded-3 shadow-sm" id="pills-tab" role="tablist">
+      <li class="nav-item">
+        <button class="nav-link active" onclick="switchTab('banks')"><i class="fa-solid fa-building-columns me-1"></i> بينڪ اڪائونٽس</button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link" onclick="switchTab('employees')"><i class="fa-solid fa-users-gear me-1"></i> ايمپلائيز (ملازم)</button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link" onclick="switchTab('retailers')"><i class="fa-solid fa-shop me-1"></i> ريٽيلر کاتو (Udhar)</button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link" onclick="switchTab('products')"><i class="fa-solid fa-box-archive me-1"></i> پروڊڪٽس ۽ اسٽاڪ</button>
+      </li>
+    </ul>
 
-      <!-- CHARTS -->
-      <div class="row g-3 mb-4">
-        <div class="col-md-8">
-          <div class="card p-3 shadow-sm">
-            <h6 class="fw-bold mb-3">Daily Telecom Revenue Trend</h6>
-            <canvas id="revenueChart" height="120"></canvas>
-          </div>
-        </div>
+    <!-- TAB 1: BANK ACCOUNTS -->
+    <div id="tab-banks" class="tab-content">
+      <div class="row g-4">
         <div class="col-md-4">
-          <div class="card p-3 shadow-sm">
-            <h6 class="fw-bold mb-3">Revenue Breakdown</h6>
-            <canvas id="categoryChart" height="200"></canvas>
+          <div class="card p-3 shadow-sm border-0">
+            <h5 class="fw-bold text-primary mb-3">نئون بينڪ اڪائونٽ ايڊ ڪريو</h5>
+            <form onsubmit="addBank(event)">
+              <div class="mb-3">
+                <label class="form-label">بينڪ جو نالو:</label>
+                <input type="text" id="bank_name" placeholder="مثال: Meezan Bank" class="form-control" required>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">اڪائونٽ نمبر:</label>
+                <input type="text" id="bank_number" placeholder="010101..." class="form-control" required>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">ابتدائي بيلنس (PKR):</label>
+                <input type="number" id="bank_balance" placeholder="0" class="form-control" required>
+              </div>
+              <button type="submit" class="btn btn-primary w-100">اڪائونٽ شامل ڪريو</button>
+            </form>
+          </div>
+        </div>
+        <div class="col-md-8">
+          <div class="card p-3 shadow-sm border-0">
+            <h5 class="fw-bold mb-3">بينڪ اڪائونٽس جي لسٽ</h5>
+            <table class="table table-hover align-middle table-custom">
+              <thead>
+                <tr>
+                  <th>بينڪ</th>
+                  <th>اڪائونٽ نمبر</th>
+                  <th>موجوده بيلنس</th>
+                  <th>عمل</th>
+                </tr>
+              </thead>
+              <tbody id="bank-list"></tbody>
+            </table>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- TAB 2: CHART OF ACCOUNTS (ADD & DELETE ACCOUNTS) -->
-    <div id="tab-chart-of-accounts" class="tab-content d-none">
-      <div class="card p-4 shadow-sm mb-4">
-        <h5 class="fw-bold border-bottom pb-2 text-primary"><i class="fa-solid fa-plus-circle me-2"></i> Add New Account</h5>
-        <form id="addAccountForm" onsubmit="handleAddAccount(event)">
-          <div class="row g-3">
-            <div class="col-md-4">
-              <label class="form-label font-weight-bold">Account Name / Title</label>
-              <input type="text" id="accName" class="form-control" placeholder="e.g. Jazz Load Wallet / Shop Rent" required>
-            </div>
-            <div class="col-md-4">
-              <label class="form-label font-weight-bold">Account Category</label>
-              <select id="accCategory" class="form-select" required>
-                <option value="Asset">Asset (جائيداد / بيلنس)</option>
-                <option value="Revenue">Revenue / Income (آمدني)</option>
-                <option value="Expense">Expense (خرچ)</option>
-                <option value="Liability">Liability (واجبات / اوڌار)</option>
-                <option value="Equity">Equity (سرمائڪاري)</option>
-              </select>
-            </div>
-            <div class="col-md-4">
-              <label class="form-label font-weight-bold">Opening Balance (PKR)</label>
-              <input type="number" id="accBalance" class="form-control" placeholder="0.00" value="0" required>
-            </div>
-            <div class="col-12 text-end">
-              <button type="submit" class="btn btn-primary px-4"><i class="fa-solid fa-save me-1"></i> Save Account</button>
-            </div>
+    <!-- TAB 2: EMPLOYEES -->
+    <div id="tab-employees" class="tab-content d-none">
+      <div class="row g-4">
+        <div class="col-md-4">
+          <div class="card p-3 shadow-sm border-0">
+            <h5 class="fw-bold text-primary mb-3">نئون ايمپلائي (ملازم) ايڊ ڪريو</h5>
+            <form onsubmit="addEmployee(event)">
+              <div class="mb-3">
+                <label class="form-label">ملازم جو نالو:</label>
+                <input type="text" id="emp_name" placeholder="مثال: احمد علي" class="form-control" required>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">عهدو / ڪم:</label>
+                <input type="text" id="emp_role" placeholder="مثال: ڪيشيئر / سيلز مين" class="form-control" required>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">ماهوار پگهار (PKR):</label>
+                <input type="number" id="emp_salary" placeholder="25000" class="form-control" required>
+              </div>
+              <button type="submit" class="btn btn-primary w-100">ملازم شامل ڪريو</button>
+            </form>
           </div>
-        </form>
-      </div>
-
-      <!-- ACCOUNTS TABLE LIST -->
-      <div class="card p-4 shadow-sm">
-        <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-3">
-          <h5 class="fw-bold text-dark mb-0"><i class="fa-solid fa-list me-2"></i> Manage Accounts List</h5>
-          <input type="text" id="searchAccountInput" onkeyup="filterAccounts()" class="form-control w-25" placeholder="Search account...">
         </div>
-        <div class="table-responsive">
-          <table class="table table-hover align-middle" id="accountsTable">
-            <thead class="table-light">
-              <tr>
-                <th>ID</th>
-                <th>Account Name</th>
-                <th>Category</th>
-                <th>Current Balance (PKR)</th>
-                <th class="text-center">Action</th>
-              </tr>
-            </thead>
-            <tbody id="accountsTableBody">
-              <!-- Dynamically Populated -->
-            </tbody>
-          </table>
+        <div class="col-md-8">
+          <div class="card p-3 shadow-sm border-0">
+            <h5 class="fw-bold mb-3">ملازمن جي لسٽ</h5>
+            <table class="table table-hover align-middle table-custom">
+              <thead>
+                <tr>
+                  <th>نالو</th>
+                  <th>عهدو</th>
+                  <th>پگهار</th>
+                  <th>عمل</th>
+                </tr>
+              </thead>
+              <tbody id="emp-list"></tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>
 
-    <!-- TAB 3: TELECOM SALES -->
-    <div id="tab-telecom-sales" class="tab-content d-none">
-      <div class="card p-4 shadow-sm">
-        <h5 class="fw-bold border-bottom pb-2 mb-3 text-primary"><i class="fa-solid fa-mobile-screen-button me-2"></i> Record Easyload & SIM Transactions</h5>
-        <form onsubmit="event.preventDefault(); alert('Sale Recorded!');">
-          <div class="row g-3">
-            <div class="col-md-3">
-              <label class="form-label">Service Category</label>
-              <select class="form-select" required>
-                <option value="">Choose Service...</option>
-                <option value="easyload">Easyload / Load Transfer</option>
-                <option value="sim_new">New SIM Sale & Verification</option>
-                <option value="sim_swap">SIM Swap / Duplicate Fee</option>
-                <option value="bundle">Special Bundle / Package</option>
-              </select>
-            </div>
-            <div class="col-md-3">
-              <label class="form-label">Customer / Retailer Name</label>
-              <input type="text" class="form-control" placeholder="Walk-in / Retailer" required>
-            </div>
-            <div class="col-md-3">
-              <label class="form-label">Amount (PKR)</label>
-              <input type="number" class="form-control" placeholder="0.00" required>
-            </div>
-            <div class="col-md-3">
-              <label class="form-label">Payment Account</label>
-              <select class="form-select">
-                <option>Franchise Cash Box</option>
-                <option>Meezan Bank Account</option>
-                <option>Retailer Udhar Account</option>
-              </select>
-            </div>
-            <div class="col-12 text-end mt-3">
-              <button type="submit" class="btn btn-primary px-4">Post Transaction</button>
-            </div>
-          </div>
-        </form>
-      </div>
-    </div>
-
-    <!-- TAB 4: VOUCHERS -->
-    <div id="tab-vouchers" class="tab-content d-none">
-      <div class="card p-4 shadow-sm">
-        <h5 class="fw-bold mb-3">Double-Entry Vouchers</h5>
-        <p class="text-muted">Payment Voucher, Receipt Voucher, Journal Voucher and Contra Vouchers.</p>
-      </div>
-    </div>
-
-    <!-- TAB 5: RETAILERS -->
+    <!-- TAB 3: RETAILERS -->
     <div id="tab-retailers" class="tab-content d-none">
-      <div class="card p-4 shadow-sm">
-        <h5 class="fw-bold mb-3">Retailer & Customer Ledgers</h5>
-        <p class="text-muted">Manage retailer credit balances, payments and invoices.</p>
+      <div class="row g-4">
+        <div class="col-md-4">
+          <div class="card p-3 shadow-sm border-0">
+            <h5 class="fw-bold text-primary mb-3">نئون ريٽيلر کاتو ايڊ ڪريو</h5>
+            <form onsubmit="addRetailer(event)">
+              <div class="mb-3">
+                <label class="form-label">ريٽيلر / دوڪان جو نالو:</label>
+                <input type="text" id="ret_name" placeholder="مثال: طارق موبائل شاپ" class="form-control" required>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">فون نمبر:</label>
+                <input type="text" id="ret_phone" placeholder="03001234567" class="form-control" required>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">اوڌار بيلنس (PKR):</label>
+                <input type="number" id="ret_balance" placeholder="0" class="form-control" required>
+              </div>
+              <button type="submit" class="btn btn-primary w-100">ريٽيلر شامل ڪريو</button>
+            </form>
+          </div>
+        </div>
+        <div class="col-md-8">
+          <div class="card p-3 shadow-sm border-0">
+            <h5 class="fw-bold mb-3">ريٽيلرن جي اوڌار لسٽ</h5>
+            <table class="table table-hover align-middle table-custom">
+              <thead>
+                <tr>
+                  <th>دوڪان / نالو</th>
+                  <th>موبائل نمبر</th>
+                  <th>اوڌار بيلنس</th>
+                  <th>عمل</th>
+                </tr>
+              </thead>
+              <tbody id="ret-list"></tbody>
+            </table>
+          </div>
+        </div>
       </div>
     </div>
 
-    <!-- TAB 6: EXPENSES -->
-    <div id="tab-expenses" class="tab-content d-none">
-      <div class="card p-4 shadow-sm">
-        <h5 class="fw-bold mb-3">Daily Expenses</h5>
-        <p class="text-muted">Record daily office expenses, electricity bills, tea, and staff salaries.</p>
+    <!-- TAB 4: PRODUCTS -->
+    <div id="tab-products" class="tab-content d-none">
+      <div class="row g-4">
+        <div class="col-md-4">
+          <div class="card p-3 shadow-sm border-0">
+            <h5 class="fw-bold text-primary mb-3">نئين پروڊڪٽ / آفر ايڊ ڪريو</h5>
+            <form onsubmit="addProduct(event)">
+              <div class="mb-3">
+                <label class="form-label">پروڊڪٽ جو نالو:</label>
+                <input type="text" id="prod_title" placeholder="مثال: 4G Router Device / New SIM" class="form-control" required>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">قيمت (PKR):</label>
+                <input type="number" id="prod_price" placeholder="4500" class="form-control" required>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">موجوده اسٽاڪ (مجموعو):</label>
+                <input type="number" id="prod_stock" placeholder="10" class="form-control" required>
+              </div>
+              <button type="submit" class="btn btn-primary w-100">پروڊڪٽ شامل ڪريو</button>
+            </form>
+          </div>
+        </div>
+        <div class="col-md-8">
+          <div class="card p-3 shadow-sm border-0">
+            <h5 class="fw-bold mb-3">پروڊڪٽس ۽ اسٽاڪ لسٽ</h5>
+            <table class="table table-hover align-middle table-custom">
+              <thead>
+                <tr>
+                  <th>پروڊڪٽ</th>
+                  <th>قيمت</th>
+                  <th>اسٽاڪ</th>
+                  <th>عمل</th>
+                </tr>
+              </thead>
+              <tbody id="prod-list"></tbody>
+            </table>
+          </div>
+        </div>
       </div>
     </div>
 
   </div>
 
-  <!-- JAVASCRIPT LOGIC -->
   <script>
-    // Initial Accounts List Array
-    let accountsList = [
-      { id: 101, name: "Franchise Cash Box", category: "Asset", balance: 150000 },
-      { id: 102, name: "Meezan Bank Account", category: "Asset", balance: 850000 },
-      { id: 103, name: "Easyload Sales Account", category: "Revenue", balance: 450000 },
-      { id: 104, name: "Shop Rent Expense", category: "Expense", balance: 25000 },
-      { id: 105, name: "Main Vendor Payable", category: "Liability", balance: 300000 }
+    // Local Data Arrays
+    let banks = [
+      { id: 1, name: 'Meezan Bank', number: '01010102030405', balance: 850000 }
+    ];
+    let employees = [
+      { id: 1, name: 'علي اڪبر', role: 'مئنيجر', salary: 35000 }
+    ];
+    let retailers = [
+      { id: 1, name: 'سبحان ڪميونيڪيشن', phone: '03001234567', balance: 15000 }
+    ];
+    let products = [
+      { id: 1, title: '4G ڊيوائس', price: 4500, stock: 20 }
     ];
 
     document.addEventListener("DOMContentLoaded", () => {
-      renderAccountsTable();
-      initCharts();
+      renderAll();
     });
 
-    // Render Accounts Table
-    function renderAccountsTable() {
-      const tbody = document.getElementById("accountsTableBody");
-      tbody.innerHTML = "";
-
-      accountsList.forEach(acc => {
-        let badgeColor = "bg-secondary";
-        if(acc.category === "Asset") badgeColor = "bg-primary";
-        if(acc.category === "Revenue") badgeColor = "bg-success";
-        if(acc.category === "Expense") badgeColor = "bg-danger";
-        if(acc.category === "Liability") badgeColor = "bg-warning text-dark";
-
-        tbody.innerHTML += `
-          <tr>
-            <td>#${acc.id}</td>
-            <td class="fw-bold text-dark">${acc.name}</td>
-            <td><span class="badge ${badgeColor}">${acc.category}</span></td>
-            <td class="fw-bold">PKR ${Number(acc.balance).toLocaleString()}</td>
-            <td class="text-center">
-              <button class="btn btn-sm btn-outline-danger" onclick="deleteAccount(${acc.id})">
-                <i class="fa-solid fa-trash me-1"></i> Delete
-              </button>
-            </td>
-          </tr>
-        `;
-      });
-    }
-
-    // Add New Account
-    function handleAddAccount(e) {
-      e.preventDefault();
-      const name = document.getElementById("accName").value;
-      const category = document.getElementById("accCategory").value;
-      const balance = parseFloat(document.getElementById("accBalance").value);
-
-      const newId = accountsList.length > 0 ? accountsList[accountsList.length - 1].id + 1 : 101;
-
-      accountsList.push({ id: newId, name: name, category: category, balance: balance });
-      renderAccountsTable();
-      document.getElementById("addAccountForm").reset();
-      alert("Account added successfully!");
-    }
-
-    // Delete Account
-    function deleteAccount(id) {
-      if(confirm("Are you sure you want to delete this account?")) {
-        accountsList = accountsList.filter(acc => acc.id !== id);
-        renderAccountsTable();
-      }
-    }
-
-    // Filter Accounts Search
-    function filterAccounts() {
-      const query = document.getElementById("searchAccountInput").value.toLowerCase();
-      const rows = document.querySelectorAll("#accountsTableBody tr");
-
-      rows.forEach(row => {
-        const text = row.innerText.toLowerCase();
-        row.style.display = text.includes(query) ? "" : "none";
-      });
+    function renderAll() {
+      renderBanks();
+      renderEmployees();
+      renderRetailers();
+      renderProducts();
     }
 
     // Tab Switcher
     function switchTab(tabId) {
       document.querySelectorAll('.tab-content').forEach(el => el.classList.add('d-none'));
-      document.querySelectorAll('#sidebar .nav-link').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.nav-link').forEach(el => el.classList.remove('active'));
       document.getElementById('tab-' + tabId).classList.remove('d-none');
+      event.target.classList.add('active');
     }
 
-    // Dark/Light Theme Switcher
-    function toggleTheme() {
-      const current = document.documentElement.getAttribute('data-bs-theme');
-      document.documentElement.setAttribute('data-bs-theme', current === 'dark' ? 'light' : 'dark');
+    // 1. BANK FUNCTIONS
+    function renderBanks() {
+      const list = document.getElementById('bank-list');
+      list.innerHTML = '';
+      banks.forEach((b, i) => {
+        list.innerHTML += `
+          <tr>
+            <td class="fw-bold">${b.name}</td>
+            <td>${b.number}</td>
+            <td class="text-success fw-bold">PKR ${b.balance}</td>
+            <td><button class="btn btn-sm btn-outline-danger" onclick="deleteBank(${i})"><i class="fa-solid fa-trash"></i> ڊيليٽ</button></td>
+          </tr>
+        `;
+      });
+    }
+    function addBank(e) {
+      e.preventDefault();
+      banks.push({
+        id: Date.now(),
+        name: document.getElementById('bank_name').value,
+        number: document.getElementById('bank_number').value,
+        balance: parseFloat(document.getElementById('bank_balance').value)
+      });
+      renderBanks();
+      e.target.reset();
+    }
+    function deleteBank(index) {
+      banks.splice(index, 1);
+      renderBanks();
     }
 
-    // Initialize Charts
-    function initCharts() {
-      const ctx1 = document.getElementById('revenueChart').getContext('2d');
-      new Chart(ctx1, {
-        type: 'line',
-        data: {
-          labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-          datasets: [{
-            label: 'Daily Telecom Sales (PKR)',
-            data: [45000, 52000, 48000, 61000, 55000, 72000, 68000],
-            borderColor: '#0d6efd',
-            backgroundColor: 'rgba(13, 110, 253, 0.1)',
-            fill: true
-          }]
-        }
+    // 2. EMPLOYEE FUNCTIONS
+    function renderEmployees() {
+      const list = document.getElementById('emp-list');
+      list.innerHTML = '';
+      employees.forEach((emp, i) => {
+        list.innerHTML += `
+          <tr>
+            <td class="fw-bold">${emp.name}</td>
+            <td>${emp.role}</td>
+            <td class="text-primary font-bold">PKR ${emp.salary}</td>
+            <td><button class="btn btn-sm btn-outline-danger" onclick="deleteEmployee(${i})"><i class="fa-solid fa-trash"></i> ڊيليٽ</button></td>
+          </tr>
+        `;
       });
+    }
+    function addEmployee(e) {
+      e.preventDefault();
+      employees.push({
+        id: Date.now(),
+        name: document.getElementById('emp_name').value,
+        role: document.getElementById('emp_role').value,
+        salary: parseFloat(document.getElementById('emp_salary').value)
+      });
+      renderEmployees();
+      e.target.reset();
+    }
+    function deleteEmployee(index) {
+      employees.splice(index, 1);
+      renderEmployees();
+    }
 
-      const ctx2 = document.getElementById('categoryChart').getContext('2d');
-      new Chart(ctx2, {
-        type: 'doughnut',
-        data: {
-          labels: ['Easyload', 'New SIMs', 'Bundles', 'SIM Swap'],
-          datasets: [{
-            data: [50, 20, 20, 10],
-            backgroundColor: ['#0d6efd', '#f26522', '#198754', '#ffc107']
-          }]
-        }
+    // 3. RETAILER FUNCTIONS
+    function renderRetailers() {
+      const list = document.getElementById('ret-list');
+      list.innerHTML = '';
+      retailers.forEach((r, i) => {
+        list.innerHTML += `
+          <tr>
+            <td class="fw-bold">${r.name}</td>
+            <td>${r.phone}</td>
+            <td class="text-danger fw-bold">PKR ${r.balance}</td>
+            <td><button class="btn btn-sm btn-outline-danger" onclick="deleteRetailer(${i})"><i class="fa-solid fa-trash"></i> ڊيليٽ</button></td>
+          </tr>
+        `;
       });
+    }
+    function addRetailer(e) {
+      e.preventDefault();
+      retailers.push({
+        id: Date.now(),
+        name: document.getElementById('ret_name').value,
+        phone: document.getElementById('ret_phone').value,
+        balance: parseFloat(document.getElementById('ret_balance').value)
+      });
+      renderRetailers();
+      e.target.reset();
+    }
+    function deleteRetailer(index) {
+      retailers.splice(index, 1);
+      renderRetailers();
+    }
+
+    // 4. PRODUCT FUNCTIONS
+    function renderProducts() {
+      const list = document.getElementById('prod-list');
+      list.innerHTML = '';
+      products.forEach((p, i) => {
+        list.innerHTML += `
+          <tr>
+            <td class="fw-bold">${p.title}</td>
+            <td>PKR ${p.price}</td>
+            <td><span class="badge bg-info text-dark">${p.stock} Qty</span></td>
+            <td><button class="btn btn-sm btn-outline-danger" onclick="deleteProduct(${i})"><i class="fa-solid fa-trash"></i> ڊيليٽ</button></td>
+          </tr>
+        `;
+      });
+    }
+    function addProduct(e) {
+      e.preventDefault();
+      products.push({
+        id: Date.now(),
+        title: document.getElementById('prod_title').value,
+        price: parseFloat(document.getElementById('prod_price').value),
+        stock: parseInt(document.getElementById('prod_stock').value)
+      });
+      renderProducts();
+      e.target.reset();
+    }
+    function deleteProduct(index) {
+      products.splice(index, 1);
+      renderProducts();
     }
   </script>
 </body>
