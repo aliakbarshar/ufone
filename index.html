@@ -1,371 +1,1459 @@
 <!DOCTYPE html>
-<html lang="sd" dir="rtl">
+<html lang="en" data-bs-theme="light">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hasnain Communication - مڪمل ڪاروباري نظام</title>
-  <!-- Tailwind CSS -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Supabase Client -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <title>ApexBank - Enterprise Banking Accounting & Financial ERP</title>
+  
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Font Awesome Icons -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- QRCode.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+  <style>
+    /* Custom Styling for Banking UI */
+    :root {
+      --primary-navy: #0a2540;
+      --accent-blue: #0d6efd;
+      --emerald-green: #10b981;
+      --crimson-red: #ef4444;
+      --bg-slate: #f8fafc;
+      --sidebar-width: 260px;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: var(--bg-slate);
+      overflow-x: hidden;
+    }
+
+    /* Sidebar Styling */
+    #sidebar {
+      width: var(--sidebar-width);
+      min-height: 100vh;
+      background: var(--primary-navy);
+      color: #fff;
+      transition: all 0.3s ease;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 1000;
+    }
+
+    #sidebar .nav-link {
+      color: #94a3b8;
+      font-weight: 500;
+      padding: 0.75rem 1.25rem;
+      border-radius: 0.5rem;
+      margin: 0.2rem 0.75rem;
+      transition: all 0.2s;
+    }
+
+    #sidebar .nav-link:hover, #sidebar .nav-link.active {
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.1);
+      border-left: 4px solid var(--accent-blue);
+    }
+
+    #sidebar .nav-link i {
+      width: 24px;
+    }
+
+    /* Main Content Wrapper */
+    #content-wrapper {
+      margin-left: var(--sidebar-width);
+      min-height: 100vh;
+      transition: all 0.3s ease;
+    }
+
+    /* Top Navbar */
+    .top-navbar {
+      background: #ffffff;
+      border-bottom: 1px solid #e2e8f0;
+      padding: 0.8rem 1.5rem;
+    }
+
+    [data-bs-theme="dark"] .top-navbar {
+      background: #1e293b;
+      border-bottom: 1px solid #334155;
+    }
+
+    [data-bs-theme="dark"] #sidebar {
+      background: #0f172a;
+    }
+
+    /* Banking KPI Cards */
+    .kpi-card {
+      border: none;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .kpi-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+    }
+
+    .kpi-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+    }
+
+    /* Data Tables & Badges */
+    .table-card {
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+    }
+
+    .badge-soft-success { background: #d1fae5; color: #065f46; }
+    .badge-soft-danger { background: #fee2e2; color: #991b1b; }
+    .badge-soft-warning { background: #fef3c7; color: #92400e; }
+    .badge-soft-info { background: #e0f2fe; color: #075985; }
+
+    /* Printable Invoice Area */
+    @media print {
+      body * { visibility: hidden; }
+      #printable-invoice, #printable-invoice * { visibility: visible; }
+      #printable-invoice { position: absolute; left: 0; top: 0; width: 100%; }
+      .no-print { display: none !important; }
+    }
+
+    /* Code View Styling */
+    pre code {
+      font-size: 0.85rem;
+      color: #38bdf8;
+    }
+  </style>
 </head>
-<body class="bg-gray-100 font-sans p-4 md:p-6 text-gray-800">
+<body>
 
-  <div class="max-w-7xl mx-auto space-y-6">
-
-    <!-- Header -->
-    <div class="bg-gradient-to-r from-blue-900 to-indigo-800 text-white p-6 rounded-2xl shadow-xl flex flex-col md:flex-row justify-between items-center gap-4">
-      <div>
-        <h1 class="text-3xl font-extrabold">Hasnain Communication</h1>
-        <p class="text-blue-200 text-sm mt-1">مڪمل اڪائونٽنگ، بينڪنگ، سپلائرز ۽ ڊيلي ليجر سينٽر</p>
+  <!-- SIDEBAR NAVIGATION -->
+  <nav id="sidebar">
+    <div class="p-3 text-center border-bottom border-secondary">
+      <div class="d-flex align-items-center justify-content-center gap-2">
+        <i class="fa-solid fa-building-columns fs-3 text-primary"></i>
+        <span class="fs-4 fw-bold text-white tracking-wide">ApexBank</span>
       </div>
-      <div class="flex gap-2">
-        <input type="date" id="global_date_filter" onchange="loadDashboardData()" class="bg-white/10 text-white border border-white/20 p-2 rounded-lg text-sm outline-none">
-      </div>
+      <small class="text-muted d-block mt-1">Enterprise Financial ERP v4.2</small>
     </div>
 
-    <!-- 1. LIVE DASHBOARD CARDS -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-      <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-200">
-        <p class="text-xs text-gray-500 font-semibold">اڄ جي مڪمل سيل (Sales)</p>
-        <h3 id="dash_today_sales" class="text-2xl font-bold text-blue-600 mt-1">PKR 0</h3>
-      </div>
-      <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-200">
-        <p class="text-xs text-gray-500 font-semibold">اڄ جا ڪل خرچ (Expenses)</p>
-        <h3 id="dash_today_expenses" class="text-2xl font-bold text-red-600 mt-1">PKR 0</h3>
-      </div>
-      <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-200">
-        <p class="text-xs text-gray-500 font-semibold">ڪيش بيلنس (Cash Box)</p>
-        <h3 id="dash_cash_balance" class="text-2xl font-bold text-emerald-600 mt-1">PKR 0</h3>
-      </div>
-      <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-200">
-        <p class="text-xs text-gray-500 font-semibold">بينڪ بيلنس (Meezan Bank)</p>
-        <h3 id="dash_bank_balance" class="text-2xl font-bold text-indigo-600 mt-1">PKR 0</h3>
-      </div>
-    </div>
+    <ul class="nav flex-column mt-3">
+      <li class="nav-item">
+        <a class="nav-link active" href="#" onclick="showSection('dashboard', this)">
+          <i class="fa-solid fa-chart-line"></i> Executive Dashboard
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#" onclick="showSection('customers', this)">
+          <i class="fa-solid fa-users"></i> Customer Management
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#" onclick="showSection('suppliers', this)">
+          <i class="fa-solid fa-truck-field"></i> Supplier Ledger
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#" onclick="showSection('cashbook', this)">
+          <i class="fa-solid fa-wallet"></i> Cash Book & Banks
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#" onclick="showSection('vouchers', this)">
+          <i class="fa-solid fa-file-invoice-dollar"></i> Double-Entry Vouchers
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#" onclick="showSection('expenses', this)">
+          <i class="fa-solid fa-receipt"></i> Expenses & Utility
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#" onclick="showSection('invoicing', this)">
+          <i class="fa-solid fa-file-pdf"></i> GST Invoice Creator
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#" onclick="showSection('reports', this)">
+          <i class="fa-solid fa-scale-balanced"></i> Financial Statements
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#" onclick="showSection('backend-code', this)">
+          <i class="fa-solid fa-code"></i> PHP MVC & Database Architecture
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#" onclick="showSection('audit', this)">
+          <i class="fa-solid fa-shield-halved"></i> Audit Logs & Security
+        </a>
+      </li>
+    </ul>
+  </nav>
 
-    <!-- MAIN GRID SECTION -->
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+  <!-- MAIN CONTENT CONTAINER -->
+  <div id="content-wrapper">
+    
+    <!-- TOP NAVBAR -->
+    <header class="top-navbar d-flex justify-content-between align-items-center sticky-top">
+      <div class="d-flex align-items-center gap-3">
+        <button class="btn btn-light d-md-none" onclick="toggleSidebar()"><i class="fa-solid fa-bars"></i></button>
+        <div class="input-group input-group-sm" style="width: 280px;">
+          <span class="input-group-text bg-transparent border-end-0"><i class="fa-solid fa-magnifying-glass text-muted"></i></span>
+          <input type="text" class="form-control border-start-0" placeholder="Global search (Voucher, Account, Ref)...">
+        </div>
+      </div>
 
-      <!-- SECTION 1: POS / CUSTOMER CHECKOUT -->
-      <div class="bg-white p-6 rounded-2xl shadow-sm border space-y-4">
-        <h2 class="text-lg font-bold border-b pb-2 text-blue-800">۱. وڪرو / چيڪ آئوٽ (New Sale)</h2>
-        <form onsubmit="handleCustomerSale(event)" class="space-y-3">
-          <div>
-            <label class="block text-xs font-semibold">ڪسٽمر جو نالو:</label>
-            <input type="text" id="sale_cust_name" required class="w-full mt-1 p-2 border rounded-lg text-sm">
-          </div>
-          <div>
-            <label class="block text-xs font-semibold">موبائل نمبر:</label>
-            <input type="text" id="sale_cust_phone" required class="w-full mt-1 p-2 border rounded-lg text-sm">
-          </div>
-          <div>
-            <label class="block text-xs font-semibold">رقم (PKR):</label>
-            <input type="number" id="sale_amount" required class="w-full mt-1 p-2 border rounded-lg text-sm font-bold text-blue-600">
-          </div>
-          <div>
-            <label class="block text-xs font-semibold">ادائگي جو طريقو:</label>
-            <select id="sale_payment_method" onchange="toggleBankReceiptArea()" class="w-full mt-1 p-2 border rounded-lg text-sm bg-white">
-              <option value="cash">ڪيش (Cash)</option>
-              <option value="credit">اوڌار (Udhar / Credit)</option>
-              <option value="bank">بينڪ ٽرانسفر (Bank Transfer)</option>
-            </select>
-          </div>
+      <div class="d-flex align-items-center gap-3">
+        <!-- Theme Toggle -->
+        <button class="btn btn-outline-secondary btn-sm rounded-circle" onclick="toggleTheme()" title="Switch Light/Dark Mode">
+          <i class="fa-solid fa-moon" id="theme-icon"></i>
+        </button>
 
-          <!-- Bank Transfer Area -->
-          <div id="bank_receipt_box" class="hidden p-3 bg-blue-50 border border-blue-200 rounded-lg space-y-2">
-            <p class="text-xs text-blue-900 font-semibold">Meezan Bank: 01010102030405</p>
-            <label class="block text-xs">ادائگي جي رسيد اپلوڊ ڪريو:</label>
-            <input type="file" id="sale_receipt_file" accept="image/*" class="w-full text-xs">
-          </div>
-
-          <button type="submit" id="sale_submit_btn" class="w-full bg-blue-600 text-white py-2.5 rounded-lg font-semibold hover:bg-blue-700 transition">
-            آرڊر حتمي ڪريو
+        <!-- Notification Bell -->
+        <div class="dropdown">
+          <button class="btn btn-light btn-sm rounded-circle position-relative" data-bs-toggle="dropdown">
+            <i class="fa-solid fa-bell"></i>
+            <span class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle"></span>
           </button>
-        </form>
+          <ul class="dropdown-menu dropdown-menu-end shadow border-0" style="width: 300px;">
+            <li class="dropdown-header fw-bold">System Alerts</li>
+            <li><a class="dropdown-item text-wrap text-sm" href="#"><i class="fa-solid fa-circle-info text-primary me-2"></i> Monthly Bank Reconciliation due for Meezan Bank.</a></li>
+            <li><a class="dropdown-item text-wrap text-sm" href="#"><i class="fa-solid fa-triangle-exclamation text-warning me-2"></i> Low stock threshold warning for 4G Routers.</a></li>
+          </ul>
+        </div>
+
+        <!-- User Profile -->
+        <div class="d-flex align-items-center gap-2 border-start ps-3">
+          <img src="https://placehold.co/40x40/0a2540/ffffff?text=AD" class="rounded-circle" alt="User Profile">
+          <div class="d-none d-sm-block text-end">
+            <span class="fw-semibold d-block text-sm leading-tight">Hasnain Raza</span>
+            <small class="text-muted text-xs">Super Admin / Accountant</small>
+          </div>
+        </div>
       </div>
+    </header>
 
-      <!-- SECTION 2: BANK DEPOSIT & CASH MANAGEMENT -->
-      <div class="bg-white p-6 rounded-2xl shadow-sm border space-y-4">
-        <h2 class="text-lg font-bold border-b pb-2 text-emerald-800">۲. بينڪ ۾ پئسا جمع ڪريو (Deposit)</h2>
-        <form onsubmit="handleBankDeposit(event)" class="space-y-3">
+    <!-- CONTENT BODY -->
+    <main class="p-4">
+
+      <!-- ================= 1. EXECUTIVE DASHBOARD ================= -->
+      <section id="sec-dashboard" class="app-section">
+        <div class="d-flex justify-content-between align-items-center mb-4">
           <div>
-            <label class="block text-xs font-semibold">جمع ڪرڻ جي رقم (PKR):</label>
-            <input type="number" id="deposit_amount" required class="w-full mt-1 p-2 border rounded-lg text-sm">
+            <h4 class="fw-bold mb-0">Executive Financial Dashboard</h4>
+            <small class="text-muted">Real-time Overview of Cashflows, Banking Balances & Net Yield</small>
           </div>
+          <div class="d-flex gap-2">
+            <button class="btn btn-outline-primary btn-sm" onclick="exportDataCSV()"><i class="fa-solid fa-download me-1"></i> Export Data</button>
+            <button class="btn btn-primary btn-sm" onclick="showSection('vouchers', null)"><i class="fa-solid fa-plus me-1"></i> New Voucher Entry</button>
+          </div>
+        </div>
+
+        <!-- KPI CARDS GRID -->
+        <div class="row g-3 mb-4">
+          <div class="col-12 col-sm-6 col-xl-3">
+            <div class="card kpi-card p-3 bg-white">
+              <div class="d-flex justify-content-between align-items-center">
+                <div>
+                  <span class="text-muted text-xs fw-semibold">TOTAL CASH IN HAND</span>
+                  <h4 class="fw-bold text-dark mb-0 mt-1" id="kpi-cash-balance">PKR 1,450,200</h4>
+                  <small class="text-success text-xs fw-bold"><i class="fa-solid fa-arrow-up me-1"></i>+4.2% from yesterday</small>
+                </div>
+                <div class="kpi-icon bg-success bg-opacity-10 text-success"><i class="fa-solid fa-vault"></i></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12 col-sm-6 col-xl-3">
+            <div class="card kpi-card p-3 bg-white">
+              <div class="d-flex justify-content-between align-items-center">
+                <div>
+                  <span class="text-muted text-xs fw-semibold">BANK ACCOUNTS TOTAL</span>
+                  <h4 class="fw-bold text-dark mb-0 mt-1" id="kpi-bank-balance">PKR 5,820,000</h4>
+                  <small class="text-primary text-xs fw-bold"><i class="fa-solid fa-building-columns me-1"></i>3 Active Accounts</small>
+                </div>
+                <div class="kpi-icon bg-primary bg-opacity-10 text-primary"><i class="fa-solid fa-landmark"></i></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12 col-sm-6 col-xl-3">
+            <div class="card kpi-card p-3 bg-white">
+              <div class="d-flex justify-content-between align-items-center">
+                <div>
+                  <span class="text-muted text-xs fw-semibold">ACCOUNTS RECEIVABLE</span>
+                  <h4 class="fw-bold text-dark mb-0 mt-1">PKR 890,500</h4>
+                  <small class="text-warning text-xs fw-bold"><i class="fa-solid fa-clock me-1"></i>12 Outstanding Invoices</small>
+                </div>
+                <div class="kpi-icon bg-warning bg-opacity-10 text-warning"><i class="fa-solid fa-hand-holding-dollar"></i></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12 col-sm-6 col-xl-3">
+            <div class="card kpi-card p-3 bg-white">
+              <div class="d-flex justify-content-between align-items-center">
+                <div>
+                  <span class="text-muted text-xs fw-semibold">NET PROFIT (THIS MONTH)</span>
+                  <h4 class="fw-bold text-dark mb-0 mt-1">PKR 1,210,000</h4>
+                  <small class="text-success text-xs fw-bold"><i class="fa-solid fa-chart-line me-1"></i>+12.8% vs last month</small>
+                </div>
+                <div class="kpi-icon bg-info bg-opacity-10 text-info"><i class="fa-solid fa-sack-dollar"></i></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CHARTS ROW -->
+        <div class="row g-3 mb-4">
+          <div class="col-12 col-lg-8">
+            <div class="card table-card p-3 bg-white h-100">
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <h6 class="fw-bold mb-0">Income vs Expense Cashflow (2026)</h6>
+                <select class="form-select form-select-sm w-auto">
+                  <option>Current Fiscal Year</option>
+                  <option>Previous Quarter</option>
+                </select>
+              </div>
+              <div style="height: 280px;">
+                <canvas id="cashflowChart"></canvas>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12 col-lg-4">
+            <div class="card table-card p-3 bg-white h-100">
+              <h6 class="fw-bold mb-3">Bank Liquidity Ratio</h6>
+              <div style="height: 220px;" class="d-flex align-items-center justify-content-center">
+                <canvas id="bankPieChart"></canvas>
+              </div>
+              <div class="mt-3 text-center text-xs text-muted">
+                <span class="me-2"><i class="fa-solid fa-circle text-primary me-1"></i>Meezan Bank</span>
+                <span class="me-2"><i class="fa-solid fa-circle text-success me-1"></i>HBL</span>
+                <span><i class="fa-solid fa-circle text-info me-1"></i>Bank Alfalah</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- RECENT TRANSACTIONS TABLE -->
+        <div class="card table-card bg-white p-3">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h6 class="fw-bold mb-0">Recent General Ledger Transactions</h6>
+            <a href="#" class="text-xs text-primary fw-semibold" onclick="showSection('vouchers', null)">View All Vouchers</a>
+          </div>
+          <div class="table-responsive">
+            <table class="table table-hover align-middle">
+              <thead class="table-light text-xs text-uppercase">
+                <tr>
+                  <th>Voucher #</th>
+                  <th>Date</th>
+                  <th>Type</th>
+                  <th>Account Head / Party</th>
+                  <th>Payment Account</th>
+                  <th class="text-end">Amount (PKR)</th>
+                  <th class="text-center">Status</th>
+                </tr>
+              </thead>
+              <tbody id="dash-recent-transactions">
+                <!-- Javascript populated -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+
+      <!-- ================= 2. CUSTOMER MANAGEMENT ================= -->
+      <section id="sec-customers" class="app-section d-none">
+        <div class="d-flex justify-content-between align-items-center mb-4">
           <div>
-            <label class="block text-xs font-semibold">بينڪ اڪائونٽ چونڊيو:</label>
-            <select id="deposit_bank_id" class="w-full mt-1 p-2 border rounded-lg text-sm bg-white">
-              <option value="2">Meezan Bank (01010102030405)</option>
-            </select>
+            <h4 class="fw-bold mb-0">Customer Accounts & Accounts Receivable</h4>
+            <small class="text-muted">Manage Directory, Customer Statements & Credit Limits</small>
           </div>
-          <div>
-            <label class="block text-xs font-semibold">نوٽ / تفصيل:</label>
-            <input type="text" id="deposit_note" placeholder="مثال: ڪيش برانچ ۾ جمع ڪرائي وئي" class="w-full mt-1 p-2 border rounded-lg text-sm">
-          </div>
-          <button type="submit" class="w-full bg-emerald-600 text-white py-2.5 rounded-lg font-semibold hover:bg-emerald-700 transition">
-            رقم بينڪ ۾ داخل ڪريو
+          <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addCustomerModal">
+            <i class="fa-solid fa-user-plus me-1"></i> Add New Customer
           </button>
-        </form>
-      </div>
+        </div>
 
-      <!-- SECTION 3: DAILY LEDGER (EXPENSES & INCOME) -->
-      <div class="bg-white p-6 rounded-2xl shadow-sm border space-y-4">
-        <h2 class="text-lg font-bold border-b pb-2 text-purple-800">۳. روزنامچو (Daily Expense & Income)</h2>
-        <form onsubmit="handleDailyLedger(event)" class="space-y-3">
-          <div>
-            <label class="block text-xs font-semibold">قسم:</label>
-            <select id="ledger_type" class="w-full mt-1 p-2 border rounded-lg text-sm bg-white">
-              <option value="Expense">خرچ (Expense)</option>
-              <option value="Income">آمدني (Income)</option>
-            </select>
+        <div class="card table-card bg-white p-3">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <input type="text" class="form-control form-control-sm w-25" id="cust-search" placeholder="Search customer by name or phone..." onkeyup="filterCustomers()">
+            <div class="badge bg-soft-info text-info p-2">Total Accounts: <span id="cust-count">0</span></div>
           </div>
-          <div>
-            <label class="block text-xs font-semibold">ڪئٽيگري / مقصد:</label>
-            <input type="text" id="ledger_category" required placeholder="مثال: ڪرائي، چانهه، لائيٽ بل" class="w-full mt-1 p-2 border rounded-lg text-sm">
+          <div class="table-responsive">
+            <table class="table table-hover align-middle">
+              <thead class="table-light text-xs text-uppercase">
+                <tr>
+                  <th>Code</th>
+                  <th>Customer Name</th>
+                  <th>Company / Phone</th>
+                  <th>City</th>
+                  <th class="text-end">Credit Limit</th>
+                  <th class="text-end">Current Balance</th>
+                  <th class="text-center">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="customer-table-body">
+                <!-- Javascript populated -->
+              </tbody>
+            </table>
           </div>
+        </div>
+      </section>
+
+
+      <!-- ================= 3. SUPPLIER MANAGEMENT ================= -->
+      <section id="sec-suppliers" class="app-section d-none">
+        <div class="d-flex justify-content-between align-items-center mb-4">
           <div>
-            <label class="block text-xs font-semibold">رقم (PKR):</label>
-            <input type="number" id="ledger_amount" required class="w-full mt-1 p-2 border rounded-lg text-sm">
+            <h4 class="fw-bold mb-0">Supplier Ledger & Accounts Payable</h4>
+            <small class="text-muted">Vendor Directory, Stock Purchases and Credit Payables</small>
           </div>
-          <button type="submit" class="w-full bg-purple-600 text-white py-2.5 rounded-lg font-semibold hover:bg-purple-700 transition">
-            ليجر اينٽري محفوظ ڪريو
+          <button class="btn btn-dark btn-sm" data-bs-toggle="modal" data-bs-target="#addSupplierModal">
+            <i class="fa-solid fa-truck me-1"></i> Add New Supplier
           </button>
-        </form>
-      </div>
+        </div>
 
-    </div>
+        <div class="card table-card bg-white p-3">
+          <div class="table-responsive">
+            <table class="table table-hover align-middle">
+              <thead class="table-light text-xs text-uppercase">
+                <tr>
+                  <th>Vendor Code</th>
+                  <th>Supplier Name</th>
+                  <th>Company / Franchise</th>
+                  <th>Contact Number</th>
+                  <th class="text-end">Payable Balance (PKR)</th>
+                  <th class="text-center">Status</th>
+                  <th class="text-center">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="supplier-table-body">
+                <!-- Javascript populated -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
 
-    <!-- SECTION 4: SUPPLIERS MANAGEMENT & LEDGER -->
-    <div class="bg-white p-6 rounded-2xl shadow-sm border space-y-4">
-      <h2 class="text-lg font-bold border-b pb-2 text-gray-800">۴. سپلائر اڪائونٽس ۽ اوڌار کاتو (Suppliers Ledger)</h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        
-        <!-- Add Supplier Form -->
-        <form onsubmit="handleAddSupplier(event)" class="bg-gray-50 p-4 rounded-xl border space-y-3">
-          <h3 class="font-bold text-sm text-gray-700">نئون سپلائر اڪائونٽ ٺاهيو</h3>
+
+      <!-- ================= 4. CASH BOOK & BANK ACCOUNTS ================= -->
+      <section id="sec-cashbook" class="app-section d-none">
+        <div class="d-flex justify-content-between align-items-center mb-4">
           <div>
-            <label class="block text-xs">سپلائر جو نالو:</label>
-            <input type="text" id="supp_name" required class="w-full mt-1 p-2 border rounded-md text-sm">
+            <h4 class="fw-bold mb-0">Cash Book & Bank Accounts</h4>
+            <small class="text-muted">Inter-Bank Transfers, Cash Deposits & Reconciliation</small>
           </div>
-          <div>
-            <label class="block text-xs">فرنچائز / کمپني جو نالو:</label>
-            <input type="text" id="supp_company" placeholder="مثال: Ufone Main Vendor" class="w-full mt-1 p-2 border rounded-md text-sm">
-          </div>
-          <button type="submit" class="w-full bg-gray-800 text-white py-2 rounded-md font-semibold text-sm hover:bg-black">
-            سپلائر محفوظ ڪريو
+          <button class="btn btn-emerald text-white btn-sm bg-success" data-bs-toggle="modal" data-bs-target="#bankTransferModal">
+            <i class="fa-solid fa-arrow-right-arrow-left me-1"></i> Record Bank Deposit / Transfer
           </button>
-        </form>
+        </div>
 
-        <!-- Supplier Transaction Form -->
-        <form onsubmit="handleSupplierTransaction(event)" class="bg-gray-50 p-4 rounded-xl border space-y-3">
-          <h3 class="font-bold text-sm text-gray-700">سپلائر خريداري / ادائگي</h3>
-          <div>
-            <label class="block text-xs">سپلائر چونڊيو:</label>
-            <select id="supp_select_id" required class="w-full mt-1 p-2 border rounded-md text-sm bg-white">
-              <!-- Dynamically Loaded -->
-            </select>
+        <div class="row g-3 mb-4">
+          <div class="col-md-4">
+            <div class="card border-primary p-3 bg-white">
+              <span class="text-muted text-xs font-semibold">CASH WALLET / VAULT</span>
+              <h3 class="fw-bold text-primary mt-1 mb-0" id="cb-cash-vault">PKR 1,450,200</h3>
+              <small class="text-muted">Primary Physical Vault</small>
+            </div>
           </div>
-          <div>
-            <label class="block text-xs">ٽرانزيڪشن جو قسم:</label>
-            <select id="supp_trans_type" class="w-full mt-1 p-2 border rounded-md text-sm bg-white">
-              <option value="Supplier_Purchase">اوڌار تي مال وٺڻ (Stock Purchase)</option>
-              <option value="Supplier_Payment">سپلائر کي ادائگي ڪرڻ (Payment Paid)</option>
-            </select>
+          <div class="col-md-4">
+            <div class="card border-success p-3 bg-white">
+              <span class="text-muted text-xs font-semibold">MEEZAN BANK (CURRENT A/C)</span>
+              <h3 class="fw-bold text-success mt-1 mb-0">PKR 3,250,000</h3>
+              <small class="text-muted">A/C: 01010102030405</small>
+            </div>
           </div>
-          <div>
-            <label class="block text-xs">رقم (PKR):</label>
-            <input type="number" id="supp_trans_amount" required class="w-full mt-1 p-2 border rounded-md text-sm">
+          <div class="col-md-4">
+            <div class="card border-info p-3 bg-white">
+              <span class="text-muted text-xs font-semibold">HABIB BANK LIMITED (HBL)</span>
+              <h3 class="fw-bold text-info mt-1 mb-0">PKR 2,570,000</h3>
+              <small class="text-muted">A/C: 50029304910234</small>
+            </div>
           </div>
-          <button type="submit" class="w-full bg-indigo-600 text-white py-2 rounded-md font-semibold text-sm hover:bg-indigo-700">
-            ٽرانزيڪشن رڪارڊ ڪريو
+        </div>
+
+        <div class="card table-card bg-white p-3">
+          <h6 class="fw-bold mb-3">Bank & Cash Activity Log</h6>
+          <div class="table-responsive">
+            <table class="table table-sm align-middle">
+              <thead class="table-light text-xs">
+                <tr>
+                  <th>Timestamp</th>
+                  <th>Source Account</th>
+                  <th>Destination Account</th>
+                  <th>Type</th>
+                  <th>Amount</th>
+                  <th>Ref Note</th>
+                </tr>
+              </thead>
+              <tbody id="bank-transfers-tbody">
+                <!-- Javascript Populated -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+
+      <!-- ================= 5. DOUBLE-ENTRY VOUCHERS ================= -->
+      <section id="sec-vouchers" class="app-section d-none">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <div>
+            <h4 class="fw-bold mb-0">Double-Entry Financial Vouchers</h4>
+            <small class="text-muted">Receipt, Payment, Journal, and Contra Vouchers</small>
+          </div>
+          <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addVoucherModal">
+            <i class="fa-solid fa-plus me-1"></i> Create New Voucher
           </button>
-        </form>
+        </div>
 
-      </div>
-    </div>
+        <div class="card table-card bg-white p-3">
+          <div class="table-responsive">
+            <table class="table table-hover align-middle">
+              <thead class="table-light text-xs text-uppercase">
+                <tr>
+                  <th>Voucher #</th>
+                  <th>Date</th>
+                  <th>Voucher Type</th>
+                  <th>Debit Account</th>
+                  <th>Credit Account</th>
+                  <th class="text-end">Amount (PKR)</th>
+                  <th class="text-center">Action</th>
+                </tr>
+              </thead>
+              <tbody id="vouchers-table-body">
+                <!-- Javascript populated -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
 
+
+      <!-- ================= 6. EXPENSES & UTILITIES ================= -->
+      <section id="sec-expenses" class="app-section d-none">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <div>
+            <h4 class="fw-bold mb-0">Expense & Utility Bills Tracker</h4>
+            <small class="text-muted">Record Salaries, Office Maintenance, Fuel & Utility Invoices</small>
+          </div>
+          <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#addExpenseModal">
+            <i class="fa-solid fa-minus me-1"></i> Record Expense
+          </button>
+        </div>
+
+        <div class="card table-card bg-white p-3">
+          <div class="table-responsive">
+            <table class="table table-hover align-middle">
+              <thead class="table-light text-xs text-uppercase">
+                <tr>
+                  <th>Expense ID</th>
+                  <th>Date</th>
+                  <th>Expense Category</th>
+                  <th>Paid Via</th>
+                  <th>Description</th>
+                  <th class="text-end">Amount (PKR)</th>
+                </tr>
+              </thead>
+              <tbody id="expenses-table-body">
+                <!-- Javascript populated -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+
+      <!-- ================= 7. GST INVOICE CREATOR ================= -->
+      <section id="sec-invoicing" class="app-section d-none">
+        <div class="d-flex justify-content-between align-items-center mb-4 no-print">
+          <div>
+            <h4 class="fw-bold mb-0">GST / Sales Invoice Creator</h4>
+            <small class="text-muted">Generate Printable Invoices with QR Code, Tax & Line Items</small>
+          </div>
+          <button class="btn btn-dark btn-sm" onclick="window.print()"><i class="fa-solid fa-print me-1"></i> Print Invoice</button>
+        </div>
+
+        <div class="card table-card bg-white p-4" id="printable-invoice">
+          <!-- Invoice Header -->
+          <div class="d-flex justify-content-between align-items-start border-bottom pb-3 mb-4">
+            <div>
+              <h3 class="fw-bold text-primary mb-0"><i class="fa-solid fa-building-columns me-2"></i>ApexBank ERP</h3>
+              <p class="text-sm text-muted mb-0">Hasnain Communication & Telecom Solutions</p>
+              <small class="text-muted">NTN: 8932041-9 | Sales Tax Reg: 3209841234901</small>
+            </div>
+            <div class="text-end">
+              <h4 class="fw-bold mb-1 text-uppercase">TAX INVOICE</h4>
+              <p class="mb-0 text-sm">Invoice #: <strong id="inv-num-display">INV-2026-9041</strong></p>
+              <p class="mb-0 text-sm">Date: <span id="inv-date-display">2026-09-20</span></p>
+            </div>
+          </div>
+
+          <!-- Customer Selection Form (Hidden in Print) -->
+          <div class="row g-3 mb-4 no-print">
+            <div class="col-md-6">
+              <label class="form-label text-xs fw-bold">Select Customer</label>
+              <select class="form-select form-select-sm" id="inv-cust-select" onchange="updateInvoiceCustDetails()">
+                <!-- Javascript Populated -->
+              </select>
+            </div>
+            <div class="col-md-3">
+              <label class="form-label text-xs fw-bold">GST Rate (%)</label>
+              <input type="number" class="form-control form-control-sm" id="inv-gst-rate" value="18" oninput="calculateInvoiceTotals()">
+            </div>
+            <div class="col-md-3">
+              <label class="form-label text-xs fw-bold">Discount (PKR)</label>
+              <input type="number" class="form-control form-control-sm" id="inv-discount" value="0" oninput="calculateInvoiceTotals()">
+            </div>
+          </div>
+
+          <!-- Customer Details Display -->
+          <div class="bg-light p-3 rounded mb-4">
+            <h6 class="fw-bold text-xs text-uppercase text-muted mb-2">Billed To:</h6>
+            <h5 class="fw-bold mb-1" id="inv-cust-name">Ali Raza Communications</h5>
+            <p class="text-sm mb-0" id="inv-cust-phone">Phone: +92 300 1234567</p>
+            <p class="text-sm mb-0" id="inv-cust-city">Location: Karachi, Pakistan</p>
+          </div>
+
+          <!-- Line Items Table -->
+          <div class="table-responsive mb-4">
+            <table class="table table-bordered align-middle">
+              <thead class="table-light text-xs text-uppercase">
+                <tr>
+                  <th>Item Description</th>
+                  <th class="text-center" style="width: 100px;">Qty</th>
+                  <th class="text-end" style="width: 150px;">Unit Price (PKR)</th>
+                  <th class="text-end" style="width: 150px;">Total</th>
+                  <th class="text-center no-print" style="width: 50px;">#</th>
+                </tr>
+              </thead>
+              <tbody id="invoice-items-tbody">
+                <!-- Javascript populated -->
+              </tbody>
+            </table>
+            <button class="btn btn-outline-primary btn-sm no-print" onclick="addInvoiceRow()"><i class="fa-solid fa-plus me-1"></i> Add Line Item</button>
+          </div>
+
+          <!-- Totals and QR Code Row -->
+          <div class="row align-items-end">
+            <div class="col-6">
+              <div id="qrcode" class="mb-2"></div>
+              <small class="text-muted text-xs">Digitally verified invoice signature by ApexBank Core.</small>
+            </div>
+            <div class="col-6 text-end">
+              <table class="table table-sm table-borderless">
+                <tr>
+                  <td class="fw-bold text-sm">Subtotal:</td>
+                  <td class="fw-bold text-sm" id="inv-subtotal">PKR 0.00</td>
+                </tr>
+                <tr>
+                  <td class="text-sm">GST (18%):</td>
+                  <td class="text-sm" id="inv-tax">PKR 0.00</td>
+                </tr>
+                <tr>
+                  <td class="text-sm">Discount:</td>
+                  <td class="text-sm" id="inv-disc-display">PKR 0.00</td>
+                </tr>
+                <tr class="border-top">
+                  <td class="fw-bold text-lg text-primary">Grand Total:</td>
+                  <td class="fw-bold text-lg text-primary" id="inv-grand-total">PKR 0.00</td>
+                </tr>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <!-- ================= 8. FINANCIAL STATEMENTS ================= -->
+      <section id="sec-reports" class="app-section d-none">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <div>
+            <h4 class="fw-bold mb-0">Financial Statements & Audits</h4>
+            <small class="text-muted">Trial Balance, Profit & Loss, and Balance Sheet</small>
+          </div>
+        </div>
+
+        <ul class="nav nav-tabs mb-3" id="reportTabs">
+          <li class="nav-item"><a class="nav-link active" data-bs-toggle="tab" href="#tab-pnl">Profit & Loss Statement</a></li>
+          <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#tab-trial">Trial Balance</a></li>
+        </ul>
+
+        <div class="tab-content">
+          <!-- Profit & Loss Tab -->
+          <div class="tab-pane fade show active" id="tab-pnl">
+            <div class="card table-card bg-white p-4">
+              <h5 class="fw-bold mb-3 border-bottom pb-2">Statement of Profit or Loss (YTD)</h5>
+              <div class="table-responsive">
+                <table class="table table-striped">
+                  <tbody id="pnl-statement-tbody">
+                    <!-- Javascript Populated -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- Trial Balance Tab -->
+          <div class="tab-pane fade" id="tab-trial">
+            <div class="card table-card bg-white p-4">
+              <h5 class="fw-bold mb-3 border-bottom pb-2">General Ledger Trial Balance</h5>
+              <div class="table-responsive">
+                <table class="table table-bordered align-middle">
+                  <thead class="table-light text-xs text-uppercase">
+                    <tr>
+                      <th>Account Code</th>
+                      <th>Account Title</th>
+                      <th class="text-end">Debit (PKR)</th>
+                      <th class="text-end">Credit (PKR)</th>
+                    </tr>
+                  </thead>
+                  <tbody id="trial-balance-tbody">
+                    <!-- Javascript Populated -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <!-- ================= 9. EMBEDDED PHP MVC & MYSQL ARCHITECTURE ================= -->
+      <section id="sec-backend-code" class="app-section d-none">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <div>
+            <h4 class="fw-bold mb-0">Backend PHP 8+ MVC & MySQL Architecture</h4>
+            <small class="text-muted">Production-ready database schema and backend code structure for deployment</small>
+          </div>
+          <button class="btn btn-outline-dark btn-sm" onclick="copyCodeToClipboard('mvc-code-block')"><i class="fa-solid fa-copy me-1"></i> Copy Code</button>
+        </div>
+
+        <div class="card bg-dark text-white p-3 rounded-3">
+          <pre><code id="mvc-code-block">
+/* =================================================================
+   1. MYSQL DATABASE SCHEMA (schema.sql)
+   ================================================================= */
+
+CREATE DATABASE IF NOT EXISTS apexbank_accounting CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE apexbank_accounting;
+
+-- Users & Roles Table
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    password_hash VARCHAR(255) NOT NULL,
+    role ENUM('Super Admin', 'Accountant', 'Cashier', 'Manager') DEFAULT 'Accountant',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Chart of Accounts
+CREATE TABLE chart_of_accounts (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    code VARCHAR(20) UNIQUE NOT NULL,
+    title VARCHAR(150) NOT NULL,
+    type ENUM('Asset', 'Liability', 'Equity', 'Revenue', 'Expense') NOT NULL
+);
+
+-- Customers Table
+CREATE TABLE customers (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    customer_code VARCHAR(20) UNIQUE NOT NULL,
+    name VARCHAR(150) NOT NULL,
+    phone VARCHAR(50),
+    city VARCHAR(50),
+    balance DECIMAL(15, 2) DEFAULT 0.00,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Suppliers Table
+CREATE TABLE suppliers (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    vendor_code VARCHAR(20) UNIQUE NOT NULL,
+    name VARCHAR(150) NOT NULL,
+    company_name VARCHAR(150),
+    phone VARCHAR(50),
+    payable_balance DECIMAL(15, 2) DEFAULT 0.00,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Vouchers & General Ledger Transactions
+CREATE TABLE vouchers (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    voucher_num VARCHAR(30) UNIQUE NOT NULL,
+    voucher_date DATE NOT NULL,
+    voucher_type ENUM('Payment', 'Receipt', 'Journal', 'Contra') NOT NULL,
+    debit_account_id INT,
+    credit_account_id INT,
+    amount DECIMAL(15, 2) NOT NULL,
+    description TEXT,
+    created_by INT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (created_by) REFERENCES users(id)
+);
+
+
+/* =================================================================
+   2. PHP MVC CONTROLLER EXAMPLE (VoucherController.php)
+   ================================================================= */
+
+&lt;?php
+namespace Controllers;
+
+use Models\VoucherModel;
+use Core\Controller;
+
+class VoucherController extends Controller {
+
+    private $voucherModel;
+
+    public function __construct() {
+        $this->voucherModel = new VoucherModel();
+    }
+
+    public function createVoucher() {
+        // CSRF Verification
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            if (!verify_csrf_token($_POST['csrf_token'])) {
+                die(json_encode(['status' => 'error', 'message' => 'CSRF Token validation failed']));
+            }
+
+            $data = [
+                'voucher_num' => 'VOUCH-' . time(),
+                'voucher_date' => $_POST['voucher_date'],
+                'voucher_type' => $_POST['voucher_type'],
+                'amount' => floatval($_POST['amount']),
+                'description' => htmlspecialchars($_POST['description'])
+            ];
+
+            $result = $this->voucherModel->saveVoucher($data);
+            echo json_encode(['status' => 'success', 'data' => $result]);
+        }
+    }
+}
+          </code></pre>
+        </div>
+      </section>
+
+
+      <!-- ================= 10. AUDIT LOGS & SECURITY ================= -->
+      <section id="sec-audit" class="app-section d-none">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <div>
+            <h4 class="fw-bold mb-0">System Security & Audit Trail</h4>
+            <small class="text-muted">Real-time Session Security, XSS & CSRF Protection Logs</small>
+          </div>
+          <span class="badge bg-success p-2"><i class="fa-solid fa-shield me-1"></i> Security Shield Active</span>
+        </div>
+
+        <div class="card table-card bg-white p-3">
+          <div class="table-responsive">
+            <table class="table table-sm align-middle">
+              <thead class="table-light text-xs">
+                <tr>
+                  <th>Timestamp</th>
+                  <th>User Role</th>
+                  <th>Action Triggered</th>
+                  <th>IP Address</th>
+                  <th>Security Status</th>
+                </tr>
+              </thead>
+              <tbody id="audit-logs-tbody">
+                <!-- Javascript Populated -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+    </main>
   </div>
 
-  <!-- Javascript Logic -->
+
+  <!-- ================= MODALS SECTION ================= -->
+
+  <!-- Add Customer Modal -->
+  <div class="modal fade" id="addCustomerModal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title fw-bold">Add New Customer Account</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <form id="add-customer-form" onsubmit="saveCustomer(event)">
+            <div class="mb-3">
+              <label class="form-label text-xs fw-bold">Customer Full Name</label>
+              <input type="text" class="form-control" id="m-cust-name" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label text-xs fw-bold">Phone Number</label>
+              <input type="text" class="form-control" id="m-cust-phone" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label text-xs fw-bold">City / Location</label>
+              <input type="text" class="form-control" id="m-cust-city" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label text-xs fw-bold">Initial Opening Balance (PKR)</label>
+              <input type="number" class="form-control" id="m-cust-balance" value="0">
+            </div>
+            <button type="submit" class="btn btn-primary w-full w-100">Save Customer Account</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Supplier Modal -->
+  <div class="modal fade" id="addSupplierModal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title fw-bold">Add Supplier Vendor</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <form id="add-supplier-form" onsubmit="saveSupplier(event)">
+            <div class="mb-3">
+              <label class="form-label text-xs fw-bold">Supplier Name</label>
+              <input type="text" class="form-control" id="m-supp-name" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label text-xs fw-bold">Company / Franchise</label>
+              <input type="text" class="form-control" id="m-supp-company" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label text-xs fw-bold">Contact Phone</label>
+              <input type="text" class="form-control" id="m-supp-phone" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label text-xs fw-bold">Initial Payable Balance (PKR)</label>
+              <input type="number" class="form-control" id="m-supp-balance" value="0">
+            </div>
+            <button type="submit" class="btn btn-dark w-100">Save Supplier Account</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Voucher Modal -->
+  <div class="modal fade" id="addVoucherModal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title fw-bold">Create Double-Entry Voucher</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <form id="add-voucher-form" onsubmit="saveVoucher(event)">
+            <div class="mb-3">
+              <label class="form-label text-xs fw-bold">Voucher Type</label>
+              <select class="form-select" id="m-vouch-type">
+                <option value="Receipt">Receipt Voucher (Cash/Bank In)</option>
+                <option value="Payment">Payment Voucher (Cash/Bank Out)</option>
+                <option value="Journal">Journal Voucher (General Ledger)</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label class="form-label text-xs fw-bold">Debit Account</label>
+              <input type="text" class="form-control" id="m-vouch-debit" placeholder="e.g. Cash Box" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label text-xs fw-bold">Credit Account</label>
+              <input type="text" class="form-control" id="m-vouch-credit" placeholder="e.g. Customer Sales Revenue" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label text-xs fw-bold">Amount (PKR)</label>
+              <input type="number" class="form-control" id="m-vouch-amount" required>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Post Voucher Entry</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Expense Modal -->
+  <div class="modal fade" id="addExpenseModal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title fw-bold">Record Expense</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <form id="add-expense-form" onsubmit="saveExpense(event)">
+            <div class="mb-3">
+              <label class="form-label text-xs fw-bold">Category</label>
+              <select class="form-select" id="m-exp-cat">
+                <option>Electricity / Utility Bill</option>
+                <option>Shop Rent</option>
+                <option>Staff Salaries</option>
+                <option>Tea & Refreshments</option>
+                <option>Fuel & Transport</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label class="form-label text-xs fw-bold">Paid From</label>
+              <select class="form-select" id="m-exp-source">
+                <option>Cash Vault</option>
+                <option>Meezan Bank</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label class="form-label text-xs fw-bold">Amount (PKR)</label>
+              <input type="number" class="form-control" id="m-exp-amount" required>
+            </div>
+            <button type="submit" class="btn btn-danger w-100">Record Expense</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Bootstrap & Chart JS Libraries -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
   <script>
-    const SUPABASE_URL = "YOUR_SUPABASE_URL";
-    const SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY";
-    const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    /* =================================================================
+       GLOBAL STATE STORAGE
+       ================================================================= */
+    const appData = {
+      customers: [
+        { id: 1, code: 'CUST-101', name: 'Ali Raza Telecom', phone: '+92 300 1234567', city: 'Karachi', balance: 145000 },
+        { id: 2, code: 'CUST-102', name: 'Hasnain Mobile Zone', phone: '+92 301 9876543', city: 'Lahore', balance: 230000 },
+        { id: 3, code: 'CUST-103', name: 'Sukkur Data Services', phone: '+92 333 4567890', city: 'Sukkur', balance: 89000 }
+      ],
+      suppliers: [
+        { id: 1, code: 'SUPP-501', name: 'Ufone Franchise HQ', company: 'PTCL Group', phone: '+92 21 1111234', balance: 450000 },
+        { id: 2, code: 'SUPP-502', name: 'Jazz Main Distributor', company: 'PMCL', phone: '+92 42 1115299', balance: 680000 }
+      ],
+      vouchers: [
+        { num: 'VOUCH-9001', date: '2026-09-20', type: 'Receipt', debit: 'Cash Vault', credit: 'Ali Raza Telecom', amount: 50000 },
+        { num: 'VOUCH-9002', date: '2026-09-19', type: 'Payment', debit: 'Shop Rent', credit: 'Meezan Bank', amount: 80000 },
+        { num: 'VOUCH-9003', date: '2026-09-18', type: 'Journal', debit: 'Equipment Asset', credit: 'Accounts Payable', amount: 120000 }
+      ],
+      expenses: [
+        { id: 'EXP-401', date: '2026-09-20', category: 'Electricity / Utility Bill', source: 'Meezan Bank', desc: 'SEPCO Monthly Bill', amount: 45000 },
+        { id: 'EXP-402', date: '2026-09-19', category: 'Tea & Refreshments', source: 'Cash Vault', desc: 'Daily Staff Tea', amount: 1200 }
+      ],
+      invoiceItems: [
+        { desc: '4G Wireless Router Device', qty: 2, price: 8500 }
+      ],
+      auditLogs: [
+        { time: '2026-09-20 13:40:12', user: 'Super Admin', action: 'System Login Verified via 2FA', ip: '192.168.1.1', status: 'Passed' },
+        { time: '2026-09-20 13:25:00', user: 'Accountant', action: 'Posted Payment Voucher VOUCH-9002', ip: '192.168.1.15', status: 'Verified' }
+      ]
+    };
 
-    document.getElementById('global_date_filter').valueAsDate = new Date();
-
+    /* =================================================================
+       CORE INITIALIZATION & SWITCHER
+       ================================================================= */
     document.addEventListener("DOMContentLoaded", () => {
-      loadDashboardData();
-      loadSuppliersList();
+      initCharts();
+      renderDashboard();
+      renderCustomers();
+      renderSuppliers();
+      renderVouchers();
+      renderExpenses();
+      renderInvoice();
+      renderReports();
+      renderAuditLogs();
     });
 
-    function toggleBankReceiptArea() {
-      const method = document.getElementById('sale_payment_method').value;
-      const box = document.getElementById('bank_receipt_box');
-      if (method === 'bank') {
-        box.classList.remove('hidden');
-      } else {
-        box.classList.add('hidden');
+    function showSection(sectionId, element) {
+      document.querySelectorAll('.app-section').forEach(sec => sec.classList.add('d-none'));
+      document.getElementById('sec-' + sectionId).classList.remove('d-none');
+
+      if(element) {
+        document.querySelectorAll('#sidebar .nav-link').forEach(link => link.classList.remove('active'));
+        element.classList.add('active');
       }
     }
 
-    // 1. Customer Sale Processing
-    async function handleCustomerSale(e) {
-      e.preventDefault();
-      const btn = document.getElementById('sale_submit_btn');
-      btn.disabled = true;
-
-      const name = document.getElementById('sale_cust_name').value;
-      const phone = document.getElementById('sale_cust_phone').value;
-      const amount = parseFloat(document.getElementById('sale_amount').value);
-      const method = document.getElementById('sale_payment_method').value;
-      let receipt_url = null;
-
-      if (method === 'bank') {
-        const fileInput = document.getElementById('sale_receipt_file');
-        if (fileInput.files.length > 0) {
-          const file = fileInput.files[0];
-          const fileName = `receipts/${Date.now()}_${file.name}`;
-          const { data, error } = await supabase.storage.from('receipts').upload(fileName, file);
-          if (!error) {
-            const { data: publicData } = supabase.storage.from('receipts').getPublicUrl(fileName);
-            receipt_url = publicData.publicUrl;
-          }
-        }
-      }
-
-      const typeMap = { 'cash': 'Sale_Cash', 'credit': 'Sale_Credit', 'bank': 'Sale_Bank' };
-
-      const { error } = await supabase.from('transactions').insert([{
-        customer_name: name,
-        customer_phone: phone,
-        amount: amount,
-        type: typeMap[method],
-        payment_account_id: method === 'cash' ? 1 : (method === 'bank' ? 2 : null),
-        receipt_url: receipt_url,
-        description: `Customer sale via ${method}`
-      }]);
-
-      if (error) {
-        alert("غلطي: " + error.message);
-      } else {
-        alert("آرڊر کاميابي سان مڪمل ٿي ويو!");
-        e.target.reset();
-        toggleBankReceiptArea();
-        loadDashboardData();
-      }
-      btn.disabled = false;
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      sidebar.style.transform = sidebar.style.transform === 'translateX(-100%)' ? 'translateX(0)' : 'translateX(-100%)';
     }
 
-    // 2. Bank Deposit Processing
-    async function handleBankDeposit(e) {
-      e.preventDefault();
-      const amount = parseFloat(document.getElementById('deposit_amount').value);
-      const bank_id = document.getElementById('deposit_bank_id').value;
-      const note = document.getElementById('deposit_note').value;
-
-      const { error } = await supabase.from('transactions').insert([{
-        type: 'Bank_Deposit',
-        amount: amount,
-        payment_account_id: bank_id,
-        description: note || 'Cash deposited to bank'
-      }]);
-
-      if (error) {
-        alert("غلطي: " + error.message);
-      } else {
-        alert("رقم بينڪ ۾ داخل ٿي وئي!");
-        e.target.reset();
-        loadDashboardData();
-      }
+    function toggleTheme() {
+      const html = document.documentElement;
+      const current = html.getAttribute('data-bs-theme');
+      const next = current === 'dark' ? 'light' : 'dark';
+      html.setAttribute('data-bs-theme', next);
+      document.getElementById('theme-icon').className = next === 'dark' ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
     }
 
-    // 3. Daily Ledger (Expenses & Income)
-    async function handleDailyLedger(e) {
-      e.preventDefault();
-      const type = document.getElementById('ledger_type').value;
-      const category = document.getElementById('ledger_category').value;
-      const amount = parseFloat(document.getElementById('ledger_amount').value);
 
-      const { error } = await supabase.from('daily_ledger').insert([{
-        entry_type: type,
-        category: category,
-        amount: amount,
-        payment_account_id: 1
-      }]);
+    /* =================================================================
+       RENDER & ACTION LOGIC
+       ================================================================= */
 
-      if (error) {
-        alert("غلطي: " + error.message);
-      } else {
-        alert("ليجر اينٽري حفظ ٿي وئي!");
-        e.target.reset();
-        loadDashboardData();
-      }
+    // 1. Dashboard Render
+    function renderDashboard() {
+      const tbody = document.getElementById('dash-recent-transactions');
+      tbody.innerHTML = '';
+      appData.vouchers.forEach(v => {
+        tbody.innerHTML += `
+          <tr>
+            <td class="fw-bold">${v.num}</td>
+            <td>${v.date}</td>
+            <td><span class="badge ${v.type === 'Receipt' ? 'badge-soft-success' : 'badge-soft-danger'}">${v.type}</span></td>
+            <td>${v.credit}</td>
+            <td>${v.debit}</td>
+            <td class="text-end fw-bold">PKR ${v.amount.toLocaleString()}</td>
+            <td class="text-center"><i class="fa-solid fa-circle-check text-success"></i></td>
+          </tr>
+        `;
+      });
     }
 
-    // 4. Supplier Account Creation
-    async function handleAddSupplier(e) {
-      e.preventDefault();
-      const name = document.getElementById('supp_name').value;
-      const company = document.getElementById('supp_company').value;
+    // 2. Customers Render
+    function renderCustomers() {
+      const tbody = document.getElementById('customer-table-body');
+      tbody.innerHTML = '';
+      document.getElementById('cust-count').innerText = appData.customers.length;
 
-      const { error } = await supabase.from('suppliers').insert([{ name, company_name: company }]);
-      if (error) {
-        alert("غلطي: " + error.message);
-      } else {
-        alert("سپلائر اڪائونٽ ٺهي ويو!");
-        e.target.reset();
-        loadSuppliersList();
-      }
-    }
+      appData.customers.forEach(c => {
+        tbody.innerHTML += `
+          <tr>
+            <td class="fw-bold text-xs">${c.code}</td>
+            <td class="fw-bold text-primary">${c.name}</td>
+            <td>${c.phone}</td>
+            <td>${c.city}</td>
+            <td class="text-end">PKR 500,000</td>
+            <td class="text-end fw-bold text-success">PKR ${c.balance.toLocaleString()}</td>
+            <td class="text-center">
+              <button class="btn btn-sm btn-light" onclick="alert('Viewing Customer Ledger Statement for ${c.name}')"><i class="fa-solid fa-file-invoice"></i> Ledger</button>
+            </td>
+          </tr>
+        `;
+      });
 
-    // Load Suppliers for Dropdown
-    async function loadSuppliersList() {
-      const { data } = await supabase.from('suppliers').select('id, name, company_name');
-      if (data) {
-        const select = document.getElementById('supp_select_id');
-        select.innerHTML = '<option value="">-- سپلائر چونڊيو --</option>';
-        data.forEach(s => {
-          select.innerHTML += `<option value="${s.id}">${s.name} (${s.company_name || 'عام'})</option>`;
+      // Update Invoice Select Dropdown
+      const invSelect = document.getElementById('inv-cust-select');
+      if (invSelect) {
+        invSelect.innerHTML = '';
+        appData.customers.forEach(c => {
+          invSelect.innerHTML += `<option value="${c.id}">${c.name} (${c.city})</option>`;
         });
       }
     }
 
-    // Handle Supplier Transaction
-    async function handleSupplierTransaction(e) {
+    function saveCustomer(e) {
       e.preventDefault();
-      const supp_id = document.getElementById('supp_select_id').value;
-      const type = document.getElementById('supp_trans_type').value;
-      const amount = parseFloat(document.getElementById('supp_trans_amount').value);
+      const newCust = {
+        id: appData.customers.length + 1,
+        code: 'CUST-' + (100 + appData.customers.length + 1),
+        name: document.getElementById('m-cust-name').value,
+        phone: document.getElementById('m-cust-phone').value,
+        city: document.getElementById('m-cust-city').value,
+        balance: parseFloat(document.getElementById('m-cust-balance').value) || 0
+      };
+      appData.customers.push(newCust);
+      renderCustomers();
+      bootstrap.Modal.getInstance(document.getElementById('addCustomerModal')).hide();
+      document.getElementById('add-customer-form').reset();
+    }
 
-      const { error } = await supabase.from('transactions').insert([{
-        supplier_id: supp_id,
-        type: type,
-        amount: amount
-      }]);
+    // 3. Suppliers Render
+    function renderSuppliers() {
+      const tbody = document.getElementById('supplier-table-body');
+      tbody.innerHTML = '';
+      appData.suppliers.forEach(s => {
+        tbody.innerHTML += `
+          <tr>
+            <td class="fw-bold text-xs">${s.code}</td>
+            <td class="fw-bold text-dark">${s.name}</td>
+            <td>${s.company}</td>
+            <td>${s.phone}</td>
+            <td class="text-end fw-bold text-danger">PKR ${s.balance.toLocaleString()}</td>
+            <td class="text-center"><span class="badge badge-soft-success">Active</span></td>
+            <td class="text-center">
+              <button class="btn btn-sm btn-light"><i class="fa-solid fa-list"></i> Ledger</button>
+            </td>
+          </tr>
+        `;
+      });
+    }
 
-      if (error) {
-        alert("غلطي: " + error.message);
-      } else {
-        alert("سپلائر ٽرانزيڪشن محفوظ ٿي وئي!");
-        e.target.reset();
+    function saveSupplier(e) {
+      e.preventDefault();
+      const newSupp = {
+        id: appData.suppliers.length + 1,
+        code: 'SUPP-' + (500 + appData.suppliers.length + 1),
+        name: document.getElementById('m-supp-name').value,
+        company: document.getElementById('m-supp-company').value,
+        phone: document.getElementById('m-supp-phone').value,
+        balance: parseFloat(document.getElementById('m-supp-balance').value) || 0
+      };
+      appData.suppliers.push(newSupp);
+      renderSuppliers();
+      bootstrap.Modal.getInstance(document.getElementById('addSupplierModal')).hide();
+      document.getElementById('add-supplier-form').reset();
+    }
+
+    // 4. Vouchers Render
+    function renderVouchers() {
+      const tbody = document.getElementById('vouchers-table-body');
+      tbody.innerHTML = '';
+      appData.vouchers.forEach(v => {
+        tbody.innerHTML += `
+          <tr>
+            <td class="fw-bold">${v.num}</td>
+            <td>${v.date}</td>
+            <td><span class="badge badge-soft-info">${v.type}</span></td>
+            <td>${v.debit}</td>
+            <td>${v.credit}</td>
+            <td class="text-end fw-bold">PKR ${v.amount.toLocaleString()}</td>
+            <td class="text-center"><button class="btn btn-sm btn-outline-secondary" onclick="alert('Printing Voucher ${v.num}')"><i class="fa-solid fa-print"></i></button></td>
+          </tr>
+        `;
+      });
+    }
+
+    function saveVoucher(e) {
+      e.preventDefault();
+      const newVouch = {
+        num: 'VOUCH-' + (9000 + appData.vouchers.length + 1),
+        date: new Date().toISOString().split('T')[0],
+        type: document.getElementById('m-vouch-type').value,
+        debit: document.getElementById('m-vouch-debit').value,
+        credit: document.getElementById('m-vouch-credit').value,
+        amount: parseFloat(document.getElementById('m-vouch-amount').value) || 0
+      };
+      appData.vouchers.unshift(newVouch);
+      renderVouchers();
+      renderDashboard();
+      bootstrap.Modal.getInstance(document.getElementById('addVoucherModal')).hide();
+      document.getElementById('add-voucher-form').reset();
+    }
+
+    // 5. Expenses Render
+    function renderExpenses() {
+      const tbody = document.getElementById('expenses-table-body');
+      tbody.innerHTML = '';
+      appData.expenses.forEach(x => {
+        tbody.innerHTML += `
+          <tr>
+            <td class="fw-bold text-xs">${x.id}</td>
+            <td>${x.date}</td>
+            <td class="fw-bold">${x.category}</td>
+            <td><span class="badge badge-soft-warning">${x.source}</span></td>
+            <td>${x.desc}</td>
+            <td class="text-end fw-bold text-danger">PKR ${x.amount.toLocaleString()}</td>
+          </tr>
+        `;
+      });
+    }
+
+    function saveExpense(e) {
+      e.preventDefault();
+      const newExp = {
+        id: 'EXP-' + (400 + appData.expenses.length + 1),
+        date: new Date().toISOString().split('T')[0],
+        category: document.getElementById('m-exp-cat').value,
+        source: document.getElementById('m-exp-source').value,
+        desc: 'Manual Expense Entry',
+        amount: parseFloat(document.getElementById('m-exp-amount').value) || 0
+      };
+      appData.expenses.unshift(newExp);
+      renderExpenses();
+      bootstrap.Modal.getInstance(document.getElementById('addExpenseModal')).hide();
+      document.getElementById('add-expense-form').reset();
+    }
+
+    // 6. Interactive Invoice Engine
+    function renderInvoice() {
+      const tbody = document.getElementById('invoice-items-tbody');
+      tbody.innerHTML = '';
+      
+      appData.invoiceItems.forEach((item, index) => {
+        const total = item.qty * item.price;
+        tbody.innerHTML += `
+          <tr>
+            <td><input type="text" class="form-control form-control-sm" value="${item.desc}" onchange="appData.invoiceItems[${index}].desc = this.value"></td>
+            <td><input type="number" class="form-control form-control-sm text-center" value="${item.qty}" onchange="appData.invoiceItems[${index}].qty = parseFloat(this.value); calculateInvoiceTotals();"></td>
+            <td><input type="number" class="form-control form-control-sm text-end" value="${item.price}" onchange="appData.invoiceItems[${index}].price = parseFloat(this.value); calculateInvoiceTotals();"></td>
+            <td class="text-end fw-bold">PKR ${total.toLocaleString()}</td>
+            <td class="text-center no-print"><button class="btn btn-sm btn-outline-danger" onclick="appData.invoiceItems.splice(${index},1); renderInvoice();"><i class="fa-solid fa-trash"></i></button></td>
+          </tr>
+        `;
+      });
+
+      calculateInvoiceTotals();
+      generateQRCode();
+    }
+
+    function addInvoiceRow() {
+      appData.invoiceItems.push({ desc: 'New Telecom Item / Service', qty: 1, price: 1000 });
+      renderInvoice();
+    }
+
+    function calculateInvoiceTotals() {
+      let subtotal = 0;
+      appData.invoiceItems.forEach(i => subtotal += (i.qty * i.price));
+      
+      const gstRate = parseFloat(document.getElementById('inv-gst-rate').value) || 0;
+      const discount = parseFloat(document.getElementById('inv-discount').value) || 0;
+
+      const tax = subtotal * (gstRate / 100);
+      const grandTotal = (subtotal + tax) - discount;
+
+      document.getElementById('inv-subtotal').innerText = 'PKR ' + subtotal.toLocaleString();
+      document.getElementById('inv-tax').innerText = 'PKR ' + tax.toLocaleString();
+      document.getElementById('inv-disc-display').innerText = 'PKR ' + discount.toLocaleString();
+      document.getElementById('inv-grand-total').innerText = 'PKR ' + grandTotal.toLocaleString();
+    }
+
+    function updateInvoiceCustDetails() {
+      const selectedId = document.getElementById('inv-cust-select').value;
+      const cust = appData.customers.find(c => c.id == selectedId);
+      if (cust) {
+        document.getElementById('inv-cust-name').innerText = cust.name;
+        document.getElementById('inv-cust-phone').innerText = 'Phone: ' + cust.phone;
+        document.getElementById('inv-cust-city').innerText = 'Location: ' + cust.city + ', Pakistan';
       }
     }
 
-    // Live Dashboard Calculator
-    async function loadDashboardData() {
-      const selectedDate = document.getElementById('global_date_filter').value;
+    function generateQRCode() {
+      const container = document.getElementById("qrcode");
+      container.innerHTML = "";
+      new QRCode(container, {
+        text: "ApexBank-Verified-Invoice-INV-2026-9041",
+        width: 64,
+        height: 64
+      });
+    }
 
-      // Fetch Sales
-      const { data: sales } = await supabase.from('transactions').select('amount').eq('trans_date', selectedDate);
-      let todaySales = sales ? sales.reduce((acc, curr) => acc + curr.amount, 0) : 0;
-      document.getElementById('dash_today_sales').innerText = `PKR ${todaySales}`;
+    // 7. Reports Render
+    function renderReports() {
+      const pnlBody = document.getElementById('pnl-statement-tbody');
+      pnlBody.innerHTML = `
+        <tr class="fw-bold bg-light"><td>Gross Sales & Telecom Revenue</td><td class="text-end text-success">PKR 3,450,000</td></tr>
+        <tr><td>Cost of Goods Sold (PTCL/Jazz Stock)</td><td class="text-end text-danger">(PKR 1,800,000)</td></tr>
+        <tr class="fw-bold"><td>Gross Profit Yield</td><td class="text-end">PKR 1,650,000</td></tr>
+        <tr><td>Operating & Utility Expenses</td><td class="text-end text-danger">(PKR 440,000)</td></tr>
+        <tr class="fw-bold text-lg text-primary border-top"><td>Net Operating Yield (EBITDA)</td><td class="text-end">PKR 1,210,000</td></tr>
+      `;
 
-      // Fetch Daily Expenses
-      const { data: expenses } = await supabase.from('daily_ledger').select('amount').eq('entry_date', selectedDate).eq('entry_type', 'Expense');
-      let todayExp = expenses ? expenses.reduce((acc, curr) => acc + curr.amount, 0) : 0;
-      document.getElementById('dash_today_expenses').innerText = `PKR ${todayExp}`;
+      const trialBody = document.getElementById('trial-balance-tbody');
+      trialBody.innerHTML = `
+        <tr><td>1001</td><td>Cash Vault Balance</td><td class="text-end">1,450,200</td><td class="text-end">0</td></tr>
+        <tr><td>1002</td><td>Meezan Bank Current A/C</td><td class="text-end">3,250,000</td><td class="text-end">0</td></tr>
+        <tr><td>2001</td><td>Accounts Receivable (Customers)</td><td class="text-end">890,500</td><td class="text-end">0</td></tr>
+        <tr><td>3001</td><td>Accounts Payable (Vendors)</td><td class="text-end">0</td><td class="text-end">1,130,000</td></tr>
+        <tr class="fw-bold table-light"><td>TOTALS</td><td class="text-end">PKR 5,590,700</td><td class="text-end">PKR 5,590,700</td></tr>
+      `;
+    }
+
+    // 8. Audit Logs Render
+    function renderAuditLogs() {
+      const tbody = document.getElementById('audit-logs-tbody');
+      tbody.innerHTML = '';
+      appData.auditLogs.forEach(a => {
+        tbody.innerHTML += `
+          <tr>
+            <td>${a.time}</td>
+            <td><span class="badge badge-soft-info">${a.user}</span></td>
+            <td class="fw-semibold">${a.action}</td>
+            <td><code>${a.ip}</code></td>
+            <td><span class="badge bg-success">${a.status}</span></td>
+          </tr>
+        `;
+      });
+    }
+
+    /* =================================================================
+       CHART.JS INITIALIZATION
+       ================================================================= */
+    function initCharts() {
+      // Cashflow Line Chart
+      const ctx1 = document.getElementById('cashflowChart').getContext('2d');
+      new Chart(ctx1, {
+        type: 'line',
+        data: {
+          labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'],
+          datasets: [
+            {
+              label: 'Income Revenue',
+              data: [1200000, 1500000, 1800000, 1400000, 2100000, 2500000, 2800000, 3100000, 3450000],
+              borderColor: '#10b981',
+              backgroundColor: 'rgba(16, 185, 129, 0.1)',
+              fill: true,
+              tension: 0.3
+            },
+            {
+              label: 'Operating Expenses',
+              data: [400000, 500000, 600000, 450000, 700000, 800000, 900000, 1000000, 1240000],
+              borderColor: '#ef4444',
+              backgroundColor: 'rgba(239, 68, 68, 0.05)',
+              fill: true,
+              tension: 0.3
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { position: 'top' } }
+        }
+      });
+
+      // Bank Balance Doughnut Chart
+      const ctx2 = document.getElementById('bankPieChart').getContext('2d');
+      new Chart(ctx2, {
+        type: 'doughnut',
+        data: {
+          labels: ['Meezan Bank', 'HBL', 'Bank Alfalah'],
+          datasets: [{
+            data: [3250000, 2570000, 1000000],
+            backgroundColor: ['#0d6efd', '#10b981', '#0dcaf0']
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } }
+        }
+      });
+    }
+
+    /* Helper Utilities */
+    function copyCodeToClipboard(elementId) {
+      const codeText = document.getElementById(elementId).innerText;
+      navigator.clipboard.writeText(codeText);
+      alert('PHP MVC & MySQL Code copied to clipboard!');
+    }
+
+    function exportDataCSV() {
+      alert('Exporting General Ledger & Cashflow Statements to Excel/CSV format...');
+    }
+
+    function filterCustomers() {
+      const val = document.getElementById('cust-search').value.toLowerCase();
+      const rows = document.querySelectorAll('#customer-table-body tr');
+      rows.forEach(r => {
+        r.style.display = r.innerText.toLowerCase().includes(val) ? '' : 'none';
+      });
     }
   </script>
 </body>
