@@ -3,166 +3,31 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hasnain Communication - Telecom & Franchise Accounting System</title>
+  <title>Hasnain Communication - Telecom Accounting System</title>
   
-  <!-- Bootstrap 5.3 CSS -->
+  <!-- Bootstrap 5 CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-  <!-- FontAwesome 6.4 Icons -->
+  <!-- FontAwesome Icons -->
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
-  <!-- Google Fonts: Inter -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <!-- Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <style>
     :root {
-      --sidebar-width: 270px;
-      --navy-dark: #1e293b;
-      --royal-blue: #0d6efd;
+      --sidebar-width: 260px;
+      --primary-color: #0d6efd;
       --telecom-orange: #f26522;
-      --emerald-green: #10b981;
-      --bg-light: #f8fafc;
-      --card-border: #e2e8f0;
     }
-
-    [data-bs-theme="dark"] {
-      --bg-light: #0f172a;
-      --card-border: #334155;
-    }
-
-    body {
-      font-family: 'Inter', system-ui, -apple-system, sans-serif;
-      background-color: var(--bg-light);
-      color: var(--bs-body-color);
-      overflow-x: hidden;
-    }
-
-    /* Sidebar Navigation Styling */
-    #sidebar {
-      width: var(--sidebar-width);
-      position: fixed;
-      top: 0;
-      bottom: 0;
-      left: 0;
-      z-index: 1000;
-      background: var(--navy-dark);
-      color: #fff;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      box-shadow: 4px 0 15px rgba(0,0,0,0.05);
-    }
-
-    #sidebar .brand-header {
-      padding: 20px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-      background: rgba(0,0,0,0.15);
-    }
-
-    #sidebar .nav-link {
-      color: #94a3b8;
-      padding: 12px 20px;
-      font-weight: 500;
-      font-size: 0.92rem;
-      border-radius: 8px;
-      margin: 3px 12px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      transition: all 0.2s ease;
-    }
-
-    #sidebar .nav-link:hover {
-      color: #fff;
-      background: rgba(255, 255, 255, 0.08);
-    }
-
-    #sidebar .nav-link.active {
-      color: #fff;
-      background: var(--royal-blue);
-      box-shadow: 0 4px 12px rgba(13, 110, 253, 0.3);
-    }
-
-    #sidebar .nav-link.active-orange {
-      background: var(--telecom-orange) !important;
-      box-shadow: 0 4px 12px rgba(242, 101, 34, 0.3);
-    }
-
-    /* Content Area */
-    #content {
-      margin-left: var(--sidebar-width);
-      padding: 25px;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      min-height: 100vh;
-    }
-
-    /* KPI Glassmorphic & Modern Cards */
-    .kpi-card {
-      border: 1px solid var(--card-border);
-      border-radius: 14px;
-      transition: transform 0.25s ease, box-shadow 0.25s ease;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .kpi-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
-    }
-
-    .kpi-icon-bg {
-      position: absolute;
-      right: 15px;
-      bottom: 10px;
-      font-size: 3.5rem;
-      opacity: 0.12;
-    }
-
-    .bg-gradient-blue { background: linear-gradient(135deg, #0d6efd, #0b5ed7); }
-    .bg-gradient-orange { background: linear-gradient(135deg, #f26522, #d94e0d); }
-    .bg-gradient-emerald { background: linear-gradient(135deg, #10b981, #059669); }
-    .bg-gradient-purple { background: linear-gradient(135deg, #8b5cf6, #7c3aed); }
-
-    /* Tables & Badges */
-    .table-custom th {
-      background-color: rgba(0,0,0,0.02);
-      font-weight: 600;
-      text-transform: uppercase;
-      font-size: 0.75rem;
-      letter-spacing: 0.5px;
-    }
-
-    .badge-telecom {
-      background-color: rgba(242, 101, 34, 0.15);
-      color: var(--telecom-orange);
-      font-weight: 600;
-    }
-
-    .code-editor-box {
-      background-color: #0f172a;
-      color: #38bdf8;
-      font-family: 'Courier New', Courier, monospace;
-      border-radius: 10px;
-      padding: 18px;
-      font-size: 0.88rem;
-      max-height: 550px;
-      overflow-y: auto;
-    }
-
-    /* Custom Responsive Sidebar Toggle */
-    @media (max-width: 991.98px) {
-      #sidebar {
-        margin-left: calc(-1 * var(--sidebar-width));
-      }
-      #sidebar.active {
-        margin-left: 0;
-      }
-      #content {
-        margin-left: 0;
-      }
-    }
-
-    .text-sindhi {
-      font-family: 'Lateef', 'Segoe UI', Tahoma, sans-serif;
-      direction: rtl;
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f6f9; }
+    #sidebar { width: var(--sidebar-width); position: fixed; top: 0; bottom: 0; left: 0; z-index: 100; background: #1e293b; color: #fff; transition: all 0.3s; }
+    #sidebar .nav-link { color: #94a3b8; padding: 12px 20px; font-weight: 500; border-radius: 8px; margin: 2px 10px; cursor: pointer; }
+    #sidebar .nav-link:hover, #sidebar .nav-link.active { color: #fff; background: rgba(255,255,255,0.1); }
+    #content { margin-left: var(--sidebar-width); padding: 20px; transition: all 0.3s; }
+    .kpi-card { border: none; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
+    @media (max-width: 768px) {
+      #sidebar { margin-left: calc(-1 * var(--sidebar-width)); }
+      #sidebar.active { margin-left: 0; }
+      #content { margin-left: 0; }
     }
   </style>
 </head>
@@ -170,1047 +35,341 @@
 
   <!-- SIDEBAR NAVIGATION -->
   <nav id="sidebar">
-    <div class="brand-header d-flex align-items-center justify-content-between">
-      <div>
-        <h5 class="fw-bold mb-0 text-white d-flex align-items-center gap-2">
-          <i class="fa-solid fa-tower-cell text-warning"></i> Hasnain Comm.
-        </h5>
-        <small class="text-white-50" style="font-size: 0.75rem;">Ufone Franchise & Telecom Ledger</small>
-      </div>
-      <span class="badge bg-warning text-dark font-monospace" style="font-size: 0.65rem;">v2.6</span>
+    <div class="p-3 border-bottom border-secondary text-center">
+      <h4 class="fw-bold mb-0 text-warning"><i class="fa-solid fa-tower-cell me-2"></i>Hasnain Comm.</h4>
+      <small class="text-muted">Telecom Accounting & ERP</small>
     </div>
-
     <div class="py-3">
       <ul class="nav flex-column">
         <li class="nav-item">
-          <a class="nav-link active" href="#" onclick="switchTab('dashboard', this)">
-            <i class="fa-solid fa-chart-pie"></i> <span>Dashboard</span>
-          </a>
+          <a class="nav-link active" onclick="switchTab('dashboard')"><i class="fa-solid fa-chart-line me-2"></i> Dashboard</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#" onclick="switchTab('sales-entry', this)">
-            <i class="fa-solid fa-mobile-screen-button"></i> <span>Easyload & Sales</span>
-          </a>
+          <a class="nav-link" onclick="switchTab('chart-of-accounts')"><i class="fa-solid fa-folder-tree me-2"></i> Chart of Accounts</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#" onclick="switchTab('vouchers', this)">
-            <i class="fa-solid fa-receipt"></i> <span>Accounting Vouchers</span>
-          </a>
+          <a class="nav-link" onclick="switchTab('telecom-sales')"><i class="fa-solid fa-mobile-screen-button me-2"></i> Easyload & SIM Sales</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#" onclick="switchTab('retailers', this)">
-            <i class="fa-solid fa-users-gear"></i> <span>Retailer Udhar Ledger</span>
-          </a>
+          <a class="nav-link" onclick="switchTab('vouchers')"><i class="fa-solid fa-file-invoice-dollar me-2"></i> Accounting Vouchers</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#" onclick="switchTab('vendors', this)">
-            <i class="fa-solid fa-building-columns"></i> <span>Main Telecom Vendors</span>
-          </a>
+          <a class="nav-link" onclick="switchTab('retailers')"><i class="fa-solid fa-users me-2"></i> Retailers & Customers</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#" onclick="switchTab('expenses', this)">
-            <i class="fa-solid fa-wallet"></i> <span>Daily Expenses</span>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#" onclick="switchTab('reports', this)">
-            <i class="fa-solid fa-file-invoice-dollar"></i> <span>Financial Reports</span>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#" onclick="switchTab('sql-schema', this)">
-            <i class="fa-solid fa-database text-info"></i> <span>MySQL Schema & SQL</span>
-          </a>
+          <a class="nav-link" onclick="switchTab('expenses')"><i class="fa-solid fa-wallet me-2"></i> Daily Expenses</a>
         </li>
       </ul>
     </div>
-
-    <div class="position-absolute bottom-0 start-0 end-0 p-3 text-center border-top border-secondary border-opacity-25 bg-dark">
-      <div class="small text-white-50 mb-1">حسنين ڪميونيڪيشن آفيشل</div>
-      <div class="fw-bold text-white small"><i class="fa-solid fa-phone me-1"></i> Franchise Helpline</div>
-    </div>
   </nav>
 
-  <!-- MAIN CONTENT CONTAINER -->
+  <!-- MAIN CONTENT AREA -->
   <div id="content">
 
     <!-- TOP NAVBAR -->
-    <div class="d-flex justify-content-between align-items-center mb-4 p-3 bg-body rounded-3 shadow-sm border">
+    <div class="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom bg-white p-3 rounded shadow-sm">
+      <button class="btn btn-sm btn-outline-dark d-md-none" onclick="document.getElementById('sidebar').classList.toggle('active')">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+      <div class="h5 mb-0 fw-bold text-dark">Hasnain Communication Management Portal</div>
       <div class="d-flex align-items-center gap-3">
-        <button class="btn btn-sm btn-outline-secondary d-lg-none" onclick="document.getElementById('sidebar').classList.toggle('active')">
-          <i class="fa-solid fa-bars"></i>
-        </button>
-        <div>
-          <h5 class="mb-0 fw-bold" id="page-title">Telecom Franchise Overview</h5>
-          <small class="text-muted d-none d-md-inline">Manage sales, retailer credits, company accounts, and daily profit</small>
-        </div>
-      </div>
-
-      <div class="d-flex align-items-center gap-3">
-        <!-- Search Input -->
-        <div class="input-group input-group-sm d-none d-md-flex" style="width: 220px;">
-          <span class="input-group-text bg-transparent"><i class="fa-solid fa-magnifying-glass text-muted"></i></span>
-          <input type="text" class="form-control" placeholder="Search vouchers, SIMs...">
-        </div>
-
-        <!-- Date Range Quick Filter -->
-        <select class="form-select form-select-sm d-none d-sm-block" style="width: 140px;">
-          <option selected>Today (Sep 20)</option>
-          <option>Yesterday</option>
-          <option>This Week</option>
-          <option>This Month</option>
-        </select>
-
-        <!-- Dark/Light Theme Switcher -->
-        <button class="btn btn-sm btn-outline-secondary rounded-circle" onclick="toggleTheme()" id="themeBtn" title="Toggle Light/Dark Theme">
-          <i class="fa-solid fa-moon"></i>
-        </button>
+        <span class="badge bg-success p-2"><i class="fa-solid fa-circle-check me-1"></i> System Active</span>
+        <button class="btn btn-sm btn-outline-secondary" onclick="toggleTheme()"><i class="fa-solid fa-moon"></i></button>
       </div>
     </div>
 
     <!-- TAB 1: DASHBOARD -->
     <div id="tab-dashboard" class="tab-content">
-      <!-- LIVE KPI CARDS -->
       <div class="row g-3 mb-4">
-        <div class="col-xl-2 col-md-4 col-sm-6">
-          <div class="card kpi-card bg-gradient-blue text-white p-3 h-100">
-            <small class="text-white-50 fw-medium">Franchise Cash Box</small>
-            <h4 class="fw-bold my-1">PKR 185,400</h4>
-            <div class="small text-white-50"><i class="fa-solid fa-cash-register me-1"></i> On-hand Cash</div>
-            <i class="fa-solid fa-wallet kpi-icon-bg"></i>
+        <div class="col-md-3">
+          <div class="card kpi-card bg-primary text-white p-3">
+            <small class="text-white-50">Franchise Cash Box</small>
+            <h3 class="mb-0 fw-bold">PKR 150,000</h3>
+            <small class="mt-2 text-white-50"><i class="fa-solid fa-wallet me-1"></i> Cash Balance</small>
           </div>
         </div>
-
-        <div class="col-xl-3 col-md-4 col-sm-6">
-          <div class="card kpi-card bg-gradient-emerald text-white p-3 h-100">
-            <small class="text-white-50 fw-medium">Meezan Bank Account</small>
-            <h4 class="fw-bold my-1">PKR 940,000</h4>
-            <div class="small text-white-50"><i class="fa-solid fa-building-columns me-1"></i> A/C # 0102030499</div>
-            <i class="fa-solid fa-university kpi-icon-bg"></i>
+        <div class="col-md-3">
+          <div class="card kpi-card bg-success text-white p-3">
+            <small class="text-white-50">Meezan Bank Balance</small>
+            <h3 class="mb-0 fw-bold">PKR 850,000</h3>
+            <small class="mt-2 text-white-50"><i class="fa-solid fa-building-columns me-1"></i> Bank Balance</small>
           </div>
         </div>
-
-        <div class="col-xl-2 col-md-4 col-sm-6">
-          <div class="card kpi-card bg-gradient-orange text-white p-3 h-100">
-            <small class="text-white-50 fw-medium">Retailers Udhar</small>
-            <h4 class="fw-bold my-1">PKR 215,800</h4>
-            <div class="small text-white-50"><i class="fa-solid fa-hand-holding-dollar me-1"></i> Receivables</div>
-            <i class="fa-solid fa-users kpi-icon-bg"></i>
+        <div class="col-md-3">
+          <div class="card kpi-card bg-warning text-dark p-3">
+            <small class="text-dark-50">Retailer Receivables (Udhar)</small>
+            <h3 class="mb-0 fw-bold">PKR 220,000</h3>
+            <small class="mt-2 text-dark-50"><i class="fa-solid fa-hand-holding-dollar me-1"></i> Pending Balance</small>
           </div>
         </div>
-
-        <div class="col-xl-3 col-md-6 col-sm-6">
-          <div class="card kpi-card bg-gradient-purple text-white p-3 h-100">
-            <small class="text-white-50 fw-medium">Company Payables (Ufone)</small>
-            <h4 class="fw-bold my-1">PKR 480,000</h4>
-            <div class="small text-white-50"><i class="fa-solid fa-truck-ramp-box me-1"></i> Vendor Main Balance</div>
-            <i class="fa-solid fa-tower-cell kpi-icon-bg"></i>
-          </div>
-        </div>
-
-        <div class="col-xl-2 col-md-6 col-sm-12">
-          <div class="card kpi-card bg-dark text-white p-3 h-100 border-start border-warning border-4">
-            <small class="text-warning fw-medium">Today's Net Profit</small>
-            <h4 class="fw-bold my-1 text-warning">PKR 14,250</h4>
-            <div class="small text-white-50"><i class="fa-solid fa-chart-line me-1"></i> Load + SIM Margin</div>
-            <i class="fa-solid fa-coins kpi-icon-bg text-warning"></i>
+        <div class="col-md-3">
+          <div class="card kpi-card bg-danger text-white p-3">
+            <small class="text-white-50">Telecom Vendor Payable</small>
+            <h3 class="mb-0 fw-bold">PKR 300,000</h3>
+            <small class="mt-2 text-white-50"><i class="fa-solid fa-truck me-1"></i> Company Credit</small>
           </div>
         </div>
       </div>
 
-      <!-- ACTION BUTTONS ROW -->
-      <div class="d-flex gap-2 mb-4 overflow-auto pb-1">
-        <button class="btn btn-primary btn-sm px-3 shadow-sm rounded-pill d-flex align-items-center gap-2" onclick="switchTab('sales-entry', null)">
-          <i class="fa-solid fa-plus-circle"></i> New Easyload Transfer
-        </button>
-        <button class="btn btn-outline-success btn-sm px-3 shadow-sm rounded-pill d-flex align-items-center gap-2" onclick="switchTab('vouchers', null)">
-          <i class="fa-solid fa-money-bill-transfer"></i> Post Journal Voucher
-        </button>
-        <button class="btn btn-outline-danger btn-sm px-3 shadow-sm rounded-pill d-flex align-items-center gap-2" onclick="switchTab('expenses', null)">
-          <i class="fa-solid fa-minus-circle"></i> Add Daily Expense
-        </button>
-      </div>
-
-      <!-- CHARTS ROW -->
+      <!-- CHARTS -->
       <div class="row g-3 mb-4">
-        <div class="col-lg-8">
-          <div class="card p-3 shadow-sm border-0 h-100">
-            <div class="d-flex justify-content-between align-items-center mb-3">
-              <h6 class="fw-bold mb-0"><i class="fa-solid fa-chart-area text-primary me-2"></i>Daily Revenue & Easyload Sales Trend</h6>
-              <span class="badge bg-light text-dark border">Last 7 Days</span>
-            </div>
-            <div style="height: 260px;">
-              <canvas id="revenueChart"></canvas>
-            </div>
+        <div class="col-md-8">
+          <div class="card p-3 shadow-sm">
+            <h6 class="fw-bold mb-3">Daily Telecom Revenue Trend</h6>
+            <canvas id="revenueChart" height="120"></canvas>
           </div>
         </div>
-
-        <div class="col-lg-4">
-          <div class="card p-3 shadow-sm border-0 h-100">
-            <div class="d-flex justify-content-between align-items-center mb-3">
-              <h6 class="fw-bold mb-0"><i class="fa-solid fa-chart-pie text-warning me-2"></i>Sales Mix by Telecom Service</h6>
-            </div>
-            <div style="height: 230px;" class="d-flex align-items-center justify-content-center">
-              <canvas id="categoryChart"></canvas>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- RECENT TRANSACTIONS TABLE -->
-      <div class="card shadow-sm border-0">
-        <div class="card-header bg-body d-flex justify-content-between align-items-center py-3">
-          <h6 class="fw-bold mb-0"><i class="fa-solid fa-clock-rotate-left me-2 text-primary"></i>Recent Franchise Voucher Activity</h6>
-          <a href="#" onclick="switchTab('vouchers', null)" class="btn btn-link btn-sm text-decoration-none">View All Vouchers</a>
-        </div>
-        <div class="table-responsive">
-          <table class="table table-hover table-custom align-middle mb-0">
-            <thead>
-              <tr>
-                <th>Voucher #</th>
-                <th>Type</th>
-                <th>Account / Retailer</th>
-                <th>Description</th>
-                <th>Debit (PKR)</th>
-                <th>Credit (PKR)</th>
-                <th>Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td class="fw-bold text-primary">RV-2026-089</td>
-                <td><span class="badge bg-success-subtle text-success">Receipt</span></td>
-                <td>Al-Madina Telecom (Retailer)</td>
-                <td>Udhar Recovery via Cash Box</td>
-                <td class="text-success fw-bold">15,000.00</td>
-                <td>-</td>
-                <td><span class="badge bg-success">Posted</span></td>
-              </tr>
-              <tr>
-                <td class="fw-bold text-primary">PV-2026-042</td>
-                <td><span class="badge bg-danger-subtle text-danger">Payment</span></td>
-                <td>Ufone Regional Vendor</td>
-                <td>Online Load Stock Transfer via Meezan Bank</td>
-                <td>-</td>
-                <td class="text-danger fw-bold">300,000.00</td>
-                <td><span class="badge bg-success">Posted</span></td>
-              </tr>
-              <tr>
-                <td class="fw-bold text-primary">JV-2026-015</td>
-                <td><span class="badge bg-warning-subtle text-warning">Journal</span></td>
-                <td>New SIM Commission A/C</td>
-                <td>Weekly Verification Incentive Credit</td>
-                <td class="text-success fw-bold">8,500.00</td>
-                <td>-</td>
-                <td><span class="badge bg-success">Posted</span></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-
-    <!-- TAB 2: EASYLOAD & TELECOM SALES ENTRY -->
-    <div id="tab-sales-entry" class="tab-content d-none">
-      <div class="row g-4">
-        <!-- Sales Form -->
-        <div class="col-lg-7">
-          <div class="card shadow-sm border-0 p-4">
-            <h5 class="fw-bold mb-3 text-primary d-flex align-items-center gap-2">
-              <i class="fa-solid fa-mobile-screen-button"></i> Record Easyload & Telecom Sales
-            </h5>
-            <p class="text-muted small">Select the specific telecom product, calculate expected commission, and post instantly to ledgers.</p>
-            
-            <form id="salesForm" onsubmit="handleSalesSubmit(event)">
-              <div class="row g-3">
-                <div class="col-md-6">
-                  <label class="form-label font-medium">Telecom Service Type</label>
-                  <select class="form-select" id="saleCategory" onchange="calculateCommission()" required>
-                    <option value="easyload" selected>Easyload / Load Transfer</option>
-                    <option value="sim_new">New SIM Sale & Biometric</option>
-                    <option value="sim_swap">SIM Swap / Duplicate SIM Fee</option>
-                    <option value="bundle">Franchise Special Package / Bundle</option>
-                    <option value="utility_bill">Utility Bill Payment Collection</option>
-                  </select>
-                </div>
-
-                <div class="col-md-6">
-                  <label class="form-label font-medium">Customer / Retailer</label>
-                  <select class="form-select" id="saleRetailer">
-                    <option value="walkin">Walk-in Customer (Cash)</option>
-                    <option value="1">Al-Madina Mobile Shop (Udhar Account)</option>
-                    <option value="2">Bismillah Telecom Daharki</option>
-                    <option value="3">Sindh Easyload Center</option>
-                  </select>
-                </div>
-
-                <div class="col-md-6">
-                  <label class="form-label font-medium">Gross Amount (PKR)</label>
-                  <input type="number" class="form-control" id="saleAmount" placeholder="e.g. 5000" min="10" oninput="calculateCommission()" required>
-                </div>
-
-                <div class="col-md-6">
-                  <label class="form-label font-medium">Settlement Account</label>
-                  <select class="form-select" id="settlementAccount">
-                    <option value="cash">Franchise Cash Box</option>
-                    <option value="meezan">Meezan Bank Account</option>
-                    <option value="retailer_udhar">Retailer Credit / Udhar Ledger</option>
-                  </select>
-                </div>
-
-                <div class="col-md-12">
-                  <div class="card bg-body-tertiary border p-3 rounded-3">
-                    <div class="d-flex justify-content-between align-items-center">
-                      <div>
-                        <small class="text-muted d-block">Estimated Commission / Profit Rate</small>
-                        <span class="fw-bold text-success" id="commissionRateText">2.5% Default Margin</span>
-                      </div>
-                      <div class="text-end">
-                        <small class="text-muted d-block">Calculated Income (PKR)</small>
-                        <h4 class="mb-0 fw-bold text-success" id="calculatedIncome">0.00</h4>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="col-md-12">
-                  <label class="form-label font-medium">Notes / Mobile Number / SIM Serial</label>
-                  <input type="text" class="form-control" placeholder="e.g. Load transferred to 0333-1234567 or SIM ICCID">
-                </div>
-
-                <div class="col-md-12 text-end mt-4">
-                  <button type="reset" class="btn btn-light me-2">Reset</button>
-                  <button type="submit" class="btn btn-primary px-4"><i class="fa-solid fa-save me-1"></i> Post Transaction</button>
-                </div>
-              </div>
-            </form>
-          </div>
-        </div>
-
-        <!-- Right Side Live Calculator & Rate Cards -->
-        <div class="col-lg-5">
-          <div class="card shadow-sm border-0 p-4 mb-3 bg-gradient-blue text-white">
-            <h6 class="fw-bold border-bottom border-white border-opacity-25 pb-2">
-              <i class="fa-solid fa-calculator me-2"></i>Commission Structure Rules
-            </h6>
-            <ul class="list-unstyled small mb-0 d-flex flex-column gap-2">
-              <li class="d-flex justify-content-between">
-                <span>Ufone Easyload:</span>
-                <span class="fw-bold">2.5% Gross Margin</span>
-              </li>
-              <li class="d-flex justify-content-between">
-                <span>New SIM Biometric:</span>
-                <span class="fw-bold">PKR 150 Fixed Profit / SIM</span>
-              </li>
-              <li class="d-flex justify-content-between">
-                <span>SIM Swap / Duplicate:</span>
-                <span class="fw-bold">PKR 100 Franchise Fee</span>
-              </li>
-              <li class="d-flex justify-content-between">
-                <span>Super Cards / Bundles:</span>
-                <span class="fw-bold">5.0% Special Margin</span>
-              </li>
-              <li class="d-flex justify-content-between">
-                <span>Utility Bills:</span>
-                <span class="fw-bold">PKR 15 Commission / Bill</span>
-              </li>
-            </ul>
-          </div>
-
-          <div class="card shadow-sm border-0 p-3">
-            <h6 class="fw-bold mb-3"><i class="fa-solid fa-fire text-danger me-2"></i>Quick Easyload Shortcuts</h6>
-            <div class="d-grid gap-2">
-              <button class="btn btn-outline-secondary text-start btn-sm" onclick="setQuickSale(1000, 'easyload')">
-                <i class="fa-solid fa-bolt text-warning me-2"></i> PKR 1,000 Easyload Transfer
-              </button>
-              <button class="btn btn-outline-secondary text-start btn-sm" onclick="setQuickSale(5000, 'easyload')">
-                <i class="fa-solid fa-bolt text-warning me-2"></i> PKR 5,000 Retailer Load Balance
-              </button>
-              <button class="btn btn-outline-secondary text-start btn-sm" onclick="setQuickSale(850, 'bundle')">
-                <i class="fa-solid fa-box text-primary me-2"></i> Super Card Max (PKR 850)
-              </button>
-            </div>
+        <div class="col-md-4">
+          <div class="card p-3 shadow-sm">
+            <h6 class="fw-bold mb-3">Revenue Breakdown</h6>
+            <canvas id="categoryChart" height="200"></canvas>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- TAB 3: ACCOUNTING VOUCHERS -->
-    <div id="tab-vouchers" class="tab-content d-none">
-      <div class="card shadow-sm border-0 p-4 mb-4">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-          <div>
-            <h5 class="fw-bold text-primary mb-1"><i class="fa-solid fa-file-invoice-dollar me-2"></i>Double-Entry Accounting Vouchers</h5>
-            <small class="text-muted">Post payment, receipt, contra, and general journal vouchers directly to chart of accounts.</small>
-          </div>
-          <button class="btn btn-success btn-sm" onclick="openVoucherModal()"><i class="fa-solid fa-plus me-1"></i> New Voucher Entry</button>
-        </div>
-
-        <div class="table-responsive">
-          <table class="table table-hover align-middle table-custom">
-            <thead>
-              <tr>
-                <th>Voucher Ref #</th>
-                <th>Date</th>
-                <th>Voucher Type</th>
-                <th>Debit Account</th>
-                <th>Credit Account</th>
-                <th>Amount (PKR)</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td class="fw-bold text-primary">RV-2026-102</td>
-                <td>20-Sep-2026</td>
-                <td><span class="badge bg-success">Receipt Voucher</span></td>
-                <td>Franchise Cash Box</td>
-                <td>Al-Madina Telecom</td>
-                <td class="fw-bold">PKR 25,000.00</td>
-                <td><button class="btn btn-sm btn-light" onclick="alert('Printing Voucher RV-2026-102...')"><i class="fa-solid fa-print"></i></button></td>
-              </tr>
-              <tr>
-                <td class="fw-bold text-primary">PV-2026-088</td>
-                <td>19-Sep-2026</td>
-                <td><span class="badge bg-danger">Payment Voucher</span></td>
-                <td>Main Telecom Vendor A/C</td>
-                <td>Meezan Bank A/C</td>
-                <td class="fw-bold">PKR 500,000.00</td>
-                <td><button class="btn btn-sm btn-light" onclick="alert('Printing Voucher PV-2026-088...')"><i class="fa-solid fa-print"></i></button></td>
-              </tr>
-              <tr>
-                <td class="fw-bold text-primary">CV-2026-012</td>
-                <td>18-Sep-2026</td>
-                <td><span class="badge bg-info text-dark">Contra Voucher</span></td>
-                <td>Meezan Bank A/C</td>
-                <td>Franchise Cash Box</td>
-                <td class="fw-bold">PKR 100,000.00</td>
-                <td><button class="btn btn-sm btn-light" onclick="alert('Printing Voucher CV-2026-012...')"><i class="fa-solid fa-print"></i></button></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-
-    <!-- TAB 4: RETAILER & CUSTOMER LEDGER -->
-    <div id="tab-retailers" class="tab-content d-none">
-      <div class="card shadow-sm border-0 p-4">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-          <div>
-            <h5 class="fw-bold text-primary mb-1"><i class="fa-solid fa-users-gear me-2"></i>Retailer Credit & Udhar Ledger</h5>
-            <small class="text-muted">Track all retailers receiving easyload stock on credit and cash repayments.</small>
-          </div>
-          <button class="btn btn-primary btn-sm"><i class="fa-solid fa-user-plus me-1"></i> Register New Retailer</button>
-        </div>
-
-        <div class="row g-3 mb-4">
-          <div class="col-md-4">
-            <div class="input-group">
-              <span class="input-group-text bg-transparent"><i class="fa-solid fa-search text-muted"></i></span>
-              <input type="text" class="form-control" placeholder="Search retailer name or phone...">
+    <!-- TAB 2: CHART OF ACCOUNTS (ADD & DELETE ACCOUNTS) -->
+    <div id="tab-chart-of-accounts" class="tab-content d-none">
+      <div class="card p-4 shadow-sm mb-4">
+        <h5 class="fw-bold border-bottom pb-2 text-primary"><i class="fa-solid fa-plus-circle me-2"></i> Add New Account</h5>
+        <form id="addAccountForm" onsubmit="handleAddAccount(event)">
+          <div class="row g-3">
+            <div class="col-md-4">
+              <label class="form-label font-weight-bold">Account Name / Title</label>
+              <input type="text" id="accName" class="form-control" placeholder="e.g. Jazz Load Wallet / Shop Rent" required>
             </div>
-          </div>
-        </div>
-
-        <div class="table-responsive">
-          <table class="table table-hover align-middle">
-            <thead class="table-light">
-              <tr>
-                <th>Code</th>
-                <th>Retailer Shop Name</th>
-                <th>City / Area</th>
-                <th>Phone Number</th>
-                <th>Total Udhar Given</th>
-                <th>Total Cash Recovered</th>
-                <th>Net Receivable Balance</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><strong>RET-001</strong></td>
-                <td class="fw-bold">Al-Madina Mobile Daharki</td>
-                <td>Main Bazaar Daharki</td>
-                <td>0333-7890123</td>
-                <td>PKR 150,000</td>
-                <td>PKR 110,000</td>
-                <td class="fw-bold text-danger">PKR 40,000 DR</td>
-                <td>
-                  <button class="btn btn-sm btn-outline-primary" onclick="alert('Showing Full Ledger for Al-Madina Mobile')"><i class="fa-solid fa-eye me-1"></i> Ledger</button>
-                </td>
-              </tr>
-              <tr>
-                <td><strong>RET-002</strong></td>
-                <td class="fw-bold">Bismillah Easyload Shop</td>
-                <td>Station Road Daharki</td>
-                <td>0331-4567890</td>
-                <td>PKR 90,000</td>
-                <td>PKR 65,000</td>
-                <td class="fw-bold text-danger">PKR 25,000 DR</td>
-                <td>
-                  <button class="btn btn-sm btn-outline-primary" onclick="alert('Showing Full Ledger for Bismillah Easyload')"><i class="fa-solid fa-eye me-1"></i> Ledger</button>
-                </td>
-              </tr>
-              <tr>
-                <td><strong>RET-003</strong></td>
-                <td class="fw-bold">Sindh Telecom & Verification</td>
-                <td>Ghotki Bypass</td>
-                <td>0334-1122334</td>
-                <td>PKR 300,000</td>
-                <td>PKR 300,000</td>
-                <td class="fw-bold text-success">PKR 0.00 (Clear)</td>
-                <td>
-                  <button class="btn btn-sm btn-outline-primary" onclick="alert('Showing Full Ledger for Sindh Telecom')"><i class="fa-solid fa-eye me-1"></i> Ledger</button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-
-    <!-- TAB 5: MAIN TELECOM VENDORS -->
-    <div id="tab-vendors" class="tab-content d-none">
-      <div class="card shadow-sm border-0 p-4">
-        <h5 class="fw-bold text-primary mb-3"><i class="fa-solid fa-building-columns me-2"></i>Main Telecom Company & Vendor Accounts</h5>
-        <p class="text-muted small">Manage main Ufone corporate stock purchases, bank transfers, and automated commission credits.</p>
-
-        <div class="row g-3">
-          <div class="col-md-6">
-            <div class="card border p-3 rounded-3 bg-body-tertiary">
-              <div class="d-flex justify-content-between align-items-center mb-2">
-                <h6 class="fw-bold mb-0">Ufone Regional Stock Ledger</h6>
-                <span class="badge bg-warning text-dark">Primary Vendor</span>
-              </div>
-              <p class="small text-muted mb-2">Pak Telecom Mobile Limited (Ufone Franchise Head Balance)</p>
-              <div class="d-flex justify-content-between align-items-center">
-                <span>Current Payable:</span>
-                <span class="fw-bold text-danger fs-5">PKR 480,000 CR</span>
-              </div>
-              <div class="mt-3 d-flex gap-2">
-                <button class="btn btn-primary btn-sm flex-fill" onclick="switchTab('vouchers', null)"><i class="fa-solid fa-money-bill-transfer me-1"></i> Record Bank Transfer</button>
-                <button class="btn btn-outline-secondary btn-sm flex-fill" onclick="alert('Fetching Ufone Invoice Statement...')">Statement</button>
-              </div>
+            <div class="col-md-4">
+              <label class="form-label font-weight-bold">Account Category</label>
+              <select id="accCategory" class="form-select" required>
+                <option value="Asset">Asset (جائيداد / بيلنس)</option>
+                <option value="Revenue">Revenue / Income (آمدني)</option>
+                <option value="Expense">Expense (خرچ)</option>
+                <option value="Liability">Liability (واجبات / اوڌار)</option>
+                <option value="Equity">Equity (سرمائڪاري)</option>
+              </select>
             </div>
-          </div>
-
-          <div class="col-md-6">
-            <div class="card border p-3 rounded-3 bg-body-tertiary">
-              <div class="d-flex justify-content-between align-items-center mb-2">
-                <h6 class="fw-bold mb-0">Utility Bills Processing Company</h6>
-                <span class="badge bg-secondary">Utility Clearing</span>
-              </div>
-              <p class="small text-muted mb-2">SEPCO & Gas Collection Clearing Wallet</p>
-              <div class="d-flex justify-content-between align-items-center">
-                <span>Clearing Credit:</span>
-                <span class="fw-bold text-success fs-5">PKR 12,400 DR</span>
-              </div>
-              <div class="mt-3 d-flex gap-2">
-                <button class="btn btn-success btn-sm flex-fill" onclick="switchTab('vouchers', null)"><i class="fa-solid fa-plus-circle me-1"></i> Reconcile Clearing</button>
-                <button class="btn btn-outline-secondary btn-sm flex-fill" onclick="alert('Fetching Clearing Report...')">Statement</button>
-              </div>
+            <div class="col-md-4">
+              <label class="form-label font-weight-bold">Opening Balance (PKR)</label>
+              <input type="number" id="accBalance" class="form-control" placeholder="0.00" value="0" required>
             </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- TAB 6: DAILY EXPENSES -->
-    <div id="tab-expenses" class="tab-content d-none">
-      <div class="card shadow-sm border-0 p-4">
-        <h5 class="fw-bold text-primary mb-3"><i class="fa-solid fa-wallet me-2"></i>Daily Franchise Expenses</h5>
-        
-        <form id="expenseForm" onsubmit="handleExpenseSubmit(event)" class="row g-3 mb-4 border-bottom pb-4">
-          <div class="col-md-3">
-            <label class="form-label font-medium">Expense Category</label>
-            <select class="form-select" id="expenseCat" required>
-              <option value="rent">Shop Rent</option>
-              <option value="utility">Electricity & Generator Fuel</option>
-              <option value="salary">Staff Salary / Incentive</option>
-              <option value="tea">Refreshment / Tea / Guest</option>
-              <option value="misc">Miscellaneous Maintenance</option>
-            </select>
-          </div>
-          <div class="col-md-3">
-            <label class="form-label font-medium">Amount (PKR)</label>
-            <input type="number" class="form-control" id="expenseAmount" placeholder="e.g. 500" required>
-          </div>
-          <div class="col-md-4">
-            <label class="form-label font-medium">Description / Remarks</label>
-            <input type="text" class="form-control" id="expenseDesc" placeholder="e.g. Tea for Ufone Regional Officer" required>
-          </div>
-          <div class="col-md-2 d-flex align-items-end">
-            <button type="submit" class="btn btn-danger w-100"><i class="fa-solid fa-minus-circle me-1"></i> Post Expense</button>
+            <div class="col-12 text-end">
+              <button type="submit" class="btn btn-primary px-4"><i class="fa-solid fa-save me-1"></i> Save Account</button>
+            </div>
           </div>
         </form>
+      </div>
 
-        <h6 class="fw-bold mb-3">Today's Expense Summary</h6>
+      <!-- ACCOUNTS TABLE LIST -->
+      <div class="card p-4 shadow-sm">
+        <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-3">
+          <h5 class="fw-bold text-dark mb-0"><i class="fa-solid fa-list me-2"></i> Manage Accounts List</h5>
+          <input type="text" id="searchAccountInput" onkeyup="filterAccounts()" class="form-control w-25" placeholder="Search account...">
+        </div>
         <div class="table-responsive">
-          <table class="table table-striped align-middle">
-            <thead>
+          <table class="table table-hover align-middle" id="accountsTable">
+            <thead class="table-light">
               <tr>
-                <th>Date</th>
+                <th>ID</th>
+                <th>Account Name</th>
                 <th>Category</th>
-                <th>Description</th>
-                <th>Paid From</th>
-                <th>Amount (PKR)</th>
+                <th>Current Balance (PKR)</th>
+                <th class="text-center">Action</th>
               </tr>
             </thead>
-            <tbody id="expenseTableBody">
-              <tr>
-                <td>20-Sep-2026</td>
-                <td><span class="badge bg-secondary">Refreshment</span></td>
-                <td>Tea & Snacks for Retailers Meeting</td>
-                <td>Franchise Cash Box</td>
-                <td class="fw-bold text-danger">PKR 450.00</td>
-              </tr>
-              <tr>
-                <td>20-Sep-2026</td>
-                <td><span class="badge bg-secondary">Utility</span></td>
-                <td>Shop Generator Petrol Purchase</td>
-                <td>Franchise Cash Box</td>
-                <td class="fw-bold text-danger">PKR 1,200.00</td>
-              </tr>
+            <tbody id="accountsTableBody">
+              <!-- Dynamically Populated -->
             </tbody>
           </table>
         </div>
       </div>
     </div>
 
-    <!-- TAB 7: FINANCIAL REPORTS -->
-    <div id="tab-reports" class="tab-content d-none">
-      <div class="card shadow-sm border-0 p-4">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-          <h5 class="fw-bold text-primary mb-0"><i class="fa-solid fa-file-invoice me-2"></i>Franchise Financial Statements</h5>
-          <button class="btn btn-outline-primary btn-sm" onclick="window.print()"><i class="fa-solid fa-print me-1"></i> Print Financial Summary</button>
-        </div>
-
-        <!-- Statement Navigation Tabs -->
-        <ul class="nav nav-tabs mb-3" id="reportTabs">
-          <li class="nav-item">
-            <button class="nav-link active" onclick="switchReportTab('pnl')">Profit & Loss Statement</button>
-          </li>
-          <li class="nav-item">
-            <button class="nav-link" onclick="switchReportTab('trial')">Trial Balance</button>
-          </li>
-        </ul>
-
-        <!-- P&L Content -->
-        <div id="report-pnl">
-          <div class="border rounded-3 p-3 bg-body-tertiary">
-            <h6 class="fw-bold text-center mb-3">Hasnain Communication - Statement of Profit & Loss (Income Statement)</h6>
-            <div class="table-responsive">
-              <table class="table table-bordered">
-                <thead class="table-dark">
-                  <tr>
-                    <th>Revenue & Income Head</th>
-                    <th class="text-end">Amount (PKR)</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>Easyload Margin Income (2.5%)</td>
-                    <td class="text-end text-success fw-bold">125,400.00</td>
-                  </tr>
-                  <tr>
-                    <td>New SIM Biometric Verification Revenue</td>
-                    <td class="text-end text-success fw-bold">42,000.00</td>
-                  </tr>
-                  <tr>
-                    <td>Franchise Super Card Commissions</td>
-                    <td class="text-end text-success fw-bold">28,500.00</td>
-                  </tr>
-                  <tr class="table-success fw-bold">
-                    <td>TOTAL GROSS REVENUE / INCOME</td>
-                    <td class="text-end">PKR 195,900.00</td>
-                  </tr>
-                  <tr>
-                    <th colspan="2" class="bg-light">Operating Expenses</th>
-                  </tr>
-                  <tr>
-                    <td>Shop Rent & Maintenance</td>
-                    <td class="text-end text-danger">(35,000.00)</td>
-                  </tr>
-                  <tr>
-                    <td>Staff Salaries & Retailer Incentives</td>
-                    <td class="text-end text-danger">(45,000.00)</td>
-                  </tr>
-                  <tr>
-                    <td>Electricity & Generator Fuel Expenses</td>
-                    <td class="text-end text-danger">(18,200.00)</td>
-                  </tr>
-                  <tr class="table-danger fw-bold">
-                    <td>TOTAL OPERATING EXPENSES</td>
-                    <td class="text-end">(PKR 98,200.00)</td>
-                  </tr>
-                  <tr class="table-warning fw-bold fs-5">
-                    <td>NET OPERATING PROFIT</td>
-                    <td class="text-end text-primary">PKR 97,700.00</td>
-                  </tr>
-                </tbody>
-              </table>
+    <!-- TAB 3: TELECOM SALES -->
+    <div id="tab-telecom-sales" class="tab-content d-none">
+      <div class="card p-4 shadow-sm">
+        <h5 class="fw-bold border-bottom pb-2 mb-3 text-primary"><i class="fa-solid fa-mobile-screen-button me-2"></i> Record Easyload & SIM Transactions</h5>
+        <form onsubmit="event.preventDefault(); alert('Sale Recorded!');">
+          <div class="row g-3">
+            <div class="col-md-3">
+              <label class="form-label">Service Category</label>
+              <select class="form-select" required>
+                <option value="">Choose Service...</option>
+                <option value="easyload">Easyload / Load Transfer</option>
+                <option value="sim_new">New SIM Sale & Verification</option>
+                <option value="sim_swap">SIM Swap / Duplicate Fee</option>
+                <option value="bundle">Special Bundle / Package</option>
+              </select>
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">Customer / Retailer Name</label>
+              <input type="text" class="form-control" placeholder="Walk-in / Retailer" required>
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">Amount (PKR)</label>
+              <input type="number" class="form-control" placeholder="0.00" required>
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">Payment Account</label>
+              <select class="form-select">
+                <option>Franchise Cash Box</option>
+                <option>Meezan Bank Account</option>
+                <option>Retailer Udhar Account</option>
+              </select>
+            </div>
+            <div class="col-12 text-end mt-3">
+              <button type="submit" class="btn btn-primary px-4">Post Transaction</button>
             </div>
           </div>
-        </div>
-
-        <!-- Trial Balance Content -->
-        <div id="report-trial" class="d-none">
-          <div class="border rounded-3 p-3 bg-body-tertiary">
-            <h6 class="fw-bold text-center mb-3">Trial Balance as of September 20, 2026</h6>
-            <table class="table table-striped table-bordered">
-              <thead>
-                <tr class="table-dark">
-                  <th>Account Name</th>
-                  <th class="text-end">Debit (PKR)</th>
-                  <th class="text-end">Credit (PKR)</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr><td>Franchise Cash Box</td><td class="text-end">185,400.00</td><td class="text-end">-</td></tr>
-                <tr><td>Meezan Bank Account</td><td class="text-end">940,000.00</td><td class="text-end">-</td></tr>
-                <tr><td>Retailers Udhar Receivables</td><td class="text-end">215,800.00</td><td class="text-end">-</td></tr>
-                <tr><td>Ufone Main Vendor Payables</td><td class="text-end">-</td><td class="text-end">480,000.00</td></tr>
-                <tr><td>Franchise Capital Account</td><td class="text-end">-</td><td class="text-end">861,200.00</td></tr>
-                <tr class="fw-bold table-active">
-                  <td>TOTAL BALANCES</td>
-                  <td class="text-end">PKR 1,341,200.00</td>
-                  <td class="text-end">PKR 1,341,200.00</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
+        </form>
       </div>
     </div>
 
-    <!-- TAB 8: MYSQL SCHEMA ARCHITECTURE -->
-    <div id="tab-sql-schema" class="tab-content d-none">
-      <div class="card shadow-sm border-0 p-4">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-          <div>
-            <h5 class="fw-bold text-info mb-1"><i class="fa-solid fa-database me-2"></i>Production MySQL 8.0 Schema Architecture</h5>
-            <small class="text-muted">Complete relational database schema designed specifically for Ufone Telecom Franchise double-entry accounting.</small>
-          </div>
-          <button class="btn btn-outline-info btn-sm" onclick="copySqlToClipboard()"><i class="fa-solid fa-copy me-1"></i> Copy SQL Script</button>
-        </div>
+    <!-- TAB 4: VOUCHERS -->
+    <div id="tab-vouchers" class="tab-content d-none">
+      <div class="card p-4 shadow-sm">
+        <h5 class="fw-bold mb-3">Double-Entry Vouchers</h5>
+        <p class="text-muted">Payment Voucher, Receipt Voucher, Journal Voucher and Contra Vouchers.</p>
+      </div>
+    </div>
 
-        <div class="code-editor-box" id="sqlCodeBlock">
-<pre><code>-- =========================================================================
--- HASNAIN COMMUNICATION - TELECOM & FRANCHISE ACCOUNTING SYSTEM SCHEMA
--- TARGET DATABASE: MySQL 8.0+ / MariaDB 10.5+
--- ENGINE: InnoDB | CHARSET: utf8mb4_unicode_ci
--- =========================================================================
+    <!-- TAB 5: RETAILERS -->
+    <div id="tab-retailers" class="tab-content d-none">
+      <div class="card p-4 shadow-sm">
+        <h5 class="fw-bold mb-3">Retailer & Customer Ledgers</h5>
+        <p class="text-muted">Manage retailer credit balances, payments and invoices.</p>
+      </div>
+    </div>
 
-CREATE DATABASE IF NOT EXISTS `hasnain_telecom_db` 
-DEFAULT CHARACTER SET utf8mb4 
-COLLATE utf8mb4_unicode_ci;
-
-USE `hasnain_telecom_db`;
-
--- 1. PAYMENT ACCOUNTS (CASH & BANK BALANCES)
-CREATE TABLE `payment_accounts` (
-  `account_id` INT AUTO_INCREMENT PRIMARY KEY,
-  `account_name` VARCHAR(100) NOT NULL,
-  `account_type` ENUM('Cash', 'Bank', 'Mobile Wallet') NOT NULL,
-  `account_number` VARCHAR(50) DEFAULT NULL,
-  `bank_name` VARCHAR(100) DEFAULT NULL,
-  `current_balance` DECIMAL(15,2) NOT NULL DEFAULT 0.00,
-  `status` ENUM('Active', 'Inactive') DEFAULT 'Active',
-  `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB;
-
--- 2. CHART OF ACCOUNTS (DOUBLE-ENTRY LEDGER)
-CREATE TABLE `chart_of_accounts` (
-  `account_code` VARCHAR(20) PRIMARY KEY,
-  `account_name` VARCHAR(100) NOT NULL,
-  `account_group` ENUM('Asset', 'Liability', 'Equity', 'Revenue', 'Expense') NOT NULL,
-  `opening_balance` DECIMAL(15,2) DEFAULT 0.00,
-  `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB;
-
--- 3. RETAILERS & CUSTOMERS (UDHAR MANAGEMENT)
-CREATE TABLE `retailers_customers` (
-  `retailer_id` INT AUTO_INCREMENT PRIMARY KEY,
-  `shop_name` VARCHAR(150) NOT NULL,
-  `owner_name` VARCHAR(100) NOT NULL,
-  `phone_number` VARCHAR(20) NOT NULL UNIQUE,
-  `address` VARCHAR(255) DEFAULT NULL,
-  `credit_limit` DECIMAL(12,2) DEFAULT 50000.00,
-  `current_udhar_balance` DECIMAL(12,2) DEFAULT 0.00,
-  `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB;
-
--- 4. VENDORS & SUPPLIERS (MAIN TELECOM COMPANIES)
-CREATE TABLE `vendors_suppliers` (
-  `vendor_id` INT AUTO_INCREMENT PRIMARY KEY,
-  `company_name` VARCHAR(150) NOT NULL,
-  `contact_person` VARCHAR(100) DEFAULT NULL,
-  `phone_number` VARCHAR(20) DEFAULT NULL,
-  `current_payable_balance` DECIMAL(15,2) DEFAULT 0.00,
-  `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB;
-
--- 5. ACCOUNTING VOUCHERS (HEAD TABLE)
-CREATE TABLE `vouchers` (
-  `voucher_id` BIGINT AUTO_INCREMENT PRIMARY KEY,
-  `voucher_no` VARCHAR(30) NOT NULL UNIQUE,
-  `voucher_type` ENUM('Receipt', 'Payment', 'Journal', 'Contra') NOT NULL,
-  `voucher_date` DATE NOT NULL,
-  `total_amount` DECIMAL(15,2) NOT NULL,
-  `narration` TEXT DEFAULT NULL,
-  `posted_by` INT DEFAULT 1,
-  `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB;
-
--- 6. VOUCHER ITEMS (DOUBLE-ENTRY LINE ITEMS)
-CREATE TABLE `voucher_items` (
-  `item_id` BIGINT AUTO_INCREMENT PRIMARY KEY,
-  `voucher_id` BIGINT NOT NULL,
-  `account_code` VARCHAR(20) NOT NULL,
-  `debit_amount` DECIMAL(15,2) DEFAULT 0.00,
-  `credit_amount` DECIMAL(15,2) DEFAULT 0.00,
-  FOREIGN KEY (`voucher_id`) REFERENCES `vouchers`(`voucher_id`) ON DELETE CASCADE,
-  FOREIGN KEY (`account_code`) REFERENCES `chart_of_accounts`(`account_code`)
-) ENGINE=InnoDB;
-
--- 7. TELECOM SALES TRANSACTIONS
-CREATE TABLE `telecom_sales` (
-  `sale_id` BIGINT AUTO_INCREMENT PRIMARY KEY,
-  `sale_type` ENUM('Easyload', 'SIM_New', 'SIM_Swap', 'Bundle', 'Utility_Bill') NOT NULL,
-  `retailer_id` INT DEFAULT NULL,
-  `gross_amount` DECIMAL(12,2) NOT NULL,
-  `commission_earned` DECIMAL(10,2) NOT NULL DEFAULT 0.00,
-  `payment_account_id` INT NOT NULL,
-  `remarks` VARCHAR(255) DEFAULT NULL,
-  `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY (`retailer_id`) REFERENCES `retailers_customers`(`retailer_id`),
-  FOREIGN KEY (`payment_account_id`) REFERENCES `payment_accounts`(`account_id`)
-) ENGINE=InnoDB;
-
--- 8. DAILY EXPENSES
-CREATE TABLE `daily_expenses` (
-  `expense_id` INT AUTO_INCREMENT PRIMARY KEY,
-  `category` VARCHAR(50) NOT NULL,
-  `amount` DECIMAL(10,2) NOT NULL,
-  `description` VARCHAR(255) NOT NULL,
-  `paid_from_account_id` INT NOT NULL,
-  `expense_date` DATE NOT NULL,
-  `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB;
-
--- =========================================================================
--- SEED DATA FOR HASNAIN COMMUNICATION (UFONE FRANCHISE)
--- =========================================================================
-
-INSERT INTO `payment_accounts` (`account_id`, `account_name`, `account_type`, `current_balance`) VALUES
-(1, 'Franchise Cash Box', 'Cash', 185400.00),
-(2, 'Meezan Bank Account', 'Bank', 940000.00);
-
-INSERT INTO `chart_of_accounts` (`account_code`, `account_name`, `account_group`) VALUES
-('1001', 'Cash in Hand', 'Asset'),
-('1002', 'Bank - Meezan', 'Asset'),
-('1003', 'Retailers Receivables (Udhar)', 'Asset'),
-('2001', 'Ufone Main Company Payable', 'Liability'),
-('3001', 'Franchise Capital Account', 'Equity'),
-('4001', 'Easyload Revenue', 'Revenue'),
-('5001', 'Shop Rent & Utilities Expense', 'Expense');
-
-INSERT INTO `retailers_customers` (`shop_name`, `owner_name`, `phone_number`, `current_udhar_balance`) VALUES
-('Al-Madina Mobile Shop', 'Muhammad Ali', '03337890123', 40000.00),
-('Bismillah Easyload Shop', 'Tariq Ahmed', '03314567890', 25000.00);
-</code></pre>
-        </div>
+    <!-- TAB 6: EXPENSES -->
+    <div id="tab-expenses" class="tab-content d-none">
+      <div class="card p-4 shadow-sm">
+        <h5 class="fw-bold mb-3">Daily Expenses</h5>
+        <p class="text-muted">Record daily office expenses, electricity bills, tea, and staff salaries.</p>
       </div>
     </div>
 
   </div>
 
-  <!-- Bootstrap 5 JS Bundle -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-
+  <!-- JAVASCRIPT LOGIC -->
   <script>
-    // Tab Navigation Logic
-    function switchTab(tabId, el) {
-      document.querySelectorAll('.tab-content').forEach(tab => tab.classList.add('d-none'));
-      document.querySelectorAll('#sidebar .nav-link').forEach(nav => nav.classList.remove('active'));
+    // Initial Accounts List Array
+    let accountsList = [
+      { id: 101, name: "Franchise Cash Box", category: "Asset", balance: 150000 },
+      { id: 102, name: "Meezan Bank Account", category: "Asset", balance: 850000 },
+      { id: 103, name: "Easyload Sales Account", category: "Revenue", balance: 450000 },
+      { id: 104, name: "Shop Rent Expense", category: "Expense", balance: 25000 },
+      { id: 105, name: "Main Vendor Payable", category: "Liability", balance: 300000 }
+    ];
 
-      const targetTab = document.getElementById('tab-' + tabId);
-      if (targetTab) {
-        targetTab.classList.remove('d-none');
-      }
+    document.addEventListener("DOMContentLoaded", () => {
+      renderAccountsTable();
+      initCharts();
+    });
 
-      if (el) {
-        el.classList.add('active');
-      }
+    // Render Accounts Table
+    function renderAccountsTable() {
+      const tbody = document.getElementById("accountsTableBody");
+      tbody.innerHTML = "";
 
-      // Dynamic Title Update
-      const titleMap = {
-        'dashboard': 'Telecom Franchise Overview',
-        'sales-entry': 'Record Easyload & Telecom Sales',
-        'vouchers': 'Double-Entry Accounting Vouchers',
-        'retailers': 'Retailer Udhar & Credit Ledger',
-        'vendors': 'Main Telecom Company Accounts',
-        'expenses': 'Daily Franchise Expenses',
-        'reports': 'Financial Reports & Statements',
-        'sql-schema': 'MySQL Database Schema & SQL Architecture'
-      };
-      document.getElementById('page-title').innerText = titleMap[tabId] || 'Accounting System';
-    }
+      accountsList.forEach(acc => {
+        let badgeColor = "bg-secondary";
+        if(acc.category === "Asset") badgeColor = "bg-primary";
+        if(acc.category === "Revenue") badgeColor = "bg-success";
+        if(acc.category === "Expense") badgeColor = "bg-danger";
+        if(acc.category === "Liability") badgeColor = "bg-warning text-dark";
 
-    // Report Sub-tabs
-    function switchReportTab(type) {
-      document.getElementById('report-pnl').classList.add('d-none');
-      document.getElementById('report-trial').classList.add('d-none');
-      document.querySelectorAll('#reportTabs .nav-link').forEach(btn => btn.classList.remove('active'));
-
-      if (type === 'pnl') {
-        document.getElementById('report-pnl').classList.remove('d-none');
-        event.target.classList.add('active');
-      } else {
-        document.getElementById('report-trial').classList.remove('d-none');
-        event.target.classList.add('active');
-      }
-    }
-
-    // Light/Dark Theme Switcher
-    function toggleTheme() {
-      const currentTheme = document.documentElement.getAttribute('data-bs-theme');
-      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-      document.documentElement.setAttribute('data-bs-theme', newTheme);
-      
-      const themeBtn = document.getElementById('themeBtn');
-      if (newTheme === 'dark') {
-        themeBtn.innerHTML = '<i class="fa-solid fa-sun text-warning"></i>';
-      } else {
-        themeBtn.innerHTML = '<i class="fa-solid fa-moon"></i>';
-      }
-    }
-
-    // Commission Calculator Logic
-    function calculateCommission() {
-      const category = document.getElementById('saleCategory').value;
-      const amount = parseFloat(document.getElementById('saleAmount').value) || 0;
-      let commission = 0;
-      let rateText = "";
-
-      switch(category) {
-        case 'easyload':
-          commission = amount * 0.025;
-          rateText = "2.5% Easyload Commission";
-          break;
-        case 'sim_new':
-          commission = 150.00;
-          rateText = "Fixed PKR 150 Profit per SIM";
-          break;
-        case 'sim_swap':
-          commission = 100.00;
-          rateText = "Fixed PKR 100 Swap Fee";
-          break;
-        case 'bundle':
-          commission = amount * 0.05;
-          rateText = "5.0% Franchise Special Margin";
-          break;
-        case 'utility_bill':
-          commission = 15.00;
-          rateText = "PKR 15 Fixed Commission per Bill";
-          break;
-      }
-
-      document.getElementById('commissionRateText').innerText = rateText;
-      document.getElementById('calculatedIncome').innerText = "PKR " + commission.toFixed(2);
-    }
-
-    function setQuickSale(amount, category) {
-      document.getElementById('saleAmount').value = amount;
-      document.getElementById('saleCategory').value = category;
-      calculateCommission();
-    }
-
-    function handleSalesSubmit(e) {
-      e.preventDefault();
-      alert("Telecom Sale Recorded Successfully & Posted to Ledger!");
-      document.getElementById('salesForm').reset();
-      calculateCommission();
-    }
-
-    function handleExpenseSubmit(e) {
-      e.preventDefault();
-      const cat = document.getElementById('expenseCat').value;
-      const amt = document.getElementById('expenseAmount').value;
-      const desc = document.getElementById('expenseDesc').value;
-
-      const tbody = document.getElementById('expenseTableBody');
-      const newRow = `
-        <tr>
-          <td>20-Sep-2026</td>
-          <td><span class="badge bg-secondary">${cat}</span></td>
-          <td>${desc}</td>
-          <td>Franchise Cash Box</td>
-          <td class="fw-bold text-danger">PKR ${parseFloat(amt).toFixed(2)}</td>
-        </tr>
-      `;
-      tbody.innerHTML = newRow + tbody.innerHTML;
-      document.getElementById('expenseForm').reset();
-      alert("Expense Recorded!");
-    }
-
-    function copySqlToClipboard() {
-      const text = document.getElementById('sqlCodeBlock').innerText;
-      navigator.clipboard.writeText(text).then(() => {
-        alert("MySQL Script copied to clipboard successfully!");
+        tbody.innerHTML += `
+          <tr>
+            <td>#${acc.id}</td>
+            <td class="fw-bold text-dark">${acc.name}</td>
+            <td><span class="badge ${badgeColor}">${acc.category}</span></td>
+            <td class="fw-bold">PKR ${Number(acc.balance).toLocaleString()}</td>
+            <td class="text-center">
+              <button class="btn btn-sm btn-outline-danger" onclick="deleteAccount(${acc.id})">
+                <i class="fa-solid fa-trash me-1"></i> Delete
+              </button>
+            </td>
+          </tr>
+        `;
       });
     }
 
-    // Chart.js Setup on Load
-    window.onload = function() {
-      // 1. Revenue Line Chart
+    // Add New Account
+    function handleAddAccount(e) {
+      e.preventDefault();
+      const name = document.getElementById("accName").value;
+      const category = document.getElementById("accCategory").value;
+      const balance = parseFloat(document.getElementById("accBalance").value);
+
+      const newId = accountsList.length > 0 ? accountsList[accountsList.length - 1].id + 1 : 101;
+
+      accountsList.push({ id: newId, name: name, category: category, balance: balance });
+      renderAccountsTable();
+      document.getElementById("addAccountForm").reset();
+      alert("Account added successfully!");
+    }
+
+    // Delete Account
+    function deleteAccount(id) {
+      if(confirm("Are you sure you want to delete this account?")) {
+        accountsList = accountsList.filter(acc => acc.id !== id);
+        renderAccountsTable();
+      }
+    }
+
+    // Filter Accounts Search
+    function filterAccounts() {
+      const query = document.getElementById("searchAccountInput").value.toLowerCase();
+      const rows = document.querySelectorAll("#accountsTableBody tr");
+
+      rows.forEach(row => {
+        const text = row.innerText.toLowerCase();
+        row.style.display = text.includes(query) ? "" : "none";
+      });
+    }
+
+    // Tab Switcher
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.add('d-none'));
+      document.querySelectorAll('#sidebar .nav-link').forEach(el => el.classList.remove('active'));
+      document.getElementById('tab-' + tabId).classList.remove('d-none');
+    }
+
+    // Dark/Light Theme Switcher
+    function toggleTheme() {
+      const current = document.documentElement.getAttribute('data-bs-theme');
+      document.documentElement.setAttribute('data-bs-theme', current === 'dark' ? 'light' : 'dark');
+    }
+
+    // Initialize Charts
+    function initCharts() {
       const ctx1 = document.getElementById('revenueChart').getContext('2d');
       new Chart(ctx1, {
         type: 'line',
         data: {
-          labels: ['14-Sep', '15-Sep', '16-Sep', '17-Sep', '18-Sep', '19-Sep', '20-Sep'],
+          labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
           datasets: [{
-            label: 'Total Sales (PKR)',
-            data: [65000, 78000, 72000, 95000, 88000, 110000, 105000],
+            label: 'Daily Telecom Sales (PKR)',
+            data: [45000, 52000, 48000, 61000, 55000, 72000, 68000],
             borderColor: '#0d6efd',
-            backgroundColor: 'rgba(13, 110, 253, 0.08)',
-            fill: true,
-            tension: 0.35,
-            borderWidth: 3
+            backgroundColor: 'rgba(13, 110, 253, 0.1)',
+            fill: true
           }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: { legend: { display: false } },
-          scales: {
-            y: { grid: { color: 'rgba(0,0,0,0.05)' } },
-            x: { grid: { display: false } }
-          }
         }
       });
 
-      // 2. Category Doughnut Chart
       const ctx2 = document.getElementById('categoryChart').getContext('2d');
       new Chart(ctx2, {
         type: 'doughnut',
         data: {
-          labels: ['Easyload', 'New SIMs', 'Bundles', 'SIM Swap', 'Utility Bills'],
+          labels: ['Easyload', 'New SIMs', 'Bundles', 'SIM Swap'],
           datasets: [{
-            data: [50, 20, 15, 10, 5],
-            backgroundColor: ['#0d6efd', '#f26522', '#10b981', '#8b5cf6', '#0dcaf0']
+            data: [50, 20, 20, 10],
+            backgroundColor: ['#0d6efd', '#f26522', '#198754', '#ffc107']
           }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: {
-            legend: { position: 'bottom', labels: { boxWidth: 12 } }
-          }
         }
       });
-    };
+    }
   </script>
 </body>
 </html>
