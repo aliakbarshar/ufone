@@ -1,172 +1,372 @@
-<!-- DAILY LEDGER SECTION -->
-<div class="bg-white p-6 rounded-xl shadow-md border border-gray-200 space-y-6 mt-8">
-  <div class="flex justify-between items-center border-b pb-3">
-    <h2 class="text-xl font-bold text-gray-800">ڊيلي ليجر اپڊيٽ (Daily Ledger / Daily Cashbook)</h2>
-    <input type="date" id="ledger_filter_date" onchange="loadDailyLedger()" class="p-2 border rounded-md text-sm">
-  </div>
+<!DOCTYPE html>
+<html lang="sd" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hasnain Communication - مڪمل ڪاروباري نظام</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Supabase Client -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body class="bg-gray-100 font-sans p-4 md:p-6 text-gray-800">
 
-  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-    
-    <!-- 1. Add New Ledger Entry Form -->
-    <form onsubmit="handleDailyLedgerSubmit(event)" class="space-y-4 bg-gray-50 p-4 rounded-lg border">
-      <h3 class="font-semibold text-gray-700">نئين اينٽري داخل ڪريو (Add Entry)</h3>
+  <div class="max-w-7xl mx-auto space-y-6">
 
+    <!-- Header -->
+    <div class="bg-gradient-to-r from-blue-900 to-indigo-800 text-white p-6 rounded-2xl shadow-xl flex flex-col md:flex-row justify-between items-center gap-4">
       <div>
-        <label class="block text-xs font-medium text-gray-700">اينٽري جو قسم (Type)</label>
-        <select id="ledger_type" required class="w-full mt-1 p-2 border rounded-md bg-white">
-          <option value="Expense">خرچ (Expense / پئسا ويا)</option>
-          <option value="Income">آمدني (Income / پئسا آيا)</option>
-        </select>
+        <h1 class="text-3xl font-extrabold">Hasnain Communication</h1>
+        <p class="text-blue-200 text-sm mt-1">مڪمل اڪائونٽنگ، بينڪنگ، سپلائرز ۽ ڊيلي ليجر سينٽر</p>
+      </div>
+      <div class="flex gap-2">
+        <input type="date" id="global_date_filter" onchange="loadDashboardData()" class="bg-white/10 text-white border border-white/20 p-2 rounded-lg text-sm outline-none">
+      </div>
+    </div>
+
+    <!-- 1. LIVE DASHBOARD CARDS -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-200">
+        <p class="text-xs text-gray-500 font-semibold">اڄ جي مڪمل سيل (Sales)</p>
+        <h3 id="dash_today_sales" class="text-2xl font-bold text-blue-600 mt-1">PKR 0</h3>
+      </div>
+      <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-200">
+        <p class="text-xs text-gray-500 font-semibold">اڄ جا ڪل خرچ (Expenses)</p>
+        <h3 id="dash_today_expenses" class="text-2xl font-bold text-red-600 mt-1">PKR 0</h3>
+      </div>
+      <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-200">
+        <p class="text-xs text-gray-500 font-semibold">ڪيش بيلنس (Cash Box)</p>
+        <h3 id="dash_cash_balance" class="text-2xl font-bold text-emerald-600 mt-1">PKR 0</h3>
+      </div>
+      <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-200">
+        <p class="text-xs text-gray-500 font-semibold">بينڪ بيلنس (Meezan Bank)</p>
+        <h3 id="dash_bank_balance" class="text-2xl font-bold text-indigo-600 mt-1">PKR 0</h3>
+      </div>
+    </div>
+
+    <!-- MAIN GRID SECTION -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+      <!-- SECTION 1: POS / CUSTOMER CHECKOUT -->
+      <div class="bg-white p-6 rounded-2xl shadow-sm border space-y-4">
+        <h2 class="text-lg font-bold border-b pb-2 text-blue-800">۱. وڪرو / چيڪ آئوٽ (New Sale)</h2>
+        <form onsubmit="handleCustomerSale(event)" class="space-y-3">
+          <div>
+            <label class="block text-xs font-semibold">ڪسٽمر جو نالو:</label>
+            <input type="text" id="sale_cust_name" required class="w-full mt-1 p-2 border rounded-lg text-sm">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold">موبائل نمبر:</label>
+            <input type="text" id="sale_cust_phone" required class="w-full mt-1 p-2 border rounded-lg text-sm">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold">رقم (PKR):</label>
+            <input type="number" id="sale_amount" required class="w-full mt-1 p-2 border rounded-lg text-sm font-bold text-blue-600">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold">ادائگي جو طريقو:</label>
+            <select id="sale_payment_method" onchange="toggleBankReceiptArea()" class="w-full mt-1 p-2 border rounded-lg text-sm bg-white">
+              <option value="cash">ڪيش (Cash)</option>
+              <option value="credit">اوڌار (Udhar / Credit)</option>
+              <option value="bank">بينڪ ٽرانسفر (Bank Transfer)</option>
+            </select>
+          </div>
+
+          <!-- Bank Transfer Area -->
+          <div id="bank_receipt_box" class="hidden p-3 bg-blue-50 border border-blue-200 rounded-lg space-y-2">
+            <p class="text-xs text-blue-900 font-semibold">Meezan Bank: 01010102030405</p>
+            <label class="block text-xs">ادائگي جي رسيد اپلوڊ ڪريو:</label>
+            <input type="file" id="sale_receipt_file" accept="image/*" class="w-full text-xs">
+          </div>
+
+          <button type="submit" id="sale_submit_btn" class="w-full bg-blue-600 text-white py-2.5 rounded-lg font-semibold hover:bg-blue-700 transition">
+            آرڊر حتمي ڪريو
+          </button>
+        </form>
       </div>
 
-      <div>
-        <label class="block text-xs font-medium text-gray-700">ڪئٽيگري (Category)</label>
-        <input type="text" id="ledger_category" required placeholder="مثال: دوڪان جو ڪرائي، چانهه جو خرچ، وغيره" class="w-full mt-1 p-2 border rounded-md">
+      <!-- SECTION 2: BANK DEPOSIT & CASH MANAGEMENT -->
+      <div class="bg-white p-6 rounded-2xl shadow-sm border space-y-4">
+        <h2 class="text-lg font-bold border-b pb-2 text-emerald-800">۲. بينڪ ۾ پئسا جمع ڪريو (Deposit)</h2>
+        <form onsubmit="handleBankDeposit(event)" class="space-y-3">
+          <div>
+            <label class="block text-xs font-semibold">جمع ڪرڻ جي رقم (PKR):</label>
+            <input type="number" id="deposit_amount" required class="w-full mt-1 p-2 border rounded-lg text-sm">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold">بينڪ اڪائونٽ چونڊيو:</label>
+            <select id="deposit_bank_id" class="w-full mt-1 p-2 border rounded-lg text-sm bg-white">
+              <option value="2">Meezan Bank (01010102030405)</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-semibold">نوٽ / تفصيل:</label>
+            <input type="text" id="deposit_note" placeholder="مثال: ڪيش برانچ ۾ جمع ڪرائي وئي" class="w-full mt-1 p-2 border rounded-lg text-sm">
+          </div>
+          <button type="submit" class="w-full bg-emerald-600 text-white py-2.5 rounded-lg font-semibold hover:bg-emerald-700 transition">
+            رقم بينڪ ۾ داخل ڪريو
+          </button>
+        </form>
       </div>
 
-      <div>
-        <label class="block text-xs font-medium text-gray-700">رقم (Amount in PKR)</label>
-        <input type="number" id="ledger_amount" required placeholder="0" class="w-full mt-1 p-2 border rounded-md">
+      <!-- SECTION 3: DAILY LEDGER (EXPENSES & INCOME) -->
+      <div class="bg-white p-6 rounded-2xl shadow-sm border space-y-4">
+        <h2 class="text-lg font-bold border-b pb-2 text-purple-800">۳. روزنامچو (Daily Expense & Income)</h2>
+        <form onsubmit="handleDailyLedger(event)" class="space-y-3">
+          <div>
+            <label class="block text-xs font-semibold">قسم:</label>
+            <select id="ledger_type" class="w-full mt-1 p-2 border rounded-lg text-sm bg-white">
+              <option value="Expense">خرچ (Expense)</option>
+              <option value="Income">آمدني (Income)</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-semibold">ڪئٽيگري / مقصد:</label>
+            <input type="text" id="ledger_category" required placeholder="مثال: ڪرائي، چانهه، لائيٽ بل" class="w-full mt-1 p-2 border rounded-lg text-sm">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold">رقم (PKR):</label>
+            <input type="number" id="ledger_amount" required class="w-full mt-1 p-2 border rounded-lg text-sm">
+          </div>
+          <button type="submit" class="w-full bg-purple-600 text-white py-2.5 rounded-lg font-semibold hover:bg-purple-700 transition">
+            ليجر اينٽري محفوظ ڪريو
+          </button>
+        </form>
       </div>
 
-      <div>
-        <label class="block text-xs font-medium text-gray-700">ادائگي جو اڪائونٽ (Payment Account)</label>
-        <select id="ledger_account_id" class="w-full mt-1 p-2 border rounded-md bg-white">
-          <option value="1">Cash Wallet</option>
-          <option value="2">Meezan Bank</option>
-        </select>
-      </div>
+    </div>
 
-      <div>
-        <label class="block text-xs font-medium text-gray-700">تفصيل / تفصيلي نوٽ (Description)</label>
-        <input type="text" id="ledger_desc" placeholder="خرچ يا آمدنيءَ جي تفصيل" class="w-full mt-1 p-2 border rounded-md">
-      </div>
+    <!-- SECTION 4: SUPPLIERS MANAGEMENT & LEDGER -->
+    <div class="bg-white p-6 rounded-2xl shadow-sm border space-y-4">
+      <h2 class="text-lg font-bold border-b pb-2 text-gray-800">۴. سپلائر اڪائونٽس ۽ اوڌار کاتو (Suppliers Ledger)</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        
+        <!-- Add Supplier Form -->
+        <form onsubmit="handleAddSupplier(event)" class="bg-gray-50 p-4 rounded-xl border space-y-3">
+          <h3 class="font-bold text-sm text-gray-700">نئون سپلائر اڪائونٽ ٺاهيو</h3>
+          <div>
+            <label class="block text-xs">سپلائر جو نالو:</label>
+            <input type="text" id="supp_name" required class="w-full mt-1 p-2 border rounded-md text-sm">
+          </div>
+          <div>
+            <label class="block text-xs">فرنچائز / کمپني جو نالو:</label>
+            <input type="text" id="supp_company" placeholder="مثال: Ufone Main Vendor" class="w-full mt-1 p-2 border rounded-md text-sm">
+          </div>
+          <button type="submit" class="w-full bg-gray-800 text-white py-2 rounded-md font-semibold text-sm hover:bg-black">
+            سپلائر محفوظ ڪريو
+          </button>
+        </form>
 
-      <button type="submit" id="ledger-submit-btn" class="w-full bg-slate-800 text-white py-2 rounded-md hover:bg-slate-900 font-semibold text-sm transition">
-        اينٽري محفوظ ڪريو
-      </button>
-    </form>
+        <!-- Supplier Transaction Form -->
+        <form onsubmit="handleSupplierTransaction(event)" class="bg-gray-50 p-4 rounded-xl border space-y-3">
+          <h3 class="font-bold text-sm text-gray-700">سپلائر خريداري / ادائگي</h3>
+          <div>
+            <label class="block text-xs">سپلائر چونڊيو:</label>
+            <select id="supp_select_id" required class="w-full mt-1 p-2 border rounded-md text-sm bg-white">
+              <!-- Dynamically Loaded -->
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs">ٽرانزيڪشن جو قسم:</label>
+            <select id="supp_trans_type" class="w-full mt-1 p-2 border rounded-md text-sm bg-white">
+              <option value="Supplier_Purchase">اوڌار تي مال وٺڻ (Stock Purchase)</option>
+              <option value="Supplier_Payment">سپلائر کي ادائگي ڪرڻ (Payment Paid)</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs">رقم (PKR):</label>
+            <input type="number" id="supp_trans_amount" required class="w-full mt-1 p-2 border rounded-md text-sm">
+          </div>
+          <button type="submit" class="w-full bg-indigo-600 text-white py-2 rounded-md font-semibold text-sm hover:bg-indigo-700">
+            ٽرانزيڪشن رڪارڊ ڪريو
+          </button>
+        </form>
 
-    <!-- 2. Today's Summary & Transaction History -->
-    <div class="md:col-span-2 space-y-4">
-      <!-- Daily Summary Cards -->
-      <div class="grid grid-cols-2 gap-4">
-        <div class="bg-green-50 border border-green-200 p-4 rounded-lg">
-          <p class="text-xs text-green-700 font-semibold">اڄ جي مڪمل آمدني (Total Income)</p>
-          <h3 id="daily_total_income" class="text-2xl font-bold text-green-800">PKR 0</h3>
-        </div>
-        <div class="bg-red-50 border border-red-200 p-4 rounded-lg">
-          <p class="text-xs text-red-700 font-semibold">اڄ جو مڪمل خرچ (Total Expense)</p>
-          <h3 id="daily_total_expense" class="text-2xl font-bold text-red-800">PKR 0</h3>
-        </div>
-      </div>
-
-      <!-- History Table -->
-      <div class="overflow-x-auto border rounded-lg">
-        <table class="w-full text-sm text-right text-gray-600">
-          <thead class="text-xs text-gray-700 uppercase bg-gray-100 border-b">
-            <tr>
-              <th class="py-2 px-3">قسم</th>
-              <th class="py-2 px-3">ڪئٽيگري</th>
-              <th class="py-2 px-3">تفصيل</th>
-              <th class="py-2 px-3">رقم</th>
-            </tr>
-          </thead>
-          <tbody id="daily_ledger_list">
-            <!-- Dynamically Rendered -->
-          </tbody>
-        </table>
       </div>
     </div>
 
   </div>
-</div>
 
-<!-- JavaScript Logic -->
-<script>
-  // Set default date picker to today
-  document.getElementById('ledger_filter_date').valueAsDate = new Date();
+  <!-- Javascript Logic -->
+  <script>
+    const SUPABASE_URL = "YOUR_SUPABASE_URL";
+    const SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY";
+    const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-  // Load Daily Ledger on Page Load
-  document.addEventListener("DOMContentLoaded", () => {
-    loadDailyLedger();
-  });
+    document.getElementById('global_date_filter').valueAsDate = new Date();
 
-  // Handle Adding New Daily Ledger Entry
-  async function handleDailyLedgerSubmit(e) {
-    e.preventDefault();
-    const btn = document.getElementById('ledger-submit-btn');
-    btn.disabled = true;
-    btn.innerText = "محفوظ ٿي رھيو آھي...";
+    document.addEventListener("DOMContentLoaded", () => {
+      loadDashboardData();
+      loadSuppliersList();
+    });
 
-    const type = document.getElementById('ledger_type').value;
-    const category = document.getElementById('ledger_category').value;
-    const amount = parseFloat(document.getElementById('ledger_amount').value);
-    const account_id = document.getElementById('ledger_account_id').value;
-    const description = document.getElementById('ledger_desc').value;
-
-    // Insert into daily_ledger table
-    const { error } = await supabase.from('daily_ledger').insert([{
-      entry_type: type,
-      category: category,
-      amount: amount,
-      payment_account_id: account_id,
-      description: description
-    }]);
-
-    if (error) {
-      alert("اينٽري محفوظ ڪرڻ ۾ غلطي: " + error.message);
-    } else {
-      alert("ليجر اينٽري کاميابي سان محفوظ ٿي وئي!");
-      e.target.reset();
-      loadDailyLedger();
+    function toggleBankReceiptArea() {
+      const method = document.getElementById('sale_payment_method').value;
+      const box = document.getElementById('bank_receipt_box');
+      if (method === 'bank') {
+        box.classList.remove('hidden');
+      } else {
+        box.classList.add('hidden');
+      }
     }
 
-    btn.disabled = false;
-    btn.innerText = "اينٽري محفوظ ڪريو";
-  }
+    // 1. Customer Sale Processing
+    async function handleCustomerSale(e) {
+      e.preventDefault();
+      const btn = document.getElementById('sale_submit_btn');
+      btn.disabled = true;
 
-  // Load and Filter Ledger Entries by Selected Date
-  async function loadDailyLedger() {
-    const selectedDate = document.getElementById('ledger_filter_date').value;
-    if (!selectedDate) return;
+      const name = document.getElementById('sale_cust_name').value;
+      const phone = document.getElementById('sale_cust_phone').value;
+      const amount = parseFloat(document.getElementById('sale_amount').value);
+      const method = document.getElementById('sale_payment_method').value;
+      let receipt_url = null;
 
-    const { data, error } = await supabase
-      .from('daily_ledger')
-      .select('*')
-      .eq('entry_date', selectedDate)
-      .order('created_at', { ascending: false });
+      if (method === 'bank') {
+        const fileInput = document.getElementById('sale_receipt_file');
+        if (fileInput.files.length > 0) {
+          const file = fileInput.files[0];
+          const fileName = `receipts/${Date.now()}_${file.name}`;
+          const { data, error } = await supabase.storage.from('receipts').upload(fileName, file);
+          if (!error) {
+            const { data: publicData } = supabase.storage.from('receipts').getPublicUrl(fileName);
+            receipt_url = publicData.publicUrl;
+          }
+        }
+      }
 
-    const listBody = document.getElementById('daily_ledger_list');
-    listBody.innerHTML = '';
+      const typeMap = { 'cash': 'Sale_Cash', 'credit': 'Sale_Credit', 'bank': 'Sale_Bank' };
 
-    let totalIncome = 0;
-    let totalExpense = 0;
+      const { error } = await supabase.from('transactions').insert([{
+        customer_name: name,
+        customer_phone: phone,
+        amount: amount,
+        type: typeMap[method],
+        payment_account_id: method === 'cash' ? 1 : (method === 'bank' ? 2 : null),
+        receipt_url: receipt_url,
+        description: `Customer sale via ${method}`
+      }]);
 
-    if (data && data.length > 0) {
-      data.forEach(item => {
-        if (item.entry_type === 'Income') totalIncome += item.amount;
-        if (item.entry_type === 'Expense') totalExpense += item.amount;
-
-        const isIncome = item.entry_type === 'Income';
-        listBody.innerHTML += `
-          <tr class="border-b">
-            <td class="py-2 px-3 font-semibold ${isIncome ? 'text-green-600' : 'text-red-600'}">
-              ${isIncome ? 'آمدني (Income)' : 'خرچ (Expense)'}
-            </td>
-            <td class="py-2 px-3">${item.category}</td>
-            <td class="py-2 px-3 text-gray-500">${item.description || '-'}</td>
-            <td class="py-2 px-3 font-bold ${isIncome ? 'text-green-600' : 'text-red-600'}">
-              PKR ${item.amount}
-            </td>
-          </tr>
-        `;
-      });
-    } else {
-      listBody.innerHTML = '<tr><td colspan="4" class="text-center py-4 text-gray-400">ان تاريخ جي ڪا اينٽري موجود ناهي.</td></tr>';
+      if (error) {
+        alert("غلطي: " + error.message);
+      } else {
+        alert("آرڊر کاميابي سان مڪمل ٿي ويو!");
+        e.target.reset();
+        toggleBankReceiptArea();
+        loadDashboardData();
+      }
+      btn.disabled = false;
     }
 
-    document.getElementById('daily_total_income').innerText = `PKR ${totalIncome}`;
-    document.getElementById('daily_total_expense').innerText = `PKR ${totalExpense}`;
-  }
-</script>
+    // 2. Bank Deposit Processing
+    async function handleBankDeposit(e) {
+      e.preventDefault();
+      const amount = parseFloat(document.getElementById('deposit_amount').value);
+      const bank_id = document.getElementById('deposit_bank_id').value;
+      const note = document.getElementById('deposit_note').value;
+
+      const { error } = await supabase.from('transactions').insert([{
+        type: 'Bank_Deposit',
+        amount: amount,
+        payment_account_id: bank_id,
+        description: note || 'Cash deposited to bank'
+      }]);
+
+      if (error) {
+        alert("غلطي: " + error.message);
+      } else {
+        alert("رقم بينڪ ۾ داخل ٿي وئي!");
+        e.target.reset();
+        loadDashboardData();
+      }
+    }
+
+    // 3. Daily Ledger (Expenses & Income)
+    async function handleDailyLedger(e) {
+      e.preventDefault();
+      const type = document.getElementById('ledger_type').value;
+      const category = document.getElementById('ledger_category').value;
+      const amount = parseFloat(document.getElementById('ledger_amount').value);
+
+      const { error } = await supabase.from('daily_ledger').insert([{
+        entry_type: type,
+        category: category,
+        amount: amount,
+        payment_account_id: 1
+      }]);
+
+      if (error) {
+        alert("غلطي: " + error.message);
+      } else {
+        alert("ليجر اينٽري حفظ ٿي وئي!");
+        e.target.reset();
+        loadDashboardData();
+      }
+    }
+
+    // 4. Supplier Account Creation
+    async function handleAddSupplier(e) {
+      e.preventDefault();
+      const name = document.getElementById('supp_name').value;
+      const company = document.getElementById('supp_company').value;
+
+      const { error } = await supabase.from('suppliers').insert([{ name, company_name: company }]);
+      if (error) {
+        alert("غلطي: " + error.message);
+      } else {
+        alert("سپلائر اڪائونٽ ٺهي ويو!");
+        e.target.reset();
+        loadSuppliersList();
+      }
+    }
+
+    // Load Suppliers for Dropdown
+    async function loadSuppliersList() {
+      const { data } = await supabase.from('suppliers').select('id, name, company_name');
+      if (data) {
+        const select = document.getElementById('supp_select_id');
+        select.innerHTML = '<option value="">-- سپلائر چونڊيو --</option>';
+        data.forEach(s => {
+          select.innerHTML += `<option value="${s.id}">${s.name} (${s.company_name || 'عام'})</option>`;
+        });
+      }
+    }
+
+    // Handle Supplier Transaction
+    async function handleSupplierTransaction(e) {
+      e.preventDefault();
+      const supp_id = document.getElementById('supp_select_id').value;
+      const type = document.getElementById('supp_trans_type').value;
+      const amount = parseFloat(document.getElementById('supp_trans_amount').value);
+
+      const { error } = await supabase.from('transactions').insert([{
+        supplier_id: supp_id,
+        type: type,
+        amount: amount
+      }]);
+
+      if (error) {
+        alert("غلطي: " + error.message);
+      } else {
+        alert("سپلائر ٽرانزيڪشن محفوظ ٿي وئي!");
+        e.target.reset();
+      }
+    }
+
+    // Live Dashboard Calculator
+    async function loadDashboardData() {
+      const selectedDate = document.getElementById('global_date_filter').value;
+
+      // Fetch Sales
+      const { data: sales } = await supabase.from('transactions').select('amount').eq('trans_date', selectedDate);
+      let todaySales = sales ? sales.reduce((acc, curr) => acc + curr.amount, 0) : 0;
+      document.getElementById('dash_today_sales').innerText = `PKR ${todaySales}`;
+
+      // Fetch Daily Expenses
+      const { data: expenses } = await supabase.from('daily_ledger').select('amount').eq('entry_date', selectedDate).eq('entry_type', 'Expense');
+      let todayExp = expenses ? expenses.reduce((acc, curr) => acc + curr.amount, 0) : 0;
+      document.getElementById('dash_today_expenses').innerText = `PKR ${todayExp}`;
+    }
+  </script>
+</body>
+</html>
