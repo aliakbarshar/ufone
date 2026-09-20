@@ -2,149 +2,104 @@
 <html lang="sd" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ادائگي ۽ چيڪ آئوٽ سسٽم</title>
-  <!-- Tailwind CSS CDN -->
+  <title>بينڪ ڊپازٽ ۽ سپلائر مئنيجمينٽ</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Supabase JS Client CDN -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
-<body class="bg-gray-100 font-sans p-4">
+<body class="bg-gray-100 p-6">
 
-  <div class="max-w-lg mx-auto bg-white p-6 rounded-xl shadow-md mt-10">
-    <h2 class="text-2xl font-bold text-gray-800 border-b pb-3 mb-4 text-center">پروڊڪٽ چيڪ آئوٽ (Checkout)</h2>
+  <div class="max-w-2xl mx-auto space-y-6">
 
-    <form id="checkout-form" onsubmit="handleCheckout(event)" class="space-y-4">
-      
-      <!-- ڪسٽمر جون بنيادي معلومات -->
-      <div>
-        <label class="block text-sm font-medium text-gray-700">نام / نالو:</label>
-        <input type="text" id="customer_name" required class="w-full mt-1 p-2 border rounded-md focus:ring-2 focus:ring-blue-500 outline-none">
-      </div>
-
-      <div>
-        <label class="block text-sm font-medium text-gray-700">موبائل نمبر:</label>
-        <input type="text" id="customer_phone" required class="w-full mt-1 p-2 border rounded-md focus:ring-2 focus:ring-blue-500 outline-none">
-      </div>
-
-      <div>
-        <label class="block text-sm font-medium text-gray-700">پروڊڪٽ جو نالو:</label>
-        <input type="text" id="product_name" value="4G Package Plan" readonly class="w-full mt-1 p-2 bg-gray-100 border rounded-md">
-      </div>
-
-      <div>
-        <label class="block text-sm font-medium text-gray-700">رقم (PKR):</label>
-        <input type="number" id="amount" value="1200" readonly class="w-full mt-1 p-2 bg-gray-100 border rounded-md font-bold">
-      </div>
-
-      <!-- ادائگي جو طريقو -->
-      <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">ادائگي جو طريقو چونڊيو:</label>
-        <select id="payment_method" onchange="togglePaymentFields()" class="w-full p-2 border rounded-md bg-white focus:ring-2 focus:ring-blue-500 outline-none">
-          <option value="cash">ڪيش (Cash / Cash on Delivery)</option>
-          <option value="credit">اوڌار (Credit Account)</option>
-          <option value="bank">بينڪ ٽرانسفر (Bank Transfer)</option>
-        </select>
-      </div>
-
-      <!-- بينڪ تفصيل جڏھن بينڪ ٽرانسفر چونڊيو وڃي -->
-      <div id="bank-section" class="hidden border p-4 bg-blue-50 rounded-md space-y-3">
-        <h3 class="font-semibold text-blue-900">بينڪ اڪائونٽ جون تفصيلون:</h3>
-        <div id="bank-info" class="text-sm text-gray-700">
-          <p><strong>بينڪ:</strong> Meezan Bank</p>
-          <p><strong>عنوان:</strong> Hasnain Communication</p>
-          <p><strong>اڪائونٽ نمبر:</strong> 01010102030405</p>
-          <p><strong>IBAN:</strong> PK36MEZN0001010102030405</p>
-        </div>
-        
+    <!-- ۱. بينڪ ۾ پئسا جمع ڪرڻ جو فارم (Bank Deposit) -->
+    <div class="bg-white p-6 rounded-xl shadow">
+      <h2 class="text-xl font-bold mb-4 text-blue-700">بينڪ ۾ پئسا جمع ڪريو (Bank Deposit)</h2>
+      <form onsubmit="handleBankDeposit(event)" class="space-y-4">
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">ادائگي جي رسيد (Screenshot) اپلوڊ ڪريو:</label>
-          <input type="file" id="receipt_file" accept="image/*" class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:bg-blue-600 file:text-white hover:file:bg-blue-700">
+          <label class="block text-sm font-medium">جمع ٿيندڙ رقم (PKR):</label>
+          <input type="number" id="deposit_amount" required class="w-full p-2 border rounded mt-1">
         </div>
-      </div>
+        <div>
+          <label class="block text-sm font-medium">بينڪ اڪائونٽ چونڊيو:</label>
+          <select id="deposit_bank_account" class="w-full p-2 border rounded mt-1">
+            <!-- Supabase مان اڪائونٽس لوڊ ٿيندا -->
+          </select>
+        </div>
+        <div>
+          <label class="block text-sm font-medium">تفصيل / نوٽ:</label>
+          <input type="text" id="deposit_note" placeholder="مثال: ڪيش بينڪ ۾ جمع ڪرائي وئي" class="w-full p-2 border rounded mt-1">
+        </div>
+        <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">پئسا جمع ڪريو</button>
+      </form>
+    </div>
 
-      <button type="submit" id="submit-btn" class="w-full bg-green-600 text-white py-2.5 rounded-md hover:bg-green-700 font-semibold transition">
-        آرڊر حتمي ڪريو
-      </button>
+    <!-- ۲. نئون سپلائر شامل ڪرڻ جو فارم -->
+    <div class="bg-white p-6 rounded-xl shadow">
+      <h2 class="text-xl font-bold mb-4 text-green-700">نئون سپلائر (Supplier) شامل ڪريو</h2>
+      <form onsubmit="handleAddSupplier(event)" class="space-y-4">
+        <div>
+          <label class="block text-sm font-medium">سپلائر جو نالو:</label>
+          <input type="text" id="supplier_name" required class="w-full p-2 border rounded mt-1">
+        </div>
+        <div>
+          <label class="block text-sm font-medium">کمپني / فرنچائز جو نالو:</label>
+          <input type="text" id="supplier_company" class="w-full p-2 border rounded mt-1">
+        </div>
+        <div>
+          <label class="block text-sm font-medium">موبائل نمبر:</label>
+          <input type="text" id="supplier_phone" class="w-full p-2 border rounded mt-1">
+        </div>
+        <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">سپلائر اڪائونٽ ٺاهيو</button>
+      </form>
+    </div>
 
-    </form>
   </div>
 
   <script>
-    // Supabase Initialization
     const SUPABASE_URL = "YOUR_SUPABASE_URL";
     const SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY";
     const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    // Dynamic UI Switcher
-    function togglePaymentFields() {
-      const method = document.getElementById('payment_method').value;
-      const bankSection = document.getElementById('bank-section');
-      
-      if (method === 'bank') {
-        bankSection.classList.remove('hidden');
-      } else {
-        bankSection.classList.add('hidden');
-      }
-    }
-
-    // Process Form Submit
-    async function handleCheckout(e) {
+    // بینڪ ۾ پئسا جمع ڪرڻ جو لاجڪ
+    async function handleBankDeposit(e) {
       e.preventDefault();
-      const btn = document.getElementById('submit-btn');
-      btn.disabled = true;
-      btn.innerText = "پروسيسنگ ٿي رھي آھي...";
+      const amount = document.getElementById('deposit_amount').value;
+      const payment_account_id = document.getElementById('deposit_bank_account').value;
+      const note = document.getElementById('deposit_note').value;
 
-      const customer_name = document.getElementById('customer_name').value;
-      const customer_phone = document.getElementById('customer_phone').value;
-      const product_name = document.getElementById('product_name').value;
-      const amount = document.getElementById('amount').value;
-      const payment_method = document.getElementById('payment_method').value;
-      let receipt_url = null;
-
-      // 1. Upload receipt if Bank Transfer is chosen
-      if (payment_method === 'bank') {
-        const fileInput = document.getElementById('receipt_file');
-        if (fileInput.files.length > 0) {
-          const file = fileInput.files[0];
-          const fileName = `receipts/${Date.now()}_${file.name}`;
-          const { data, error } = await supabase.storage.from('receipts').upload(fileName, file);
-
-          if (error) {
-            alert("رسيد اپلوڊ ڪرڻ ۾ غلطي ٿي: " + error.message);
-            btn.disabled = false;
-            btn.innerText = "آرڊر حتمي ڪريو";
-            return;
-          }
-          
-          const { data: publicUrlData } = supabase.storage.from('receipts').getPublicUrl(fileName);
-          receipt_url = publicUrlData.publicUrl;
-        }
-      }
-
-      // 2. Insert order data into Supabase
-      const { data, error } = await supabase.from('orders').insert([
+      const { data, error } = await supabase.from('transactions').insert([
         {
-          customer_name: customer_name,
-          customer_phone: customer_phone,
-          product_name: product_name,
-          amount: amount,
-          payment_method: payment_method,
-          receipt_url: receipt_url,
-          status: 'pending'
+          type: 'Bank_Deposit',
+          amount: parseFloat(amount),
+          payment_account_id: payment_account_id,
+          description: note || 'Cash deposited into bank'
         }
       ]);
 
       if (error) {
-        alert("آرڊر محفوظ ڪرڻ ۾ غلطي: " + error.message);
+        alert("غلطي: " + error.message);
       } else {
-        alert("توهان جو آرڊر کاميابي سان مڪمل ٿي ويو آھي!");
-        document.getElementById('checkout-form').reset();
-        togglePaymentFields();
+        alert("پئسا کاميابي سان بينڪ اڪائونٽ ۾ داخل ٿي ويا!");
+        e.target.reset();
       }
+    }
 
-      btn.disabled = false;
-      btn.innerText = "آرڊر حتمي ڪريو";
+    // سپلائر اڪائونٽ ٺاهڻ جو لاجڪ
+    async function handleAddSupplier(e) {
+      e.preventDefault();
+      const name = document.getElementById('supplier_name').value;
+      const company_name = document.getElementById('supplier_company').value;
+      const phone = document.getElementById('supplier_phone').value;
+
+      const { data, error } = await supabase.from('suppliers').insert([
+        { name, company_name, phone }
+      ]);
+
+      if (error) {
+        alert("سپلائر اڪائونٽ ٺاهڻ ۾ غلطي: " + error.message);
+      } else {
+        alert("سپلائر اڪائونٽ کاميابي سان ٺهي ويو!");
+        e.target.reset();
+      }
     }
   </script>
 </body>
