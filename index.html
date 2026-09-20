@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hasnain Communication - مڪمل اڪائونٽنگ ۽ ڪاروبار نظام</title>
+  <title>Hasnain Communication - مڪمل اڪائونٽنگ، ڏي وٺ ۽ بيلنس شيٽ</title>
   
   <!-- Bootstrap 5 RTL CSS -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.rtl.min.css">
@@ -11,10 +11,9 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 
   <style>
-    body { font-family: 'Segoe UI', Tahoma, sans-serif; background-color: #f8f9fa; }
-    .nav-pills .nav-link.active { background-color: #0d6efd; font-weight: bold; }
+    body { font-family: 'Segoe UI', Tahoma, sans-serif; background-color: #f4f6f9; }
     .card-kpi { border: none; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
-    .table-custom th { background-color: #eef2f7; }
+    .nav-pills .nav-link.active { background-color: #0d6efd; font-weight: bold; }
   </style>
 </head>
 <body class="p-3 p-md-4">
@@ -25,190 +24,219 @@
     <div class="d-flex justify-content-between align-items-center bg-white p-3 rounded-3 shadow-sm mb-4">
       <div>
         <h3 class="fw-bold mb-0 text-primary"><i class="fa-solid fa-tower-cell me-2"></i>Hasnain Communication</h3>
-        <small class="text-muted">مڪمل ڪاروباري حساب ڪتاب ۽ اڪائونٽس مئنيجمينٽ</small>
+        <small class="text-muted">ٽيليڪام اڪائونٽنگ، ڏي وٺ (Transactions) ۽ روزاني بيلنس شيٽ</small>
       </div>
       <span class="badge bg-success p-2 fs-6">سسٽم فعال آهي</span>
     </div>
 
+    <!-- Live KPI Summary -->
+    <div class="row g-3 mb-4">
+      <div class="col-md-3">
+        <div class="card card-kpi bg-primary text-white p-3">
+          <small class="text-white-50">ڪيش باڪس (Cash Box)</small>
+          <h4 id="kpi-cash" class="fw-bold mb-0">PKR 0</h4>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card card-kpi bg-success text-white p-3">
+          <small class="text-white-50">بينڪ بيلنس (Bank Total)</small>
+          <h4 id="kpi-bank" class="fw-bold mb-0">PKR 0</h4>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card card-kpi bg-warning text-dark p-3">
+          <small class="text-dark-50">مارڪيٽ بقايا / اوڌار (Receivables)</small>
+          <h4 id="kpi-receivables" class="fw-bold mb-0">PKR 0</h4>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card card-kpi bg-dark text-white p-3">
+          <small class="text-white-50">صاف نفعو (Net Profit)</small>
+          <h4 id="kpi-profit" class="fw-bold mb-0">PKR 0</h4>
+        </div>
+      </div>
+    </div>
+
     <!-- Navigation Tabs -->
-    <ul class="nav nav-pills mb-4 bg-white p-2 rounded-3 shadow-sm" id="pills-tab" role="tablist">
+    <ul class="nav nav-pills mb-4 bg-white p-2 rounded-3 shadow-sm" id="pills-tab">
       <li class="nav-item">
-        <button class="nav-link active" onclick="switchTab('banks')"><i class="fa-solid fa-building-columns me-1"></i> بينڪ اڪائونٽس</button>
+        <button class="nav-link active" onclick="switchTab('transactions')"><i class="fa-solid fa-right-left me-1"></i> ڏي وٺ / ٽرانزيڪشنز</button>
       </li>
       <li class="nav-item">
-        <button class="nav-link" onclick="switchTab('employees')"><i class="fa-solid fa-users-gear me-1"></i> ايمپلائيز (ملازم)</button>
+        <button class="nav-link" onclick="switchTab('daily-ledger')"><i class="fa-solid fa-book me-1"></i> روزاني جو ليجر (Cashbook)</button>
       </li>
       <li class="nav-item">
-        <button class="nav-link" onclick="switchTab('retailers')"><i class="fa-solid fa-shop me-1"></i> ريٽيلر کاتو (Udhar)</button>
+        <button class="nav-link" onclick="switchTab('balance-sheet')"><i class="fa-solid fa-file-invoice-dollar me-1"></i> بيلنس شيٽ / رپورٽ</button>
       </li>
       <li class="nav-item">
-        <button class="nav-link" onclick="switchTab('products')"><i class="fa-solid fa-box-archive me-1"></i> پروڊڪٽس ۽ اسٽاڪ</button>
+        <button class="nav-link" onclick="switchTab('accounts')"><i class="fa-solid fa-users me-1"></i> اڪائونٽس ۽ بينڪون</button>
       </li>
     </ul>
 
-    <!-- TAB 1: BANK ACCOUNTS -->
-    <div id="tab-banks" class="tab-content">
+    <!-- TAB 1: TRANSACTIONS (ڏي وٺ) -->
+    <div id="tab-transactions" class="tab-content">
       <div class="row g-4">
-        <div class="col-md-4">
+        <div class="col-md-5">
           <div class="card p-3 shadow-sm border-0">
-            <h5 class="fw-bold text-primary mb-3">نئون بينڪ اڪائونٽ ايڊ ڪريو</h5>
-            <form onsubmit="addBank(event)">
+            <h5 class="fw-bold text-primary mb-3"><i class="fa-solid fa-plus-circle me-1"></i> نئين ٽرانزيڪشن / ڏي وٺ درج ڪريو</h5>
+            <form onsubmit="handleTransaction(event)">
               <div class="mb-3">
-                <label class="form-label">بينڪ جو نالو:</label>
-                <input type="text" id="bank_name" placeholder="مثال: Meezan Bank" class="form-control" required>
+                <label class="form-label">ٽرانزيڪشن جو قسم (Select Action):</label>
+                <select id="trans_type" class="form-select" onchange="toggleAccountSelects()" required>
+                  <option value="give_item">سامان / لوڊ ڏنو (کاتي ۾ اوڌار لکيو)</option>
+                  <option value="receive_payment">پئسا وصول ٿيا (بينڪ يا ڪيش ۾ آيا)</option>
+                  <option value="expense">خرچ ٿيو (Expense)</option>
+                </select>
               </div>
+
               <div class="mb-3">
-                <label class="form-label">اڪائونٽ نمبر:</label>
-                <input type="text" id="bank_number" placeholder="010101..." class="form-control" required>
+                <label class="form-label">اڪائونٽ / پارتي (Customer / Retailer):</label>
+                <select id="trans_account" class="form-select" required>
+                  <!-- Dynamically Loaded -->
+                </select>
               </div>
+
+              <div class="mb-3" id="payment_method_box">
+                <label class="form-label">پئسا ڪٿي جمع / ادا ٿيا؟ (Payment Account):</label>
+                <select id="trans_payment_account" class="form-select">
+                  <option value="cash">ڪيش باڪس (Cash Box)</option>
+                  <!-- Bank accounts dynamically appended -->
+                </select>
+              </div>
+
               <div class="mb-3">
-                <label class="form-label">ابتدائي بيلنس (PKR):</label>
-                <input type="number" id="bank_balance" placeholder="0" class="form-control" required>
+                <label class="form-label">رقم (Amount in PKR):</label>
+                <input type="number" id="trans_amount" placeholder="0" class="form-control" required>
               </div>
-              <button type="submit" class="btn btn-primary w-100">اڪائونٽ شامل ڪريو</button>
+
+              <div class="mb-3">
+                <label class="form-label">تفصيل / نوٽ (Description):</label>
+                <input type="text" id="trans_desc" placeholder="مثال: بينڪ ٽرانسفر يا 5000 ايزي لوڊ" class="form-control">
+              </div>
+
+              <button type="submit" class="btn btn-primary w-100">ٽرانزيڪشن محفوظ ڪريو</button>
             </form>
           </div>
         </div>
-        <div class="col-md-8">
+
+        <div class="col-md-7">
           <div class="card p-3 shadow-sm border-0">
-            <h5 class="fw-bold mb-3">بينڪ اڪائونٽس جي لسٽ</h5>
-            <table class="table table-hover align-middle table-custom">
-              <thead>
-                <tr>
-                  <th>بينڪ</th>
-                  <th>اڪائونٽ نمبر</th>
-                  <th>موجوده بيلنس</th>
-                  <th>عمل</th>
-                </tr>
-              </thead>
-              <tbody id="bank-list"></tbody>
-            </table>
+            <h5 class="fw-bold mb-3">تازيون ٽرانزيڪشنز (Recent Activity)</h5>
+            <div class="table-responsive">
+              <table class="table table-hover align-middle">
+                <thead class="table-light">
+                  <tr>
+                    <th>تاريخ</th>
+                    <th>تفصيل / قسم</th>
+                    <th>اڪائونٽ</th>
+                    <th>رقم</th>
+                  </tr>
+                </thead>
+                <tbody id="trans-history-list"></tbody>
+              </table>
+            </div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- TAB 2: EMPLOYEES -->
-    <div id="tab-employees" class="tab-content d-none">
-      <div class="row g-4">
-        <div class="col-md-4">
-          <div class="card p-3 shadow-sm border-0">
-            <h5 class="fw-bold text-primary mb-3">نئون ايمپلائي (ملازم) ايڊ ڪريو</h5>
-            <form onsubmit="addEmployee(event)">
-              <div class="mb-3">
-                <label class="form-label">ملازم جو نالو:</label>
-                <input type="text" id="emp_name" placeholder="مثال: احمد علي" class="form-control" required>
-              </div>
-              <div class="mb-3">
-                <label class="form-label">عهدو / ڪم:</label>
-                <input type="text" id="emp_role" placeholder="مثال: ڪيشيئر / سيلز مين" class="form-control" required>
-              </div>
-              <div class="mb-3">
-                <label class="form-label">ماهوار پگهار (PKR):</label>
-                <input type="number" id="emp_salary" placeholder="25000" class="form-control" required>
-              </div>
-              <button type="submit" class="btn btn-primary w-100">ملازم شامل ڪريو</button>
-            </form>
-          </div>
+    <!-- TAB 2: DAILY LEDGER -->
+    <div id="tab-daily-ledger" class="tab-content d-none">
+      <div class="card p-4 shadow-sm border-0">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h5 class="fw-bold mb-0">روزاني جو ليجر حساب ڪتاب (Daily Cashbook)</h5>
+          <input type="date" id="ledger_date_filter" onchange="renderDailyLedger()" class="form-control w-auto">
         </div>
-        <div class="col-md-8">
-          <div class="card p-3 shadow-sm border-0">
-            <h5 class="fw-bold mb-3">ملازمن جي لسٽ</h5>
-            <table class="table table-hover align-middle table-custom">
-              <thead>
-                <tr>
-                  <th>نالو</th>
-                  <th>عهدو</th>
-                  <th>پگهار</th>
-                  <th>عمل</th>
-                </tr>
-              </thead>
-              <tbody id="emp-list"></tbody>
-            </table>
+        <table class="table table-bordered align-middle">
+          <thead class="table-dark">
+            <tr>
+              <th>وقت / تاريخ</th>
+              <th>قسم</th>
+              <th>اڪائونٽ</th>
+              <th>تفصيل</th>
+              <th>رقم (PKR)</th>
+            </tr>
+          </thead>
+          <tbody id="daily-ledger-list"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- TAB 3: BALANCE SHEET -->
+    <div id="tab-balance-sheet" class="tab-content d-none">
+      <div class="card p-4 shadow-sm border-0">
+        <h4 class="fw-bold text-center border-bottom pb-3 mb-4 text-primary">Hasnain Communication - بيلنس شيٽ (Balance Sheet)</h4>
+        
+        <div class="row g-4">
+          <!-- Assets Side -->
+          <div class="col-md-6 border-end">
+            <h5 class="fw-bold text-success border-bottom pb-2">جائيداد ۽ بقايايل (Assets)</h5>
+            <div class="d-flex justify-content-between py-2 border-bottom">
+              <span>ڪيش باڪس بيلنس (Cash Box)</span>
+              <strong id="bs-cash">PKR 0</strong>
+            </div>
+            <div class="d-flex justify-content-between py-2 border-bottom">
+              <span>بينڪن ۾ مڪمل بيلنس (Bank Accounts)</span>
+              <strong id="bs-bank">PKR 0</strong>
+            </div>
+            <div class="d-flex justify-content-between py-2 border-bottom">
+              <span>مارڪيٽ مان وٺڻا پئسا (Receivables / Udhar)</span>
+              <strong id="bs-receivables">PKR 0</strong>
+            </div>
+            <div class="d-flex justify-content-between py-3 bg-light px-2 mt-2">
+              <span class="fw-bold">مڪمل جائيداد (Total Assets):</span>
+              <span class="fw-bold text-success" id="bs-total-assets">PKR 0</span>
+            </div>
+          </div>
+
+          <!-- Income & Expenses Side -->
+          <div class="col-md-6">
+            <h5 class="fw-bold text-danger border-bottom pb-2">نفعو ۽ نقصانات (Income vs Expenses)</h5>
+            <div class="d-flex justify-content-between py-2 border-bottom">
+              <span>مڪمل وڪرو / آمدني (Total Income)</span>
+              <strong id="bs-income" class="text-success">PKR 0</strong>
+            </div>
+            <div class="d-flex justify-content-between py-2 border-bottom">
+              <span>مڪمل خرچ (Total Expenses)</span>
+              <strong id="bs-expense" class="text-danger">PKR 0</strong>
+            </div>
+            <div class="d-flex justify-content-between py-3 bg-light px-2 mt-4">
+              <span class="fw-bold">صاف ڪمائي / نفعو (Net Profit):</span>
+              <span class="fw-bold text-primary" id="bs-net-profit">PKR 0</span>
+            </div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- TAB 3: RETAILERS -->
-    <div id="tab-retailers" class="tab-content d-none">
+    <!-- TAB 4: ACCOUNTS & BANKS MANAGEMENT -->
+    <div id="tab-accounts" class="tab-content d-none">
       <div class="row g-4">
-        <div class="col-md-4">
+        <!-- Add Bank -->
+        <div class="col-md-6">
           <div class="card p-3 shadow-sm border-0">
-            <h5 class="fw-bold text-primary mb-3">نئون ريٽيلر کاتو ايڊ ڪريو</h5>
-            <form onsubmit="addRetailer(event)">
-              <div class="mb-3">
-                <label class="form-label">ريٽيلر / دوڪان جو نالو:</label>
-                <input type="text" id="ret_name" placeholder="مثال: طارق موبائل شاپ" class="form-control" required>
-              </div>
-              <div class="mb-3">
-                <label class="form-label">فون نمبر:</label>
-                <input type="text" id="ret_phone" placeholder="03001234567" class="form-control" required>
-              </div>
-              <div class="mb-3">
-                <label class="form-label">اوڌار بيلنس (PKR):</label>
-                <input type="number" id="ret_balance" placeholder="0" class="form-control" required>
-              </div>
-              <button type="submit" class="btn btn-primary w-100">ريٽيلر شامل ڪريو</button>
+            <h5 class="fw-bold text-primary mb-3">نئون بينڪ اڪائونٽ</h5>
+            <form onsubmit="addBank(event)" class="row g-2">
+              <div class="col-6"><input type="text" id="b_name" placeholder="بينڪ جو نالو" class="form-control" required></div>
+              <div class="col-6"><input type="text" id="b_num" placeholder="اڪائونٽ نمبر" class="form-control" required></div>
+              <div class="col-12"><input type="number" id="b_bal" placeholder="ابتدائي بيلنس" class="form-control" required></div>
+              <div class="col-12"><button class="btn btn-primary w-100">بينڪ شامل ڪريو</button></div>
             </form>
+            <ul id="bank-list-view" class="list-group mt-3"></ul>
           </div>
         </div>
-        <div class="col-md-8">
-          <div class="card p-3 shadow-sm border-0">
-            <h5 class="fw-bold mb-3">ريٽيلرن جي اوڌار لسٽ</h5>
-            <table class="table table-hover align-middle table-custom">
-              <thead>
-                <tr>
-                  <th>دوڪان / نالو</th>
-                  <th>موبائل نمبر</th>
-                  <th>اوڌار بيلنس</th>
-                  <th>عمل</th>
-                </tr>
-              </thead>
-              <tbody id="ret-list"></tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </div>
 
-    <!-- TAB 4: PRODUCTS -->
-    <div id="tab-products" class="tab-content d-none">
-      <div class="row g-4">
-        <div class="col-md-4">
+        <!-- Add Customer / Retailer -->
+        <div class="col-md-6">
           <div class="card p-3 shadow-sm border-0">
-            <h5 class="fw-bold text-primary mb-3">نئين پروڊڪٽ / آفر ايڊ ڪريو</h5>
-            <form onsubmit="addProduct(event)">
-              <div class="mb-3">
-                <label class="form-label">پروڊڪٽ جو نالو:</label>
-                <input type="text" id="prod_title" placeholder="مثال: 4G Router Device / New SIM" class="form-control" required>
-              </div>
-              <div class="mb-3">
-                <label class="form-label">قيمت (PKR):</label>
-                <input type="number" id="prod_price" placeholder="4500" class="form-control" required>
-              </div>
-              <div class="mb-3">
-                <label class="form-label">موجوده اسٽاڪ (مجموعو):</label>
-                <input type="number" id="prod_stock" placeholder="10" class="form-control" required>
-              </div>
-              <button type="submit" class="btn btn-primary w-100">پروڊڪٽ شامل ڪريو</button>
+            <h5 class="fw-bold text-primary mb-3">نئون ڪسٽمر / ريٽيلر کاتو</h5>
+            <form onsubmit="addParty(event)" class="row g-2">
+              <div class="col-6"><input type="text" id="p_name" placeholder="نالو / دوڪان" class="form-control" required></div>
+              <div class="col-6"><input type="text" id="p_phone" placeholder="فون نمبر" class="form-control" required></div>
+              <div class="col-12"><input type="number" id="p_bal" placeholder="شروعاتي اوڌار (جيڪڏهن آهي)" class="form-control" required></div>
+              <div class="col-12"><button class="btn btn-primary w-100">کاتو کوليو</button></div>
             </form>
-          </div>
-        </div>
-        <div class="col-md-8">
-          <div class="card p-3 shadow-sm border-0">
-            <h5 class="fw-bold mb-3">پروڊڪٽس ۽ اسٽاڪ لسٽ</h5>
-            <table class="table table-hover align-middle table-custom">
-              <thead>
-                <tr>
-                  <th>پروڊڪٽ</th>
-                  <th>قيمت</th>
-                  <th>اسٽاڪ</th>
-                  <th>عمل</th>
-                </tr>
-              </thead>
-              <tbody id="prod-list"></tbody>
-            </table>
+            <ul id="party-list-view" class="list-group mt-3"></ul>
           </div>
         </div>
       </div>
@@ -217,32 +245,18 @@
   </div>
 
   <script>
-    // Local Data Arrays
-    let banks = [
-      { id: 1, name: 'Meezan Bank', number: '01010102030405', balance: 850000 }
-    ];
-    let employees = [
-      { id: 1, name: 'علي اڪبر', role: 'مئنيجر', salary: 35000 }
-    ];
-    let retailers = [
-      { id: 1, name: 'سبحان ڪميونيڪيشن', phone: '03001234567', balance: 15000 }
-    ];
-    let products = [
-      { id: 1, title: '4G ڊيوائس', price: 4500, stock: 20 }
-    ];
+    // System Data
+    let cashBox = 0;
+    let banks = [{ id: 'b1', name: 'Meezan Bank', number: '010101...', balance: 50000 }];
+    let parties = [{ id: 'p1', name: 'طارق ريٽيلر', phone: '03001234567', balance: 5000 }];
+    let transactions = [];
 
     document.addEventListener("DOMContentLoaded", () => {
+      document.getElementById('ledger_date_filter').valueAsDate = new Date();
+      updateDropdowns();
       renderAll();
     });
 
-    function renderAll() {
-      renderBanks();
-      renderEmployees();
-      renderRetailers();
-      renderProducts();
-    }
-
-    // Tab Switcher
     function switchTab(tabId) {
       document.querySelectorAll('.tab-content').forEach(el => el.classList.add('d-none'));
       document.querySelectorAll('.nav-link').forEach(el => el.classList.remove('active'));
@@ -250,128 +264,198 @@
       event.target.classList.add('active');
     }
 
-    // 1. BANK FUNCTIONS
-    function renderBanks() {
-      const list = document.getElementById('bank-list');
-      list.innerHTML = '';
-      banks.forEach((b, i) => {
-        list.innerHTML += `
+    function toggleAccountSelects() {
+      const type = document.getElementById('trans_type').value;
+      const box = document.getElementById('payment_method_box');
+      if (type === 'give_item') {
+        box.classList.add('d-none');
+      } else {
+        box.classList.remove('d-none');
+      }
+    }
+
+    function updateDropdowns() {
+      const pSelect = document.getElementById('trans_account');
+      pSelect.innerHTML = '';
+      parties.forEach(p => {
+        pSelect.innerHTML += `<option value="${p.id}">${p.name} (بقايا اوڌار: PKR ${p.balance})</option>`;
+      });
+
+      const paySelect = document.getElementById('trans_payment_account');
+      paySelect.innerHTML = `<option value="cash">ڪيش باڪس (Cash Box)</option>`;
+      banks.forEach(b => {
+        paySelect.innerHTML += `<option value="${b.id}">${b.name} (${b.number})</option>`;
+      });
+    }
+
+    // Process Transaction (ڏي وٺ)
+    function handleTransaction(e) {
+      e.preventDefault();
+      const type = document.getElementById('trans_type').value;
+      const partyId = document.getElementById('trans_account').value;
+      const paymentAcc = document.getElementById('trans_payment_account').value;
+      const amount = parseFloat(document.getElementById('trans_amount').value);
+      const desc = document.getElementById('trans_desc').value;
+
+      const party = parties.find(p => p.id === partyId);
+
+      if (type === 'give_item') {
+        // Customer bought item/load on credit
+        party.balance += amount;
+        transactions.push({
+          date: new Date().toISOString().split('T')[0],
+          time: new Date().toLocaleTimeString(),
+          type: 'سامان ڏنو (اوڌار)',
+          party: party.name,
+          amount: amount,
+          desc: desc || 'سامان / لوڊ کاتي ۾ لکيو ويو'
+        });
+      } else if (type === 'receive_payment') {
+        // Customer paid money into bank or cash
+        party.balance -= amount;
+        if (paymentAcc === 'cash') {
+          cashBox += amount;
+        } else {
+          const bank = banks.find(b => b.id === paymentAcc);
+          if (bank) bank.balance += amount;
+        }
+        transactions.push({
+          date: new Date().toISOString().split('T')[0],
+          time: new Date().toLocaleTimeString(),
+          type: 'پئسا وصول ٿيا',
+          party: party.name,
+          amount: amount,
+          desc: desc || `پئسا ${paymentAcc === 'cash' ? 'ڪيش' : 'بينڪ'} ۾ داخل ٿيا`
+        });
+      } else if (type === 'expense') {
+        if (paymentAcc === 'cash') {
+          cashBox -= amount;
+        } else {
+          const bank = banks.find(b => b.id === paymentAcc);
+          if (bank) bank.balance -= amount;
+        }
+        transactions.push({
+          date: new Date().toISOString().split('T')[0],
+          time: new Date().toLocaleTimeString(),
+          type: 'خرچ',
+          party: party ? party.name : 'عام خرچ',
+          amount: amount,
+          desc: desc || 'دوڪان جو خرچ'
+        });
+      }
+
+      e.target.reset();
+      updateDropdowns();
+      renderAll();
+      alert("ٽرانزيڪشن محفوظ ٿي وئي!");
+    }
+
+    function renderAll() {
+      // KPI Updates
+      document.getElementById('kpi-cash').innerText = `PKR ${cashBox}`;
+      
+      const bankTotal = banks.reduce((a, b) => a + b.balance, 0);
+      document.getElementById('kpi-bank').innerText = `PKR ${bankTotal}`;
+
+      const recTotal = parties.reduce((a, b) => a + b.balance, 0);
+      document.getElementById('kpi-receivables').innerText = `PKR ${recTotal}`;
+
+      const totalIncome = transactions.filter(t => t.type === 'پئسا وصول ٿيا').reduce((a, b) => a + b.amount, 0);
+      const totalExpense = transactions.filter(t => t.type === 'خرچ').reduce((a, b) => a + b.amount, 0);
+      const netProfit = totalIncome - totalExpense;
+
+      document.getElementById('kpi-profit').innerText = `PKR ${netProfit}`;
+
+      // History Table
+      const hist = document.getElementById('trans-history-list');
+      hist.innerHTML = '';
+      transactions.slice().reverse().forEach(t => {
+        hist.innerHTML += `
           <tr>
-            <td class="fw-bold">${b.name}</td>
-            <td>${b.number}</td>
-            <td class="text-success fw-bold">PKR ${b.balance}</td>
-            <td><button class="btn btn-sm btn-outline-danger" onclick="deleteBank(${i})"><i class="fa-solid fa-trash"></i> ڊيليٽ</button></td>
+            <td>${t.date}</td>
+            <td><span class="badge ${t.type === 'پئسا وصول ٿيا' ? 'bg-success' : (t.type === 'خرچ' ? 'bg-danger' : 'bg-warning text-dark')}">${t.type}</span></td>
+            <td>${t.party}</td>
+            <td class="fw-bold">PKR ${t.amount}</td>
           </tr>
         `;
       });
+
+      // Balance Sheet Updates
+      document.getElementById('bs-cash').innerText = `PKR ${cashBox}`;
+      document.getElementById('bs-bank').innerText = `PKR ${bankTotal}`;
+      document.getElementById('bs-receivables').innerText = `PKR ${recTotal}`;
+      document.getElementById('bs-total-assets').innerText = `PKR ${cashBox + bankTotal + recTotal}`;
+
+      document.getElementById('bs-income').innerText = `PKR ${totalIncome}`;
+      document.getElementById('bs-expense').innerText = `PKR ${totalExpense}`;
+      document.getElementById('bs-net-profit').innerText = `PKR ${netProfit}`;
+
+      // Views
+      renderViews();
+      renderDailyLedger();
     }
+
+    function renderDailyLedger() {
+      const selectedDate = document.getElementById('ledger_date_filter').value;
+      const list = document.getElementById('daily-ledger-list');
+      list.innerHTML = '';
+
+      const filtered = transactions.filter(t => t.date === selectedDate);
+      if (filtered.length > 0) {
+        filtered.forEach(t => {
+          list.innerHTML += `
+            <tr>
+              <td>${t.time || '-'} / ${t.date}</td>
+              <td>${t.type}</td>
+              <td>${t.party}</td>
+              <td>${t.desc}</td>
+              <td class="fw-bold">${t.amount}</td>
+            </tr>
+          `;
+        });
+      } else {
+        list.innerHTML = `<tr><td colspan="5" class="text-center text-muted">ان تاريخ جو ڪو حساب رڪارڊ ناهي.</td></tr>`;
+      }
+    }
+
+    function renderViews() {
+      const bView = document.getElementById('bank-list-view');
+      bView.innerHTML = '';
+      banks.forEach(b => {
+        bView.innerHTML += `<li class="list-group-item d-flex justify-content-between align-items-center"><span>${b.name} (${b.number})</span> <strong class="text-success">PKR ${b.balance}</strong></li>`;
+      });
+
+      const pView = document.getElementById('party-list-view');
+      pView.innerHTML = '';
+      parties.forEach(p => {
+        pView.innerHTML += `<li class="list-group-item d-flex justify-content-between align-items-center"><span>${p.name} (${p.phone})</span> <strong class="text-danger">اوڌار: PKR ${p.balance}</strong></li>`;
+      });
+    }
+
     function addBank(e) {
       e.preventDefault();
       banks.push({
-        id: Date.now(),
-        name: document.getElementById('bank_name').value,
-        number: document.getElementById('bank_number').value,
-        balance: parseFloat(document.getElementById('bank_balance').value)
+        id: 'b' + Date.now(),
+        name: document.getElementById('b_name').value,
+        number: document.getElementById('b_num').value,
+        balance: parseFloat(document.getElementById('b_bal').value)
       });
-      renderBanks();
       e.target.reset();
-    }
-    function deleteBank(index) {
-      banks.splice(index, 1);
-      renderBanks();
+      updateDropdowns();
+      renderAll();
     }
 
-    // 2. EMPLOYEE FUNCTIONS
-    function renderEmployees() {
-      const list = document.getElementById('emp-list');
-      list.innerHTML = '';
-      employees.forEach((emp, i) => {
-        list.innerHTML += `
-          <tr>
-            <td class="fw-bold">${emp.name}</td>
-            <td>${emp.role}</td>
-            <td class="text-primary font-bold">PKR ${emp.salary}</td>
-            <td><button class="btn btn-sm btn-outline-danger" onclick="deleteEmployee(${i})"><i class="fa-solid fa-trash"></i> ڊيليٽ</button></td>
-          </tr>
-        `;
-      });
-    }
-    function addEmployee(e) {
+    function addParty(e) {
       e.preventDefault();
-      employees.push({
-        id: Date.now(),
-        name: document.getElementById('emp_name').value,
-        role: document.getElementById('emp_role').value,
-        salary: parseFloat(document.getElementById('emp_salary').value)
+      parties.push({
+        id: 'p' + Date.now(),
+        name: document.getElementById('p_name').value,
+        phone: document.getElementById('p_phone').value,
+        balance: parseFloat(document.getElementById('p_bal').value)
       });
-      renderEmployees();
       e.target.reset();
-    }
-    function deleteEmployee(index) {
-      employees.splice(index, 1);
-      renderEmployees();
-    }
-
-    // 3. RETAILER FUNCTIONS
-    function renderRetailers() {
-      const list = document.getElementById('ret-list');
-      list.innerHTML = '';
-      retailers.forEach((r, i) => {
-        list.innerHTML += `
-          <tr>
-            <td class="fw-bold">${r.name}</td>
-            <td>${r.phone}</td>
-            <td class="text-danger fw-bold">PKR ${r.balance}</td>
-            <td><button class="btn btn-sm btn-outline-danger" onclick="deleteRetailer(${i})"><i class="fa-solid fa-trash"></i> ڊيليٽ</button></td>
-          </tr>
-        `;
-      });
-    }
-    function addRetailer(e) {
-      e.preventDefault();
-      retailers.push({
-        id: Date.now(),
-        name: document.getElementById('ret_name').value,
-        phone: document.getElementById('ret_phone').value,
-        balance: parseFloat(document.getElementById('ret_balance').value)
-      });
-      renderRetailers();
-      e.target.reset();
-    }
-    function deleteRetailer(index) {
-      retailers.splice(index, 1);
-      renderRetailers();
-    }
-
-    // 4. PRODUCT FUNCTIONS
-    function renderProducts() {
-      const list = document.getElementById('prod-list');
-      list.innerHTML = '';
-      products.forEach((p, i) => {
-        list.innerHTML += `
-          <tr>
-            <td class="fw-bold">${p.title}</td>
-            <td>PKR ${p.price}</td>
-            <td><span class="badge bg-info text-dark">${p.stock} Qty</span></td>
-            <td><button class="btn btn-sm btn-outline-danger" onclick="deleteProduct(${i})"><i class="fa-solid fa-trash"></i> ڊيليٽ</button></td>
-          </tr>
-        `;
-      });
-    }
-    function addProduct(e) {
-      e.preventDefault();
-      products.push({
-        id: Date.now(),
-        title: document.getElementById('prod_title').value,
-        price: parseFloat(document.getElementById('prod_price').value),
-        stock: parseInt(document.getElementById('prod_stock').value)
-      });
-      renderProducts();
-      e.target.reset();
-    }
-    function deleteProduct(index) {
-      products.splice(index, 1);
-      renderProducts();
+      updateDropdowns();
+      renderAll();
     }
   </script>
 </body>
