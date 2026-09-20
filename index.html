@@ -1,103 +1,325 @@
 <!DOCTYPE html>
-<html lang="sd" dir="rtl">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>بينڪ ڊپازٽ ۽ سپلائر مئنيجمينٽ</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Business & Payment Management System</title>
+  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Supabase JS Client -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
-<body class="bg-gray-100 p-6">
+<body class="bg-gray-100 font-sans p-6">
 
-  <div class="max-w-2xl mx-auto space-y-6">
-
-    <!-- ۱. بينڪ ۾ پئسا جمع ڪرڻ جو فارم (Bank Deposit) -->
-    <div class="bg-white p-6 rounded-xl shadow">
-      <h2 class="text-xl font-bold mb-4 text-blue-700">بينڪ ۾ پئسا جمع ڪريو (Bank Deposit)</h2>
-      <form onsubmit="handleBankDeposit(event)" class="space-y-4">
-        <div>
-          <label class="block text-sm font-medium">جمع ٿيندڙ رقم (PKR):</label>
-          <input type="number" id="deposit_amount" required class="w-full p-2 border rounded mt-1">
-        </div>
-        <div>
-          <label class="block text-sm font-medium">بينڪ اڪائونٽ چونڊيو:</label>
-          <select id="deposit_bank_account" class="w-full p-2 border rounded mt-1">
-            <!-- Supabase مان اڪائونٽس لوڊ ٿيندا -->
-          </select>
-        </div>
-        <div>
-          <label class="block text-sm font-medium">تفصيل / نوٽ:</label>
-          <input type="text" id="deposit_note" placeholder="مثال: ڪيش بينڪ ۾ جمع ڪرائي وئي" class="w-full p-2 border rounded mt-1">
-        </div>
-        <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">پئسا جمع ڪريو</button>
-      </form>
+  <div class="max-w-6xl mx-auto space-y-8">
+    
+    <!-- Header -->
+    <div class="bg-blue-900 text-white p-6 rounded-xl shadow-lg flex justify-between items-center">
+      <div>
+        <h1 class="text-2xl font-bold">Hasnain Communication Management</h1>
+        <p class="text-blue-200 text-sm">Bank Deposits, Supplier Ledger & Multi-Option Checkout</p>
+      </div>
     </div>
 
-    <!-- ۲. نئون سپلائر شامل ڪرڻ جو فارم -->
-    <div class="bg-white p-6 rounded-xl shadow">
-      <h2 class="text-xl font-bold mb-4 text-green-700">نئون سپلائر (Supplier) شامل ڪريو</h2>
-      <form onsubmit="handleAddSupplier(event)" class="space-y-4">
-        <div>
-          <label class="block text-sm font-medium">سپلائر جو نالو:</label>
-          <input type="text" id="supplier_name" required class="w-full p-2 border rounded mt-1">
-        </div>
-        <div>
-          <label class="block text-sm font-medium">کمپني / فرنچائز جو نالو:</label>
-          <input type="text" id="supplier_company" class="w-full p-2 border rounded mt-1">
-        </div>
-        <div>
-          <label class="block text-sm font-medium">موبائل نمبر:</label>
-          <input type="text" id="supplier_phone" class="w-full p-2 border rounded mt-1">
-        </div>
-        <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">سپلائر اڪائونٽ ٺاهيو</button>
-      </form>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+
+      <!-- SECTION 1: CUSTOMER CHECKOUT FORM -->
+      <div class="bg-white p-6 rounded-xl shadow-md border border-gray-200 space-y-4">
+        <h2 class="text-xl font-bold text-gray-800 border-b pb-2">1. Customer Checkout / Sale</h2>
+        
+        <form id="checkout-form" onsubmit="handleCheckout(event)" class="space-y-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Customer Name</label>
+            <input type="text" id="cust_name" required class="w-full mt-1 p-2 border rounded-md">
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Phone Number</label>
+            <input type="text" id="cust_phone" required class="w-full mt-1 p-2 border rounded-md">
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Product / Item</label>
+            <input type="text" id="prod_title" value="4G Wireless Device" readonly class="w-full mt-1 p-2 bg-gray-100 border rounded-md">
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Total Amount (PKR)</label>
+            <input type="number" id="prod_amount" value="4500" readonly class="w-full mt-1 p-2 bg-gray-100 border rounded-md font-bold text-blue-600">
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Payment Option</label>
+            <select id="payment_option" onchange="toggleCheckoutFields()" class="w-full mt-1 p-2 border rounded-md bg-white">
+              <option value="cash">Cash (On Delivery / Instant Cash)</option>
+              <option value="credit">On Credit (Udhar / Pay Later)</option>
+              <option value="bank">Bank Transfer</option>
+            </select>
+          </div>
+
+          <!-- Conditional Bank Info & Receipt -->
+          <div id="bank-info-box" class="hidden p-4 bg-blue-50 border border-blue-200 rounded-md space-y-3">
+            <h4 class="font-semibold text-blue-900 text-sm">Bank Account Transfer Details:</h4>
+            <div class="text-xs text-gray-700 space-y-1">
+              <p><strong>Bank:</strong> Meezan Bank</p>
+              <p><strong>Account Title:</strong> Hasnain Communication</p>
+              <p><strong>Account Number:</strong> 01010102030405</p>
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-gray-700">Upload Transfer Receipt / Screenshot</label>
+              <input type="file" id="receipt_file" accept="image/*" class="w-full mt-1 text-xs text-gray-500">
+            </div>
+          </div>
+
+          <button type="submit" id="checkout-btn" class="w-full bg-blue-600 text-white py-2.5 rounded-md hover:bg-blue-700 font-semibold transition">
+            Complete Order
+          </button>
+        </form>
+      </div>
+
+
+      <!-- SECTION 2: BANK DEPOSIT FORM -->
+      <div class="bg-white p-6 rounded-xl shadow-md border border-gray-200 space-y-4">
+        <h2 class="text-xl font-bold text-gray-800 border-b pb-2">2. Deposit Cash into Bank</h2>
+
+        <form onsubmit="handleBankDeposit(event)" class="space-y-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Deposit Amount (PKR)</label>
+            <input type="number" id="deposit_amount" required placeholder="e.g. 50000" class="w-full mt-1 p-2 border rounded-md">
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Target Bank Account</label>
+            <select id="deposit_account_id" class="w-full mt-1 p-2 border rounded-md bg-white">
+              <!-- Dynamically Populated -->
+              <option value="2">Meezan Bank - 01010102030405</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Description / Remarks</label>
+            <input type="text" id="deposit_desc" placeholder="Cash deposited at local branch" class="w-full mt-1 p-2 border rounded-md">
+          </div>
+
+          <button type="submit" class="w-full bg-emerald-600 text-white py-2.5 rounded-md hover:bg-emerald-700 font-semibold transition">
+            Record Bank Deposit
+          </button>
+        </form>
+      </div>
+
+    </div>
+
+
+    <!-- SECTION 3: SUPPLIER MANAGEMENT & PURCHASES -->
+    <div class="bg-white p-6 rounded-xl shadow-md border border-gray-200 space-y-6">
+      <h2 class="text-xl font-bold text-gray-800 border-b pb-2">3. Supplier Management & Vendor Purchases</h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        
+        <!-- Add Supplier -->
+        <form onsubmit="handleAddSupplier(event)" class="space-y-4 bg-gray-50 p-4 rounded-lg border">
+          <h3 class="font-semibold text-gray-700">Create New Supplier Account</h3>
+          
+          <div>
+            <label class="block text-xs font-medium text-gray-700">Supplier Name</label>
+            <input type="text" id="supp_name" required class="w-full mt-1 p-2 border rounded-md">
+          </div>
+
+          <div>
+            <label class="block text-xs font-medium text-gray-700">Company / Franchise Name</label>
+            <input type="text" id="supp_company" placeholder="e.g. Ufone Distribution" class="w-full mt-1 p-2 border rounded-md">
+          </div>
+
+          <div>
+            <label class="block text-xs font-medium text-gray-700">Contact Number</label>
+            <input type="text" id="supp_phone" class="w-full mt-1 p-2 border rounded-md">
+          </div>
+
+          <button type="submit" class="w-full bg-indigo-600 text-white py-2 rounded-md hover:bg-indigo-700 font-semibold text-sm">
+            Save Supplier Account
+          </button>
+        </form>
+
+        <!-- Record Supplier Purchase/Payment -->
+        <form onsubmit="handleSupplierTransaction(event)" class="space-y-4 bg-gray-50 p-4 rounded-lg border">
+          <h3 class="font-semibold text-gray-700">Record Stock Purchase / Vendor Payment</h3>
+
+          <div>
+            <label class="block text-xs font-medium text-gray-700">Select Supplier</label>
+            <select id="supp_select_id" required class="w-full mt-1 p-2 border rounded-md bg-white">
+              <option value="">-- Choose Supplier --</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-xs font-medium text-gray-700">Transaction Type</label>
+            <select id="supp_trans_type" class="w-full mt-1 p-2 border rounded-md bg-white">
+              <option value="Supplier_Purchase">Stock Purchase on Credit (Udhar)</option>
+              <option value="Supplier_Payment">Payment Paid to Supplier</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-xs font-medium text-gray-700">Amount (PKR)</label>
+            <input type="number" id="supp_trans_amount" required class="w-full mt-1 p-2 border rounded-md">
+          </div>
+
+          <button type="submit" class="w-full bg-purple-600 text-white py-2 rounded-md hover:bg-purple-700 font-semibold text-sm">
+            Record Transaction
+          </button>
+        </form>
+
+      </div>
     </div>
 
   </div>
 
+  <!-- JavaScript Integration -->
   <script>
     const SUPABASE_URL = "YOUR_SUPABASE_URL";
     const SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY";
     const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    // بینڪ ۾ پئسا جمع ڪرڻ جو لاجڪ
-    async function handleBankDeposit(e) {
-      e.preventDefault();
-      const amount = document.getElementById('deposit_amount').value;
-      const payment_account_id = document.getElementById('deposit_bank_account').value;
-      const note = document.getElementById('deposit_note').value;
+    // Initial Load
+    document.addEventListener("DOMContentLoaded", () => {
+      loadSuppliers();
+    });
 
-      const { data, error } = await supabase.from('transactions').insert([
-        {
-          type: 'Bank_Deposit',
-          amount: parseFloat(amount),
-          payment_account_id: payment_account_id,
-          description: note || 'Cash deposited into bank'
+    function toggleCheckoutFields() {
+      const option = document.getElementById('payment_option').value;
+      const bankBox = document.getElementById('bank-info-box');
+      if (option === 'bank') {
+        bankBox.classList.remove('hidden');
+      } else {
+        bankBox.classList.add('hidden');
+      }
+    }
+
+    // 1. Handle Customer Checkout
+    async function handleCheckout(e) {
+      e.preventDefault();
+      const btn = document.getElementById('checkout-btn');
+      btn.disabled = true;
+      btn.innerText = "Processing Order...";
+
+      const name = document.getElementById('cust_name').value;
+      const phone = document.getElementById('cust_phone').value;
+      const amount = parseFloat(document.getElementById('prod_amount').value);
+      const option = document.getElementById('payment_option').value;
+      let receipt_url = null;
+
+      if (option === 'bank') {
+        const fileInput = document.getElementById('receipt_file');
+        if (fileInput.files.length > 0) {
+          const file = fileInput.files[0];
+          const fileName = `receipts/${Date.now()}_${file.name}`;
+          const { data, error } = await supabase.storage.from('receipts').upload(fileName, file);
+          
+          if (!error) {
+            const { data: publicData } = supabase.storage.from('receipts').getPublicUrl(fileName);
+            receipt_url = publicData.publicUrl;
+          }
         }
-      ]);
+      }
+
+      const transType = option === 'credit' ? 'Credit' : 'Payment_In';
+
+      const { error } = await supabase.from('transactions').insert([{
+        customer_name: name,
+        customer_phone: phone,
+        amount: amount,
+        type: transType,
+        payment_method: option,
+        receipt_url: receipt_url,
+        description: `Product sale via ${option}`
+      }]);
 
       if (error) {
-        alert("غلطي: " + error.message);
+        alert("Error: " + error.message);
       } else {
-        alert("پئسا کاميابي سان بينڪ اڪائونٽ ۾ داخل ٿي ويا!");
+        alert("Order completed successfully!");
+        document.getElementById('checkout-form').reset();
+        toggleCheckoutFields();
+      }
+
+      btn.disabled = false;
+      btn.innerText = "Complete Order";
+    }
+
+    // 2. Handle Bank Deposit
+    async function handleBankDeposit(e) {
+      e.preventDefault();
+      const amount = parseFloat(document.getElementById('deposit_amount').value);
+      const accountId = document.getElementById('deposit_account_id').value;
+      const desc = document.getElementById('deposit_desc').value;
+
+      const { error } = await supabase.from('transactions').insert([{
+        type: 'Bank_Deposit',
+        amount: amount,
+        payment_account_id: accountId,
+        description: desc || 'Cash deposited into bank'
+      }]);
+
+      if (error) {
+        alert("Deposit Error: " + error.message);
+      } else {
+        alert("Cash successfully deposited into bank account!");
         e.target.reset();
       }
     }
 
-    // سپلائر اڪائونٽ ٺاهڻ جو لاجڪ
+    // 3. Add Supplier Account
     async function handleAddSupplier(e) {
       e.preventDefault();
-      const name = document.getElementById('supplier_name').value;
-      const company_name = document.getElementById('supplier_company').value;
-      const phone = document.getElementById('supplier_phone').value;
+      const name = document.getElementById('supp_name').value;
+      const company = document.getElementById('supp_company').value;
+      const phone = document.getElementById('supp_phone').value;
 
-      const { data, error } = await supabase.from('suppliers').insert([
-        { name, company_name, phone }
-      ]);
+      const { error } = await supabase.from('suppliers').insert([{
+        name: name,
+        company_name: company,
+        phone: phone
+      }]);
 
       if (error) {
-        alert("سپلائر اڪائونٽ ٺاهڻ ۾ غلطي: " + error.message);
+        alert("Error: " + error.message);
       } else {
-        alert("سپلائر اڪائونٽ کاميابي سان ٺهي ويو!");
+        alert("Supplier account created!");
+        e.target.reset();
+        loadSuppliers();
+      }
+    }
+
+    // 4. Fetch & Populate Suppliers Dropdown
+    async function loadSuppliers() {
+      const { data, error } = await supabase.from('suppliers').select('id, name, company_name');
+      if (data) {
+        const select = document.getElementById('supp_select_id');
+        select.innerHTML = '<option value="">-- Choose Supplier --</option>';
+        data.forEach(s => {
+          select.innerHTML += `<option value="${s.id}">${s.name} (${s.company_name || 'Individual'})</option>`;
+        });
+      }
+    }
+
+    // 5. Handle Supplier Purchase & Payment
+    async function handleSupplierTransaction(e) {
+      e.preventDefault();
+      const supplierId = document.getElementById('supp_select_id').value;
+      const transType = document.getElementById('supp_trans_type').value;
+      const amount = parseFloat(document.getElementById('supp_trans_amount').value);
+
+      const { error } = await supabase.from('transactions').insert([{
+        supplier_id: supplierId,
+        type: transType,
+        amount: amount,
+        description: transType === 'Supplier_Purchase' ? 'Stock purchase on credit' : 'Payment made to supplier'
+      }]);
+
+      if (error) {
+        alert("Error: " + error.message);
+      } else {
+        alert("Supplier transaction saved successfully!");
         e.target.reset();
       }
     }
